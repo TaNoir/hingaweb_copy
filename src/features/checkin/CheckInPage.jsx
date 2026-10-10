@@ -1,7 +1,7 @@
 // Fig 11 · private check-in (2.1.5.1.3, 2.1.5.1.4, 2.1.5.1.7, 2.1.6.2.7; D-08, D-09; N-01).
 // Owner-only: the row is written with the student's own session and RLS. No score is ever shown.
 // Ticking a crisis item opens /crisis at once (no server wait) and sends the event in the background.
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import {
   BookOpen,
@@ -75,6 +75,21 @@ export function CheckInPage() {
   const progress = t('checkin.progress', {
     answered: CHECKIN_ITEMS.filter((i) => draft.answers[i.column] != null).length,
   });
+
+  // While there is an unsaved answer or note, closing or reloading the tab asks first (the
+  // browser's own prompt, no custom text). In-app navigation, including ticking a safety item,
+  // never unloads the page, so it never triggers this; the draft stays in page memory.
+  const unsaved =
+    !saved && (Object.values(draft.answers).some((v) => v != null) || draft.note !== '');
+  useEffect(() => {
+    if (!unsaved) return undefined;
+    const warn = (e) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [unsaved]);
 
   const onTick = (itemId) => {
     if (draft.ticked.includes(itemId)) return;

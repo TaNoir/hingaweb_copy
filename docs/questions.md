@@ -447,3 +447,12 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
    c1 school work `BookOpen`, c2 home and family `House`, c3 future `Compass`, c4 managing
    `HandHeart`, mood `Smile`, stress `Gauge`. Ink and blush tokens only. "Somewhat" still fits whole
    at 390 px (the icon sits beside the question text, not the buttons). e2e 05 6/6 (axe included).
+9. **Unsaved check-in warning.** `CheckInPage.jsx`: while at least one question is answered or the
+   note has text, and the check-in is not saved, a `beforeunload` listener calls `preventDefault()`
+   (the browser's own prompt, no custom text). It is removed once saved (saving clears the draft) and
+   while nothing is entered. In-app moves (React Router, including ticking a safety item to
+   `/crisis` and coming back) never unload the page, so they never prompt; the draft stays in page
+   memory as before (never browser storage). Checked in Chromium: reload with nothing = no prompt;
+   reload with one answer = one `beforeunload` prompt; tick a safety item and come back = none;
+   reload after save = none. New `unsavedWarning.test.jsx` (3 tests). Not visible in screenshots
+   (the prompt is the browser's). e2e 05, 06, 07 passed.
