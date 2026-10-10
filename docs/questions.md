@@ -311,3 +311,16 @@ affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 3
    (blush) `Chip` instead of bold text, in a wrapping row (right-aligned on phone cards, left in the
    desktop table). Long markers wrap to two lines inside the chip in the desktop column (kept, so the
    other columns are not squeezed). Same text, so `queue.test.jsx` is unchanged. e2e 08 6/6.
+9. **Check-in Save bar sticky on phones.** `src/features/checkin/CheckInPage.jsx`: below 768 px the
+   "Answer questions 1 to 6 to save. The note is optional." line (while incomplete) and the Save /
+   Cancel row sit in one bar with `sticky bottom-0`, `bg-surface`, a top `border-line`, full screen
+   width (`-mx-4`). From 768 px it is the previous static row. `position: sticky` (not fixed) keeps
+   the bar's own place after the last card, so at the end of the page it never covers a field
+   (measured at 390 px: bar top 486, safety box bottom 462). `src/index.css`: below 768 px, while the
+   bar is on the page, `html { scroll-padding-bottom: 11rem }`, so a control focused with Tab is
+   scrolled clear of the bar. Without it, Tab put two answer buttons and three crisis-item
+   checkboxes completely behind the bar; with it, none (13 stops checked). No new colours.
+   **Note for review:** on a 390×844 phone the bar is 165 px tall with the hint and 129 px without
+   (Save stacked above Cancel). If that feels heavy, Save and Cancel could share one row in the bar.
+   e2e 05 6/6. Screenshot `09-sticky-save/student-check-in-390-scrolled-viewport.png` shows it
+   mid-scroll.

@@ -165,20 +165,24 @@ export function CheckInPage() {
       </section>
 
       <FormMessage>{error}</FormMessage>
-      {!complete && <p className="text-[14px] text-ink-muted">{t('checkin.required')}</p>}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button
-          size="lg"
-          onClick={onSave}
-          disabled={!complete}
-          loading={saving}
-          iconLeft={<Check aria-hidden="true" className="size-5" />}
-        >
-          {t('checkin.save')}
-        </Button>
-        <LinkButton to="/" variant="ghost">
-          {t('checkin.cancel')}
-        </LinkButton>
+      {/* Below md the Save row sticks to the bottom of the screen. Sticky (not fixed) keeps its own
+          place after the last card, so at the end of the page it never covers a field. */}
+      <div className="checkin-savebar sticky bottom-0 z-10 -mx-4 flex flex-col gap-3 border-t border-line bg-surface px-4 py-3 md:static md:z-auto md:mx-0 md:border-t-0 md:bg-transparent md:p-0">
+        {!complete && <p className="text-[14px] text-ink-muted">{t('checkin.required')}</p>}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Button
+            size="lg"
+            onClick={onSave}
+            disabled={!complete}
+            loading={saving}
+            iconLeft={<Check aria-hidden="true" className="size-5" />}
+          >
+            {t('checkin.save')}
+          </Button>
+          <LinkButton to="/" variant="ghost">
+            {t('checkin.cancel')}
+          </LinkButton>
+        </div>
       </div>
 
       <PromptDialog open={prompt != null} busy={dismissing} onSend={onSend} onNotNow={onNotNow} />

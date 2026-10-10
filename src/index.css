@@ -56,3 +56,11 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* UI polish item 9: below md the check-in Save bar sticks to the bottom of the screen. Keep focused
+   controls clear of it when the browser scrolls them into view (the bar is at most ~165 px tall). */
+@media (max-width: 767.98px) {
+  html:has(.checkin-savebar) {
+    scroll-padding-bottom: 11rem;
+  }
+}
