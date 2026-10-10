@@ -173,7 +173,7 @@ navigating; an error result still navigates; a thrown error still navigates). No
 
 1. **Phase 07 · `RequestPage.jsx` button order on phones** (see the Phase 07 observation above):
    below 640 px "Send request" shows above "Cancel" but Tab reaches "Cancel" first (WCAG 2.4.3).
-   Team decision: leave as is for now; fix before the defense.
+   Team decision: leave as is for now; fix before the defense. **Done in UI polish item 3.**
 
 ## Phase 09 · local `SITE_URL` for the invitation e2e (environment only, no code change)
 
@@ -231,3 +231,102 @@ to the queue"): those tests render with `MemoryRouter`, where `window.location` 
 unchanged-path check keeps every existing test expectation as it was. New unit test in
 `completeStaffSignIn.test.js`: from each sign-in step it navigates when the path is unchanged and
 does not navigate when the path changed before it finished (291 tests).
+
+## UI polish
+
+Branch `ui-polish` (from `main`). One commit per item; each checked with `npm run verify`, the
+affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 390, 768 and 1280 px
+(kept outside the repository, in `C:\Users\Modern15\hingaweb2-screenshots\ui-polish\`).
+
+1. **ScaleButtons — 5 columns at every width.** `src/components/ui/ScaleButtons.jsx`: grid is
+   `grid-cols-5` at all widths (was one column below 640 px); answers may wrap to two lines
+   (`leading-tight`, `py-1`); 13 px text and `px-1` below 640 px, 14 px and `px-2` from 640 px; min
+   height still 44 px; radio-group keyboard behaviour unchanged. At 390 px each answer is 58×44 px.
+   **Limitation:** "Somewhat" is 65–67 px wide at the 13 px minimum (00 §8.2), wider than a column
+   at 390 px, so it cannot stay on one line. `hyphens-auto` breaks it as "Some-/what" where the
+   browser has English hyphenation (Chrome on Android, Safari iOS, Firefox, Chrome on macOS);
+   elsewhere `overflow-wrap:anywhere` breaks it without a hyphen ("Somew/hat", seen in the headless
+   test browser). Nothing is clipped. Team may prefer to reword the scale label at co-design.
+2. **AppHeader — full nav from lg (1024 px).** `src/components/layout/AppHeader.jsx`: the nav, the
+   right-hand extras, the "Menu" button and its sheet now switch at `lg` instead of `md` (page padding
+   `md:px-6` unchanged). Measured header height (one row = 61 px): public, student, guidance and admin
+   are 61 px at 390, 768, 1024 and 1280 px, except admin at 1024 px (below). Before: admin 114 px and
+   student 66 px at 768 px (wrapped). e2e phase-02 28/28, phase-03 16/16.
+   **Found, not changed (pre-existing, needs a decision):** between 1024 px and about 1150 px the
+   admin header (chip "ADMIN CONSOLE" + five nav items + display name) does not fit, and nav labels
+   break mid-word ("Accoun/ts", "Conse/nt"); it fits from about 1180 px. This was already so before
+   item 2 (the full nav showed from 768 px). Options: hide the "ADMIN CONSOLE" chip below `xl`, or
+   keep the admin "Menu" sheet below `xl`. Screenshots: `02-header/admin-header-crop-1024.png`,
+   `-1100.png`, `-1180.png`.
+   **Unit test timeout (separate commit):** `src/features/auth/RegisterPage.test.jsx` › "signs up
+   with exactly the student metadata…" types ~80 characters key by key and takes ~3.5 s here; under
+   load it hit Vitest's 5 s default and failed 2 of ~10 runs ("Test timed out in 5000ms"). Given a
+   15 s per-test timeout; its steps and assertions are unchanged. Not caused by the UI items (jsdom
+   ignores CSS breakpoints; RegisterPage does not use ScaleButtons).
+3. **Button rows: DOM order = screen order.** Every `flex-col-reverse` button row (11 rows in 7 files)
+   now lists the primary button first in the DOM and uses `flex flex-col … sm:flex-row …`:
+   `src/features/admin/AccountsPage.jsx` (3: change role, deactivate/reactivate, create staff account),
+   `src/features/admin/ConsentPage.jsx` (2: record consent, record withdrawal),
+   `src/features/admin/ReferencePage.jsx` (2: add agreed item, retire item),
+   `src/features/admin/ResourceEditPage.jsx` (1: delete resource),
+   `src/features/assent/AssentPage.jsx` (Continue / Not now),
+   `src/features/checkin/CheckInPage.jsx` (Save check-in / Cancel and return),
+   `src/features/requests/RequestPage.jsx` (Send request / Cancel). Buttons, props and copy unchanged.
+   At 390 px the look is unchanged (primary on top). **Desktop change:** from 640 px the primary
+   button is now first (left) instead of last, because a DOM order can only match one visual order;
+   keeping the old desktop look with `sm:flex-row-reverse` would just move the Tab mismatch to
+   desktop. Measured: Tab order matches screen order at 390 and 1280 px on `/welcome`, `/check-in`,
+   `/request`, the create-staff and deactivate dialogs. e2e 04, 05, 07, 09 pass. This resolves the
+   Phase 07 "polish before defense" item.
+4. **HotlineList `variant`.** `src/features/public/HotlineList.jsx` takes `variant` (`'primary'`
+   default, `'outline'`; any other value falls back to primary) for the "Call …" buttons. `outline`
+   is used only in `src/features/public/NeedHelpCard.jsx` (landing page) and
+   `src/features/public/HelpPage.jsx`. `RequestPage.jsx` and `RequestSentPage.jsx` keep the default
+   primary style; the crisis screen does not use `HotlineList` (its own rows are unchanged). Existing
+   `outline` button tokens only (surface background, ink border and text). e2e 03 16/16, 07 3/3.
+5. **ResourceCard — "Free access" removed.** `src/features/public/ResourceCard.jsx`: the "Free access"
+   line is gone; the card footer keeps the "Read guide" link on the right (`justify-end`). Copy key
+   `public.guides.freeAccess` removed from `src/copy/en/public.js` (it was used nowhere else). No unit
+   test or e2e spec checked that text, so no test changed. Affects `/`, `/guides`, `/resources`.
+   e2e 03 16/16, 06 3/3.
+6. **PortalLayout — one "STAFF PORTAL".** `src/components/layout/PortalLayout.jsx`: the duplicate
+   label beside the logo (shown from 640 px) is removed; the pill with the lock icon stays (copy key
+   `staff.portal.label` still used there). Applies to `/staff/login`, `/staff/verify`, `/staff/setup`.
+   No test referenced the label. e2e 02 28/28.
+7. **Table — each row its own card below md.** `src/components/ui/Table.jsx`: below 768 px the outer
+   box has no border/background, `<tbody>` is a column with a 12 px gap, and each row is a card
+   (`bg-surface`, `rounded-card`, `border-line`, `px-4 py-3`). From `md` it is the previous table
+   (one bordered card, rows separated by lines, header row shown). Used by the queue, crisis channel
+   (resolved list), trends table, and the accounts, consent, reference, resource library and audit
+   screens. Measured at 390 px: tables are still exposed as tables with rows and cells
+   (`getByRole('table', { name })`), axe 0 violations on the queue, accounts, consent and reference
+   screens. e2e 06 3/3, 08 6/6, 09 6/6.
+   **Spec timing fix (separate commit, standing rule):** `e2e/phase-09/admin.spec.js` › "reference
+   data: … a retired one disappears" failed once: after "Add item", the page already shows "Saved.",
+   so the wait for "Saved." after "Retire item" could pass before the retire was stored, and the
+   student page reloaded too early. Added a wait for the item's "Retire" button to disappear before
+   the reload. Expected results unchanged. Pre-existing race, not caused by the table change.
+8. **Queue Notes markers as chips.** `src/features/guidance/QueuePage.jsx`: each Notes marker ("Has
+   another open request", "Follow-up overdue", "No first contact in 3 school days") is a default
+   (blush) `Chip` instead of bold text, in a wrapping row (right-aligned on phone cards, left in the
+   desktop table). Long markers wrap to two lines inside the chip in the desktop column (kept, so the
+   other columns are not squeezed). Same text, so `queue.test.jsx` is unchanged. e2e 08 6/6.
+9. **Check-in Save bar sticky on phones.** `src/features/checkin/CheckInPage.jsx`: below 768 px the
+   "Answer questions 1 to 6 to save. The note is optional." line (while incomplete) and the Save /
+   Cancel row sit in one bar with `sticky bottom-0`, `bg-surface`, a top `border-line`, full screen
+   width (`-mx-4`). From 768 px it is the previous static row. `position: sticky` (not fixed) keeps
+   the bar's own place after the last card, so at the end of the page it never covers a field
+   (measured at 390 px: bar top 486, safety box bottom 462). `src/index.css`: below 768 px, while the
+   bar is on the page, `html { scroll-padding-bottom: 11rem }`, so a control focused with Tab is
+   scrolled clear of the bar. Without it, Tab put two answer buttons and three crisis-item
+   checkboxes completely behind the bar; with it, none (13 stops checked). No new colours.
+   **Note for review:** on a 390×844 phone the bar is 165 px tall with the hint and 129 px without
+   (Save stacked above Cancel). If that feels heavy, Save and Cancel could share one row in the bar.
+   e2e 05 6/6. Screenshot `09-sticky-save/student-check-in-390-scrolled-viewport.png` shows it
+   mid-scroll.
+10. **Landing hero waves.** `src/features/public/LandingPage.jsx`: one inline SVG (three calm wave
+    lines, like the logo) at the end of the hero text column, `aria-hidden="true"`,
+    `focusable="false"`, no text, no image file. Strokes use tokens only:
+    `var(--color-blush-strong)`, `var(--color-line)`, `var(--color-ink)`. Width up to 420 px, scales
+    down on phones. Landing stays in the main bundle; check:bundle OK (+~0.5 KB). e2e 03 16/16 (axe on
+    `/` included).

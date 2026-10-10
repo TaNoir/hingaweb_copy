@@ -12,7 +12,7 @@ export function NeedHelpCard() {
         {t('public.hotlines.cardTitle')}
       </h2>
       <p className="text-[14px] text-ink-muted">{t('public.hotlines.cardLead')}</p>
-      <HotlineList />
+      <HotlineList variant="outline" />
       <EmergencyNotice />
     </Card>
   );

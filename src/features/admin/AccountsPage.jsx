@@ -291,12 +291,12 @@ function RoleDialog({ account, onClose, onSaved }) {
         </p>
         <RolePicker value={role} onChange={setRole} />
         <FormMessage>{error}</FormMessage>
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button variant="outline" onClick={onClose}>
-            {t('admin.accounts.roleDialog.cancel')}
-          </Button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <Button onClick={save} loading={saving} disabled={role === account.role}>
             {t('admin.accounts.roleDialog.save')}
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            {t('admin.accounts.roleDialog.cancel')}
           </Button>
         </div>
       </div>
@@ -328,12 +328,12 @@ function StatusDialog({ account, onClose, onSaved }) {
           {deactivating ? k('deactivateBody') : k('reactivateBody')}
         </p>
         <FormMessage>{error}</FormMessage>
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button variant="outline" onClick={onClose}>
-            {k('cancel')}
-          </Button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <Button onClick={save} loading={saving}>
             {deactivating ? k('confirmDeactivate') : k('confirmReactivate')}
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            {k('cancel')}
           </Button>
         </div>
       </div>
@@ -441,12 +441,12 @@ function CreateStaffDialog({ open, onClose, onCreated }) {
           <p className="mt-1">{k('nextBody')}</p>
         </div>
         <FormMessage>{formError}</FormMessage>
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button variant="outline" onClick={close}>
-            {k('cancel')}
-          </Button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <Button type="submit" loading={saving}>
             {k('submit')}
+          </Button>
+          <Button variant="outline" onClick={close}>
+            {k('cancel')}
           </Button>
         </div>
       </form>

@@ -56,6 +56,31 @@ export function LandingPage() {
             <Lock aria-hidden="true" className="size-4 shrink-0" />
             {t('public.landing.listenNote')}
           </p>
+          {/* Decorative calm waves, like the logo. Colour tokens only; hidden from screen readers. */}
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            viewBox="0 0 400 72"
+            fill="none"
+            strokeLinecap="round"
+            className="mt-2 h-auto w-full max-w-[420px]"
+          >
+            <path
+              d="M4 18 c16 -10 48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0"
+              stroke="var(--color-blush-strong)"
+              strokeWidth="6"
+            />
+            <path
+              d="M4 38 c16 -10 48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0"
+              stroke="var(--color-line)"
+              strokeWidth="4"
+            />
+            <path
+              d="M4 56 c16 -10 48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0"
+              stroke="var(--color-ink)"
+              strokeWidth="2"
+            />
+          </svg>
         </div>
         <NeedHelpCard />
       </section>

@@ -124,10 +124,7 @@ export function AssentPage() {
         onChange={setUnderstood}
       />
 
-      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button variant="ghost" onClick={() => navigate('/', { replace: true })}>
-          {a('notNow')}
-        </Button>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Button
           size="lg"
           disabled={!understood}
@@ -136,6 +133,9 @@ export function AssentPage() {
           iconRight={<ArrowRight aria-hidden="true" className="size-5" />}
         >
           {a('continue')}
+        </Button>
+        <Button variant="ghost" onClick={() => navigate('/', { replace: true })}>
+          {a('notNow')}
         </Button>
       </div>
 

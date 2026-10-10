@@ -123,7 +123,7 @@ export function HelpPage() {
         <h2 id="hotlines-title" className="text-[20px] font-semibold text-ink">
           {t('public.help.hotlines.title')}
         </h2>
-        <HotlineList />
+        <HotlineList variant="outline" />
         <EmergencyNotice />
       </Card>
 

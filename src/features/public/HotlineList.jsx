@@ -4,7 +4,9 @@ import { t } from '../../copy/index.js';
 import { HOTLINES } from '../../content/directory.js';
 import { buttonClasses } from '../../components/ui/index.js';
 
-export function HotlineList({ lang = 'en' }) {
+/** variant: 'primary' (default; request pages) or 'outline' (landing page card and Where to get help). */
+export function HotlineList({ lang = 'en', variant = 'primary' }) {
+  const callVariant = variant === 'outline' ? 'outline' : 'primary';
   return (
     <ul className="flex flex-col gap-3">
       {HOTLINES.map((h) => (
@@ -20,7 +22,7 @@ export function HotlineList({ lang = 'en' }) {
           <a
             href={`tel:${h.dial}`}
             aria-label={t('public.hotlines.callLabel', { name: h.name, number: h.number }, lang)}
-            className={buttonClasses('primary', 'md', 'max-w-full self-start text-left')}
+            className={buttonClasses(callVariant, 'md', 'max-w-full self-start text-left')}
           >
             <Phone aria-hidden="true" className="size-4" />
             <span>{t('public.hotlines.call', { number: h.number }, lang)}</span>

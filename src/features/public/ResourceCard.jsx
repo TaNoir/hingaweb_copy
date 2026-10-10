@@ -15,8 +15,7 @@ export function ResourceCard({ resource, onOpen }) {
     <Card as="article" className="flex flex-col gap-3">
       <Chip className="self-start">{area.label}</Chip>
       <h3 className="text-[17px] font-semibold text-ink">{resource.title}</h3>
-      <div className="mt-auto flex items-center justify-between gap-3 border-t border-line pt-3">
-        <span className="text-[13px] text-ink-muted">{t('public.guides.freeAccess')}</span>
+      <div className="mt-auto flex items-center justify-end gap-3 border-t border-line pt-3">
         <a
           href={resource.url}
           target="_blank"
