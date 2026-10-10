@@ -47,7 +47,10 @@ export function findViolations(copy, allowlist) {
   const out = [];
   for (const [key, value] of flatten(copy)) {
     if (allowlist.includes(value)) continue;
-    const staff = ['staff.', 'admin.', 'nav.staff.', 'nav.admin.'].some((p) => key.startsWith(p));
+    // guidance.* (Phase 08) holds the guidance dashboard copy; it is staff-facing (P08-D1).
+    const staff = ['staff.', 'admin.', 'guidance.', 'nav.staff.', 'nav.admin.'].some((p) =>
+      key.startsWith(p),
+    );
     for (const re of staff ? STAFF_BANNED : STUDENT_BANNED) {
       if (re.test(value)) out.push({ key, value, pattern: String(re) });
     }
