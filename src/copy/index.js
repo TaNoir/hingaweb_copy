@@ -1,15 +1,9 @@
 import { en } from './en.js';
+import { ceb } from './ceb.js';
+import { tl } from './tl.js';
 
-const DICTIONARIES = { en };
-
-/**
- * Register another language dictionary (Phase 04 registers 'ceb' and 'tl').
- * @param {string} lang
- * @param {object} dict
- */
-export function registerLanguage(lang, dict) {
-  DICTIONARIES[lang] = dict;
-}
+// ceb and tl hold only the assent (Phase 04) and crisis (Phase 05) keys (00 Section 10.2).
+const DICTIONARIES = { en, ceb, tl };
 
 function lookup(dict, key) {
   return key.split('.').reduce((node, part) => (node == null ? undefined : node[part]), dict);
@@ -21,7 +15,7 @@ function lookup(dict, key) {
  * Throws in development when a key does not exist at all, so typos are caught early.
  * @param {string} key
  * @param {Record<string, string|number>} [vars]
- * @param {string} [lang]
+ * @param {'en'|'ceb'|'tl'} [lang]
  */
 export function t(key, vars = {}, lang = 'en') {
   let value = lookup(DICTIONARIES[lang] ?? {}, key);
