@@ -45,6 +45,10 @@
   main:focus {
     outline: none;
   }
+  /* ui-students item 4: the h1 that RouteFocus moves focus to is a heading, not a control */
+  [data-route-focus]:focus {
+    outline: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -58,9 +62,9 @@
 }
 
 /* UI polish item 9: below md the check-in Save bar sticks to the bottom of the screen. Keep focused
-   controls clear of it when the browser scrolls them into view (the bar is at most ~165 px tall). */
+   controls clear of it when the browser scrolls them into view (since ui-students item 2 the bar holds only the Save button, under 80 px). */
 @media (max-width: 767.98px) {
   html:has(.checkin-savebar) {
-    scroll-padding-bottom: 11rem;
+    scroll-padding-bottom: 6rem;
   }
 }

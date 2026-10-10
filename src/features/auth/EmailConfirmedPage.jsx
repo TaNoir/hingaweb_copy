@@ -5,10 +5,12 @@ import { useAuth } from '../../lib/auth/useAuth.js';
 import { homePathFor } from '../../lib/auth/homePath.js';
 import { Button, LinkButton, Skeleton } from '../../components/ui/index.js';
 import { AuthCard } from './AuthCard.jsx';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 export function EmailConfirmedPage() {
   const navigate = useNavigate();
   const { status, session, account, aal } = useAuth();
+  usePageTitle(status === 'loading' ? '' : t('auth.confirmed.title'));
   if (status === 'loading')
     return (
       <AuthCard>

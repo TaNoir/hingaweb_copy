@@ -14,11 +14,13 @@ import {
 import { ResourceCard } from './ResourceCard.jsx';
 import { primaryArea } from './primaryArea.js';
 import { usePublishedResources } from './usePublishedResources.js';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 export function GuidesPage() {
   const { account } = useAuth();
   const { status, resources, reload } = usePublishedResources();
   const [area, setArea] = useState('all');
+  usePageTitle(t('public.guides.title'));
   const options = [
     { value: 'all', label: t('public.guides.all') },
     ...CRITERIA.map((c) => ({ value: c.attribute, label: c.studentLabel })),

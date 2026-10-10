@@ -11,6 +11,8 @@ import { Button, Chip, Field, PasswordInput, TextInput } from '../../components/
 import { AuthCard, FormMessage } from './AuthCard.jsx';
 import { loginSchema } from './schemas.js';
 import { useForm } from './useForm.js';
+import { usePageTitle } from '../../lib/usePageTitle.js';
+import { focusFirstError } from '../../lib/focusFirstError.js';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -19,12 +21,16 @@ export function LoginPage() {
   const { bind, errors, validate } = useForm({ email: '', password: '' });
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState(null);
+  usePageTitle(t('auth.login.title'));
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
     const v = validate(loginSchema);
-    if (!v) return;
+    if (!v) {
+      focusFirstError(e.currentTarget);
+      return;
+    }
     setSubmitting(true);
     setAuthBusy(true);
     try {

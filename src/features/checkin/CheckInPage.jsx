@@ -1,9 +1,19 @@
 // Fig 11 · private check-in (2.1.5.1.3, 2.1.5.1.4, 2.1.5.1.7, 2.1.6.2.7; D-08, D-09; N-01).
 // Owner-only: the row is written with the student's own session and RLS. No score is ever shown.
 // Ticking a crisis item opens /crisis at once (no server wait) and sends the event in the background.
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Check, Lock, Shield } from 'lucide-react';
+import {
+  BookOpen,
+  Check,
+  Compass,
+  Gauge,
+  HandHeart,
+  House,
+  Lock,
+  Shield,
+  Smile,
+} from 'lucide-react';
 import { t } from '../../copy/index.js';
 import { CHECKIN_ITEMS, storedValue } from '../../config/checkin-items.js';
 import { supabase } from '../../lib/supabase.js';
@@ -19,12 +29,24 @@ import {
   Skeleton,
   Textarea,
 } from '../../components/ui/index.js';
+import { cx } from '../../components/ui/cx.js';
 import { FormMessage } from '../auth/AuthCard.jsx';
 import { clearDraft, loadDraft, saveDraft } from './checkinDraft.js';
 import { useCrisisItems } from './useCrisisItems.js';
 import { PromptDialog } from './PromptDialog.jsx';
 import { reportCrisisItem, useCrisisReport } from '../crisis/crisisReport.js';
 import { CrisisStatus } from '../crisis/CrisisStatus.jsx';
+import { usePageTitle } from '../../lib/usePageTitle.js';
+
+// One small icon per question card, a visual anchor only (aria-hidden; ui-students item 8).
+const QUESTION_ICONS = {
+  c1: BookOpen, // school work
+  c2: House, // home and family
+  c3: Compass, // future
+  c4: HandHeart, // managing
+  mood: Smile,
+  stress: Gauge,
+};
 
 export function CheckInPage() {
   const navigate = useNavigate();
@@ -36,6 +58,7 @@ export function CheckInPage() {
   const [prompt, setPrompt] = useState(null); // { checkinId, type } while Fig 15 is open
   const [dismissing, setDismissing] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [noteFocused, setNoteFocused] = useState(false);
   const crisisItems = useCrisisItems();
   const report = useCrisisReport(owner);
 
@@ -48,6 +71,25 @@ export function CheckInPage() {
   };
   const answer = (column, value) => update({ answers: { ...draft.answers, [column]: value } });
   const complete = CHECKIN_ITEMS.every((i) => draft.answers[i.column] != null);
+  // Only the six questions count (not the note, not the safety items). No other number is shown.
+  const progress = t('checkin.progress', {
+    answered: CHECKIN_ITEMS.filter((i) => draft.answers[i.column] != null).length,
+  });
+
+  // While there is an unsaved answer or note, closing or reloading the tab asks first (the
+  // browser's own prompt, no custom text). In-app navigation, including ticking a safety item,
+  // never unloads the page, so it never triggers this; the draft stays in page memory.
+  const unsaved =
+    !saved && (Object.values(draft.answers).some((v) => v != null) || draft.note !== '');
+  useEffect(() => {
+    if (!unsaved) return undefined;
+    const warn = (e) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [unsaved]);
 
   const onTick = (itemId) => {
     if (draft.ticked.includes(itemId)) return;
@@ -105,6 +147,8 @@ export function CheckInPage() {
     setSaved(true);
   };
 
+  usePageTitle(saved ? t('checkin.saved.title') : t('checkin.title'));
+
   if (saved) return <SavedCard />;
 
   return (
@@ -118,10 +162,11 @@ export function CheckInPage() {
           {t('checkin.title')}
         </h1>
         <p className="text-base text-ink-muted">{t('checkin.lead')}</p>
+        <p className="text-[14px] font-semibold text-ink">{progress}</p>
       </header>
 
       {CHECKIN_ITEMS.map((item, i) => (
-        <Card key={item.column}>
+        <Card key={item.column} className="max-sm:p-3">
           <ScaleButtons
             name={item.column}
             legend={`${i + 1}. ${t(item.textKey)}`}
@@ -129,6 +174,8 @@ export function CheckInPage() {
             options={item.scale}
             value={draft.answers[item.column] ?? null}
             onChange={(v) => answer(item.column, v)}
+            icon={QUESTION_ICONS[item.column]}
+            markAnswered
           />
         </Card>
       ))}
@@ -140,6 +187,8 @@ export function CheckInPage() {
             value={draft.note}
             placeholder={t('checkin.note.placeholder')}
             onChange={(e) => update({ note: e.target.value })}
+            onFocus={() => setNoteFocused(true)}
+            onBlur={() => setNoteFocused(false)}
           />
         </Field>
       </Card>
@@ -165,13 +214,22 @@ export function CheckInPage() {
       </section>
 
       <FormMessage>{error}</FormMessage>
-      {/* Below md the Save row sticks to the bottom of the screen. Sticky (not fixed) keeps its own
-          place after the last card, so at the end of the page it never covers a field. */}
-      <div className="checkin-savebar sticky bottom-0 z-10 -mx-4 flex flex-col gap-3 border-t border-line bg-surface px-4 py-3 md:static md:z-auto md:mx-0 md:border-t-0 md:bg-transparent md:p-0">
-        {!complete && <p className="text-[14px] text-ink-muted">{t('checkin.required')}</p>}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      {!complete && <p className="text-[14px] text-ink-muted">{t('checkin.required')}</p>}
+      {/* Below md only the Save button and the answered count stick to the bottom (bar under 80 px); the
+          wrapper is display: contents there, so the bar's sticky area is the whole page column.
+          Sticky (not fixed) keeps its own place after the last card, so at the end of the page it
+          never covers a field. While the note has focus the bar stops sticking (the phone keyboard
+          is open). From md up, Save and Cancel share one row as before. */}
+      <div className="max-md:contents md:flex md:items-center md:justify-between md:gap-3">
+        <div
+          className={cx(
+            'checkin-savebar -mx-4 flex items-center justify-between gap-3 max-md:flex-row-reverse border-t border-line bg-surface px-4 py-3 md:static md:mx-0 md:justify-start md:gap-4 md:border-t-0 md:bg-transparent md:p-0',
+            noteFocused ? 'static' : 'sticky bottom-0 z-10',
+          )}
+        >
           <Button
             size="lg"
+            className="shrink-0"
             onClick={onSave}
             disabled={!complete}
             loading={saving}
@@ -179,10 +237,15 @@ export function CheckInPage() {
           >
             {t('checkin.save')}
           </Button>
-          <LinkButton to="/" variant="ghost">
-            {t('checkin.cancel')}
-          </LinkButton>
+          {/* The one polite live region for the count (the copy at the top is not announced).
+              Save stays first in the DOM; on phones the row is reversed so Save sits on the right. */}
+          <p role="status" className="text-[14px] font-semibold text-ink">
+            {progress}
+          </p>
         </div>
+        <LinkButton to="/" variant="ghost" className="self-start">
+          {t('checkin.cancel')}
+        </LinkButton>
       </div>
 
       <PromptDialog open={prompt != null} busy={dismissing} onSend={onSend} onNotNow={onNotNow} />
@@ -236,13 +299,24 @@ function SafetyItems({ crisisItems, ticked, onTick }) {
 }
 
 function SavedCard() {
+  // Once saved, focus moves to the heading so screen reader and keyboard users hear the result
+  // (ui-students item 11). It is a heading, not a control, so it shows no outline (data-route-focus).
+  const heading = useRef(null);
+  useEffect(() => {
+    heading.current?.focus();
+  }, []);
   return (
     <Card className="flex flex-col gap-4">
       <Chip className="self-start">
         <Check aria-hidden="true" className="size-4" />
         {t('checkin.saved.chip')}
       </Chip>
-      <h1 tabIndex={-1} className="text-[24px] font-semibold leading-8 text-ink">
+      <h1
+        ref={heading}
+        tabIndex={-1}
+        data-route-focus=""
+        className="text-[24px] font-semibold leading-8 text-ink"
+      >
         {t('checkin.saved.title')}
       </h1>
       <p role="status" className="text-base text-ink-muted">

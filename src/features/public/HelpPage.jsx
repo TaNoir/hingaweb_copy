@@ -14,6 +14,7 @@ import { GUIDANCE_OFFICE, SPECIALISTS } from '../../content/directory.js';
 import { Card, Chip, LinkButton, PageHeader, buttonClasses } from '../../components/ui/index.js';
 import { HotlineList } from './HotlineList.jsx';
 import { EmergencyNotice } from './EmergencyNotice.jsx';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 function Detail({ icon: Icon, label, value, note }) {
   return (
@@ -29,6 +30,7 @@ function Detail({ icon: Icon, label, value, note }) {
 }
 
 export function HelpPage() {
+  usePageTitle(t('public.help.title'));
   const o = GUIDANCE_OFFICE;
   return (
     <div className="flex flex-col gap-8">

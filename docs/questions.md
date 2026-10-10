@@ -358,3 +358,119 @@ by `check:placeholders`.
   therefore does not appear in the demo data. Backdating them would mean turning off more stamp
   triggers, which was not asked for.
 - How to use it: `docs/demo.md`.
+
+## UI polish (students)
+
+Branch `ui-students`. `ui-polish-2` does not exist, so items 1 to 3 were done. Every verify, e2e,
+and screenshot run used `VITE_DEMO_CONTENT=false`, because `.env.local` currently turns demo mode
+on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-students/`.
+
+1. **No mid-word breaks in the answer buttons.** `ScaleButtons.jsx`: the buttons override the
+   body's `overflow-wrap: anywhere` with `overflow-wrap: normal; word-break: normal` and keep
+   `hyphens: auto` (`<html lang="en">`). Below `sm`: side padding 0 (was 4 px), grid gap 3 px
+   (was 6 px), text 12 px (was 13 px); `CheckInPage.jsx` check-in question cards use 12 px padding
+   below `sm` (was 20 px). Reducing padding, gap, and card padding alone was not enough: at 13 px
+   "Somewhat" is 64.7 px wide (66.5 px when selected, semibold) and the widest a button can get at
+   390 px with sensible card padding is about 62 px, so the text also drops to 12 px below `sm`.
+   Measured at 390 px: button content 62 px, "Somewhat" 59.8 px (61.4 px selected): fits whole.
+   At 360 px it cannot fit (56 px), so it relies on `hyphens: auto` ("Some-what"). **Note:** the
+   headless Chromium used for screenshots on Windows has no hyphenation dictionary, so
+   `crop-360-somewhat-selected.png` shows the word cut at the button edge instead of hyphenated;
+   phone browsers (Android Chrome, iOS Safari) ship English hyphenation. Height stays 44 px. e2e 05
+   6/6. One unrelated unit test (`request.test.jsx`, a 1 s `findBy`) timed out once under full-suite
+   load; it passed alone 3/3 and on the next full verify, so no change was made.
+2. **Only Save is sticky on phones.** `CheckInPage.jsx`: below `md` the sticky bar holds just the
+   full-width "Save check-in" button (bar 73 px tall at 360 and 390 px). The "Answer questions 1 to
+   6 to save. The note is optional." line sits in the normal page flow above it, and "Cancel and
+   return" sits in the flow below it. The Save/Cancel wrapper is `display: contents` below `md`, so
+   the bar's sticky area is still the whole page column; from `md` up the wrapper is the same single
+   row as before (Save left, Cancel right). While the note textarea has focus the bar is not sticky
+   (it returns to its own place after the safety box, off screen while typing), so it never sits
+   above the phone keyboard. `index.css`: `scroll-padding-bottom` 11rem → 6rem to match the smaller
+   bar. Checked with Tab at 360 and 390 px: no focused control ends up behind the bar. e2e 05 6/6.
+3. **Primary button first: audit only, nothing to fix.** Checked every file with more than one
+   button. Each action row and dialog footer already has the primary button first in the DOM, so it
+   is on the left from `sm` up and on top on phones: AccountsPage (3 dialogs), ConsentPage (2),
+   ReferencePage (2), ResourceEditPage (page row and delete dialog), AssentPage,
+   WaitingForConsentPage, CheckInPage (save row, saved card), PromptDialog, RequestPage,
+   RequestSentPage, ResourcesPage (no check-in yet), OfficeTagPage, CrisisChannelPage,
+   RequestDetailPage (follow-up row), StaffVerifyPage, LandingPage hero. Rows with only outline
+   buttons (RequestDetailPage tag/directory links) or one button have no primary to move. Not
+   changed, **for review:** the public header and its phone menu show "Log in" (outline) before
+   "Create account" (primary). That is navigation, not a form action, and the usual order for
+   sign-in/sign-up; swapping it would change every public page. No code change, so no screenshots
+   or e2e for this item.
+4. **Focus and scroll on page change.** New `src/components/layout/RouteFocus.jsx`, mounted once in
+   `App.jsx` inside the router (not in each page). When the path changes (not on the first load, not
+   when the URL has a hash such as `/#how`, never on `/crisis`), it scrolls to the top and focuses
+   `main h1`, adding `tabindex="-1"` and `data-route-focus` if needed. Lazy pages: it waits up to 5 s
+   for the h1 to appear (MutationObserver). It never takes focus from a control inside the page that
+   the person is already using. `index.css`: `[data-route-focus]:focus { outline: none }` (a heading,
+   not a control), so mouse users see no outline; Tab after it shows the normal ring on the next
+   control. Checked at 360/390/1280 px: after sign-in, after "Cancel and return", and after Enter on
+   a nav link to a lazy page, focus is on the new h1 at `scrollY` 0; the landing `#how` link still
+   jumps to its section. New `RouteFocus.test.jsx` (4 tests; no existing test changed). Full e2e
+   02–09 passed.
+5. **Tab titles.** New `src/lib/usePageTitle.js`: `document.title = "<h1 text> · HingaWeb"` (app
+   name from `SITE.appName`), back to "HingaWeb" when the page closes. Each student and public screen
+   passes the same copy key its h1 shows, including the alternate states (registration sent,
+   reset-link sent, reset link expired / password changed, check-in saved, waiting for consent /
+   consent withdrawn, assent and crisis in the chosen language). No new text. The landing page
+   keeps "HingaWeb". Hooks sit before every early return. Checked in the browser: 20 screens, every
+   title equals its h1 plus " · HingaWeb" (list in `05-tab-titles/titles.txt`). Staff screens are
+   not part of this item and show "HingaWeb". New `usePageTitle.test.jsx` (1 test). e2e 02–07
+   passed.
+6. **Help link in the student header on phones.** `StudentLayout.jsx` passes a new `mobileAction`
+   to `AppHeader.jsx`: a link to `/help` with a `LifeBuoy` icon (aria-hidden) and the existing
+   `nav.public.needHelp` text ("Need help right now?"), blush background, ink text, 44×44 px minimum.
+   It sits next to the Menu button below `lg` (the desktop nav already has "Where to get help").
+   **The text does not fit at 360 px:** the header row has 328 px, the logo is 192 px and Menu 95 px.
+   So below `sm` only the icon shows and the text is `sr-only` (it stays the link's accessible
+   name); from `sm` to `lg` icon and text show on one line (192 px). To fit the 44 px icon at 360 px,
+   the student header only, below `sm`, uses 12 px side padding (was 16) and an 8 px gap (was 16),
+   and Menu's side padding is 8 px (was 12; still 87×44 px). Measured: no overflow at 360/390/768/
+   1023 px, header height unchanged (61 px), visible focus ring on the link. Public, staff, and admin
+   headers are unchanged. The link is outside the nav landmark, so the five nav items are unchanged.
+   e2e 03, 05, 06, 07 passed.
+7. **Check-in progress.** The one new copy key: `checkin.progress = '{answered} of 6 answered'`
+   (`src/copy/en/checkin.js`). `CheckInPage.jsx` counts only the six questions (`CHECKIN_ITEMS`),
+   never the note or the safety items, and shows no other number. Shown twice: under the lead at the
+   top (plain text) and in the Save bar (`role="status"`, the one polite live region, so a screen
+   reader hears each change once). In the bar the count shares the row with Save so the bar stays
+   73 px (under 80 px): Save is first in the DOM, and on phones the row is reversed so the count is
+   on the left and Save on the right; from `md` up Save is on the left, then the count, then Cancel
+   at the far right. Checked: 0 → 2 (with a note typed, still 2) → 6. e2e 05 6/6.
+8. **Question card icons.** `ScaleButtons.jsx` gets two optional props: `icon` (a lucide icon in a
+   32 px blush square beside the question, aria-hidden) and `markAnswered` (a small `CircleCheck`,
+   aria-hidden, ink, at the end of the question line once a value is chosen). The legend `<p>` keeps
+   its id and text, so the radiogroup's name is unchanged. `CheckInPage.jsx` maps the icons:
+   c1 school work `BookOpen`, c2 home and family `House`, c3 future `Compass`, c4 managing
+   `HandHeart`, mood `Smile`, stress `Gauge`. Ink and blush tokens only. "Somewhat" still fits whole
+   at 390 px (the icon sits beside the question text, not the buttons). e2e 05 6/6 (axe included).
+9. **Unsaved check-in warning.** `CheckInPage.jsx`: while at least one question is answered or the
+   note has text, and the check-in is not saved, a `beforeunload` listener calls `preventDefault()`
+   (the browser's own prompt, no custom text). It is removed once saved (saving clears the draft) and
+   while nothing is entered. In-app moves (React Router, including ticking a safety item to
+   `/crisis` and coming back) never unload the page, so they never prompt; the draft stays in page
+   memory as before (never browser storage). Checked in Chromium: reload with nothing = no prompt;
+   reload with one answer = one `beforeunload` prompt; tick a safety item and come back = none;
+   reload after save = none. New `unsavedWarning.test.jsx` (3 tests). Not visible in screenshots
+   (the prompt is the browser's). e2e 05, 06, 07 passed.
+10. **Focus the first field with an error.** New `src/lib/focusFirstError.js`: after a submit finds
+    problems, on the next frame it focuses the first `[aria-invalid="true"]` in the form (set by
+    `Field`) and scrolls it to the middle of the screen. Called from `/register`, `/login`,
+    `/forgot-password`, and `/reset-password` when validation fails. No text changes; the existing
+    error messages (role="alert") still show. **`/request`: not applicable, so nothing changed:**
+    the request page has no field errors. "Send" stays disabled until a concern is chosen and the
+    acknowledgement is ticked, so a submit can never find problems. Checked at 360/390/1280 px:
+    empty register → "Full name", empty login and forgot-password → "School email address", each
+    in view with the focus ring. New `focusFirstError.test.jsx` (3 tests). The helper calls
+    `scrollIntoView` only when it exists (jsdom has none; the unchanged `RegisterPage.test.jsx`
+    hit that). e2e 02 28/28.
+11. **Focus after saving a check-in.** `CheckInPage.jsx` `SavedCard`: on mount, focus moves to the
+    "Your check-in is saved" h1 (it already had `tabIndex={-1}`; now also `data-route-focus` so it
+    shows no outline, like item 4). Works for both paths to the saved card: straight after Save and
+    after "Not now" on the prompt. Checked at 360/390/1280 px: focus on the h1, in view, no outline.
+    New `savedFocus.test.jsx` (2 tests). One full verify run failed with Vitest workers that could
+    not start and four unrelated tests timing out (machine under load; 299 of 311 tests ran); the
+    next run passed 313/313 with no change. e2e 05 6/6.

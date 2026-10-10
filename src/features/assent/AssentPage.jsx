@@ -11,6 +11,7 @@ import { useAuth } from '../../lib/auth/useAuth.js';
 import { homePathFor } from '../../lib/auth/homePath.js';
 import { Button, Card, Checkbox, Chip, SegmentedControl } from '../../components/ui/index.js';
 import { FormMessage } from '../auth/AuthCard.jsx';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 const CARDS = [
   { icon: Lock, title: 'card1Title', body: 'card1Body', highlight: false },
@@ -37,6 +38,7 @@ export function AssentPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const a = (key) => t(`assent.${key}`, {}, lang);
+  usePageTitle(a('title'));
 
   // Already assented: this screen is not for them.
   if (account.assent === 'granted') return <Navigate to={homePathFor(account, aal)} replace />;

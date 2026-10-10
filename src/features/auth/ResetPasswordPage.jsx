@@ -10,6 +10,8 @@ import { Button, Field, LinkButton, PasswordInput, Skeleton } from '../../compon
 import { AuthCard, FormMessage } from './AuthCard.jsx';
 import { newPasswordSchema } from './schemas.js';
 import { useForm } from './useForm.js';
+import { usePageTitle } from '../../lib/usePageTitle.js';
+import { focusFirstError } from '../../lib/focusFirstError.js';
 
 export function ResetPasswordPage() {
   const navigate = useNavigate();
@@ -18,6 +20,15 @@ export function ResetPasswordPage() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [done, setDone] = useState(false);
+  usePageTitle(
+    status === 'loading'
+      ? ''
+      : !session
+        ? t('auth.reset.invalidTitle')
+        : done
+          ? t('auth.reset.doneTitle')
+          : t('auth.reset.title'),
+  );
 
   if (status === 'loading')
     return (
@@ -42,7 +53,10 @@ export function ResetPasswordPage() {
     e.preventDefault();
     setFormError('');
     const v = validate(newPasswordSchema);
-    if (!v) return;
+    if (!v) {
+      focusFirstError(e.currentTarget);
+      return;
+    }
     setSubmitting(true);
     const { error } = await supabase.auth.updateUser({ password: v.password });
     setSubmitting(false);

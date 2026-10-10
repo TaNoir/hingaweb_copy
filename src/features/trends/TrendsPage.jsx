@@ -21,6 +21,7 @@ import {
 import { Lock, MessageCircleHeart } from 'lucide-react';
 import { TrendChart } from './TrendChart.jsx';
 import { useCheckinHistory } from './useCheckinHistory.js';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 const RANGES = ['days30', 'months3', 'all'];
 
@@ -40,6 +41,7 @@ export function TrendsPage() {
   const { session } = useAuth();
   const [range, setRange] = useState('days30');
   const [table, setTable] = useState(false);
+  usePageTitle(t('trends.title'));
   const history = useCheckinHistory(session.user.id, range);
 
   return (

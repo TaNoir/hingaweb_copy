@@ -18,6 +18,7 @@ import {
 } from '../../components/ui/index.js';
 import { useCrisisReport } from './crisisReport.js';
 import { CrisisStatus } from './CrisisStatus.jsx';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 export function CrisisPage() {
   const { session } = useAuth();
@@ -25,6 +26,7 @@ export function CrisisPage() {
   const [lang, setLang] = useState('en');
   const heading = useRef(null);
   const c = (key, vars = {}) => t(`crisis.${key}`, vars, lang);
+  usePageTitle(c('title'));
   const emergency = emergencyHotline();
 
   // Move focus to the heading so a screen reader starts here.

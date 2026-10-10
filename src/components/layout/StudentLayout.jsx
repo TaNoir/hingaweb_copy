@@ -1,4 +1,5 @@
-import { Outlet, useNavigate } from 'react-router';
+import { Link, Outlet, useNavigate } from 'react-router';
+import { LifeBuoy } from 'lucide-react';
 import { t } from '../../copy/index.js';
 import { useAuth } from '../../lib/auth/useAuth.js';
 import { Button } from '../ui/Button.jsx';
@@ -36,6 +37,18 @@ export function StudentLayout({ width = 'reading' }) {
             itemLabel={t('nav.student.logout')}
             onSelect={logOut}
           />
+        }
+        mobileAction={
+          // Phones and tablets: help is always one tap away, not only inside the Menu sheet.
+          // Below sm only the icon shows (the text does not fit at 360 px); it stays the link's name.
+          <Link
+            to="/help"
+            data-header-help=""
+            className="flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-control border border-line bg-blush px-2.5 text-[14px] font-semibold text-ink"
+          >
+            <LifeBuoy aria-hidden="true" className="size-5 shrink-0" />
+            <span className="max-sm:sr-only">{t('nav.public.needHelp')}</span>
+          </Link>
         }
         mobileExtras={
           <Button variant="outline" onClick={logOut}>
