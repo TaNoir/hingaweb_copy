@@ -51,6 +51,10 @@ export function CheckInPage() {
   };
   const answer = (column, value) => update({ answers: { ...draft.answers, [column]: value } });
   const complete = CHECKIN_ITEMS.every((i) => draft.answers[i.column] != null);
+  // Only the six questions count (not the note, not the safety items). No other number is shown.
+  const progress = t('checkin.progress', {
+    answered: CHECKIN_ITEMS.filter((i) => draft.answers[i.column] != null).length,
+  });
 
   const onTick = (itemId) => {
     if (draft.ticked.includes(itemId)) return;
@@ -123,6 +127,7 @@ export function CheckInPage() {
           {t('checkin.title')}
         </h1>
         <p className="text-base text-ink-muted">{t('checkin.lead')}</p>
+        <p className="text-[14px] font-semibold text-ink">{progress}</p>
       </header>
 
       {CHECKIN_ITEMS.map((item, i) => (
@@ -173,7 +178,7 @@ export function CheckInPage() {
 
       <FormMessage>{error}</FormMessage>
       {!complete && <p className="text-[14px] text-ink-muted">{t('checkin.required')}</p>}
-      {/* Below md only the Save button sticks to the bottom of the screen (bar under 80 px); the
+      {/* Below md only the Save button and the answered count stick to the bottom (bar under 80 px); the
           wrapper is display: contents there, so the bar's sticky area is the whole page column.
           Sticky (not fixed) keeps its own place after the last card, so at the end of the page it
           never covers a field. While the note has focus the bar stops sticking (the phone keyboard
@@ -181,13 +186,13 @@ export function CheckInPage() {
       <div className="max-md:contents md:flex md:items-center md:justify-between md:gap-3">
         <div
           className={cx(
-            'checkin-savebar -mx-4 border-t border-line bg-surface px-4 py-3 md:static md:mx-0 md:border-t-0 md:bg-transparent md:p-0',
+            'checkin-savebar -mx-4 flex items-center justify-between gap-3 max-md:flex-row-reverse border-t border-line bg-surface px-4 py-3 md:static md:mx-0 md:justify-start md:gap-4 md:border-t-0 md:bg-transparent md:p-0',
             noteFocused ? 'static' : 'sticky bottom-0 z-10',
           )}
         >
           <Button
             size="lg"
-            className="w-full md:w-auto"
+            className="shrink-0"
             onClick={onSave}
             disabled={!complete}
             loading={saving}
@@ -195,6 +200,11 @@ export function CheckInPage() {
           >
             {t('checkin.save')}
           </Button>
+          {/* The one polite live region for the count (the copy at the top is not announced).
+              Save stays first in the DOM; on phones the row is reversed so Save sits on the right. */}
+          <p role="status" className="text-[14px] font-semibold text-ink">
+            {progress}
+          </p>
         </div>
         <LinkButton to="/" variant="ghost" className="self-start">
           {t('checkin.cancel')}

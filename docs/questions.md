@@ -432,3 +432,11 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
    1023 px, header height unchanged (61 px), visible focus ring on the link. Public, staff, and admin
    headers are unchanged. The link is outside the nav landmark, so the five nav items are unchanged.
    e2e 03, 05, 06, 07 passed.
+7. **Check-in progress.** The one new copy key: `checkin.progress = '{answered} of 6 answered'`
+   (`src/copy/en/checkin.js`). `CheckInPage.jsx` counts only the six questions (`CHECKIN_ITEMS`),
+   never the note or the safety items, and shows no other number. Shown twice: under the lead at the
+   top (plain text) and in the Save bar (`role="status"`, the one polite live region, so a screen
+   reader hears each change once). In the bar the count shares the row with Save so the bar stays
+   73 px (under 80 px): Save is first in the DOM, and on phones the row is reversed so the count is
+   on the left and Save on the right; from `md` up Save is on the left, then the count, then Cancel
+   at the far right. Checked: 0 → 2 (with a note typed, still 2) → 6. e2e 05 6/6.

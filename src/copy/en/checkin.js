@@ -28,6 +28,7 @@ export const checkinCopy = {
     empty: 'If you need help now, the hotlines are on Where to get help.',
   },
   required: 'Answer questions 1 to 6 to save. The note is optional.',
+  progress: '{answered} of 6 answered', // ui-students item 7 (the one new line)
   save: 'Save check-in',
   cancel: 'Cancel and return',
   saveError:
