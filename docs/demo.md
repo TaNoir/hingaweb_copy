@@ -20,7 +20,8 @@ those two files are not changed.
 
 - **The two hotlines are real public lines:** the NCMH Crisis Hotline and the 911 National
   Emergency Hotline.
-- **Everything else is fictional and ends with "(sample)".**
+- **Everything else is fictional:** made-up names, a made-up room, `000` phone numbers and
+  `example.org` emails. These values carry no "(sample)" label on screen.
 - **Translations are not covered:** `src/copy/ceb.js` and `src/copy/tl.js` stay placeholders.
 
 ### Turn it on
@@ -55,7 +56,7 @@ would then use the sample values.
 To check that a build is clean:
 
 ```bash
-npx vite build && grep -rl "(sample)" dist   # prints nothing when demo content is off
+npx vite build && grep -rlE "NCMH|Room 101" dist   # prints nothing when demo content is off
 ```
 
 ### Safety

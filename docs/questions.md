@@ -474,3 +474,19 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
     New `savedFocus.test.jsx` (2 tests). One full verify run failed with Vitest workers that could
     not start and four unrelated tests timing out (machine under load; 299 of 311 tests ran); the
     next run passed 313/313 with no change. e2e 05 6/6.
+
+## Landing strip removed and "(sample)" dropped from demo content (user request, 2026-10-11)
+
+- **Landing top strip removed** at the user's request: the blush line "RIZAL MEMORIAL COLLEGES
+  GUIDANCE SERVICES · Senior High School Department (SHS)" and "Free · Private check-ins · No app
+  to install" (`LandingPage.jsx`). Its three copy keys (`public.landing.strip`, `stripDept`,
+  `stripRight`) are deleted; nothing else used them and no test referred to them. verify 313/313,
+  e2e 03 16/16.
+- **"(sample)" removed from the demo content values** at the user's request
+  (`src/content/demo-content.js`). This changes the earlier demo-mode rule that every fictional value
+  ends with "(sample)". The values are still fictional: "Sample Guidance Associate", "Sample
+  Psychology Clinic", Room 101, `000` numbers, `example.org` emails. `docs/demo.md` now checks a
+  clean build with `grep -rlE "NCMH|Room 101" dist` instead of "(sample)". Checked: the flag-off build
+  contains neither; the demo build has no "(sample)". **Not changed:** the demo seed's crisis items and
+  protocol step still end with "(sample)" (they live only in the local database); say if those
+  should change too.
