@@ -97,8 +97,13 @@ it needs no extra packages. It runs only once per reset; a second run stops with
 - **Crisis items:** the three placeholder crisis items are retired, and three "(sample)" items with a
   sample protocol step are added.
 - **2 crisis events:** one active, and one acknowledged and resolved.
-- **Resources:** 8 more published resources on `example.org` covering all four areas, plus one
-  draft.
+- **Resources:** real guide links instead of `example.org`.
+  - The five seed resources keep their titles and areas and get matching YoungMinds pages.
+    "Sleep and routine" stays the draft.
+  - 7 more published guides are added, each titled to match its page: Problems at school, Family,
+    Self-care, Believing in yourself, Friendships, Social media, Young carers.
+
+Demo guides link to YoungMinds (UK); the guidance office chooses the real library before the pilot.
 
 Requests, audit entries and crisis events carry the time the script ran, because the database
 stamps them. Only the check-ins are backdated.
