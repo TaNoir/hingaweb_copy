@@ -47,7 +47,7 @@ export function findViolations(copy, allowlist) {
   const out = [];
   for (const [key, value] of flatten(copy)) {
     if (allowlist.includes(value)) continue;
-    const staff = key.startsWith('staff.') || key.startsWith('admin.');
+    const staff = ['staff.', 'admin.', 'nav.staff.', 'nav.admin.'].some((p) => key.startsWith(p));
     for (const re of staff ? STAFF_BANNED : STUDENT_BANNED) {
       if (re.test(value)) out.push({ key, value, pattern: String(re) });
     }

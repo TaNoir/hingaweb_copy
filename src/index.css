@@ -1,0 +1,56 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+/* 00 Section 8.1 — the ONLY colours the app may use. The default palette is removed. */
+@theme {
+  --color-*: initial;
+  --color-canvas: #fff1f4;
+  --color-canvas-alt: #f8f6f4;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f5f2f2;
+  --color-blush: #fde4ea;
+  --color-blush-strong: #f9ccd7;
+  --color-line: #f0dce1;
+  --color-ink: #1e1e1e;
+  --color-ink-muted: #5c5c5c;
+  --color-action: #2a2a2a;
+  --color-action-ink: #f6b3c4;
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --radius-card: 16px;
+  --radius-control: 12px;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  /* 00 Section 8.4: visible focus on every interactive element */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+  main:focus {
+    outline: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

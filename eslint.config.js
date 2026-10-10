@@ -28,6 +28,11 @@ export default [
     },
   },
   {
+    // Tests and test helpers may export helpers next to components.
+    files: ['src/**/*.test.{js,jsx}', 'src/test/**/*.{js,jsx}'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
+  {
     files: ['scripts/**/*.js', 'supabase/functions/**/*.js', 'e2e/**/*.js', '*.config.js'],
     languageOptions: {
       ecmaVersion: 'latest',
