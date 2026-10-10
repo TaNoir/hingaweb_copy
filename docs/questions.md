@@ -324,3 +324,9 @@ affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 3
    (Save stacked above Cancel). If that feels heavy, Save and Cancel could share one row in the bar.
    e2e 05 6/6. Screenshot `09-sticky-save/student-check-in-390-scrolled-viewport.png` shows it
    mid-scroll.
+10. **Landing hero waves.** `src/features/public/LandingPage.jsx`: one inline SVG (three calm wave
+    lines, like the logo) at the end of the hero text column, `aria-hidden="true"`,
+    `focusable="false"`, no text, no image file. Strokes use tokens only:
+    `var(--color-blush-strong)`, `var(--color-line)`, `var(--color-ink)`. Width up to 420 px, scales
+    down on phones. Landing stays in the main bundle; check:bundle OK (+~0.5 KB). e2e 03 16/16 (axe on
+    `/` included).
