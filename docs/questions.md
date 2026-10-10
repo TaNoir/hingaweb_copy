@@ -306,3 +306,8 @@ affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 3
    so the wait for "Saved." after "Retire item" could pass before the retire was stored, and the
    student page reloaded too early. Added a wait for the item's "Retire" button to disappear before
    the reload. Expected results unchanged. Pre-existing race, not caused by the table change.
+8. **Queue Notes markers as chips.** `src/features/guidance/QueuePage.jsx`: each Notes marker ("Has
+   another open request", "Follow-up overdue", "No first contact in 3 school days") is a default
+   (blush) `Chip` instead of bold text, in a wrapping row (right-aligned on phone cards, left in the
+   desktop table). Long markers wrap to two lines inside the chip in the desktop column (kept, so the
+   other columns are not squeezed). Same text, so `queue.test.jsx` is unchanged. e2e 08 6/6.

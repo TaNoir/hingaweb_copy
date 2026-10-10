@@ -11,6 +11,7 @@ import { formatDateTime } from '../../lib/format.js';
 import { holidaysConfigured } from '../../lib/time.js';
 import {
   Button,
+  Chip,
   EmptyState,
   ErrorState,
   SegmentedControl,
@@ -219,11 +220,9 @@ function QueueTable({ rows }) {
           key: 'notes',
           header: t('guidance.queue.columns.notes'),
           render: (r) => (
-            <span className="flex flex-col gap-1 text-right md:text-left">
+            <span className="flex flex-wrap justify-end gap-1 md:justify-start">
               {markersFor(r, now).map((m) => (
-                <span key={m} className="font-semibold text-ink">
-                  {t(`guidance.queue.markers.${m}`)}
-                </span>
+                <Chip key={m}>{t(`guidance.queue.markers.${m}`)}</Chip>
               ))}
             </span>
           ),
