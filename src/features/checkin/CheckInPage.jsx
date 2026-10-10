@@ -121,7 +121,7 @@ export function CheckInPage() {
       </header>
 
       {CHECKIN_ITEMS.map((item, i) => (
-        <Card key={item.column}>
+        <Card key={item.column} className="max-sm:p-3">
           <ScaleButtons
             name={item.column}
             legend={`${i + 1}. ${t(item.textKey)}`}

@@ -40,7 +40,10 @@ export function ScaleButtons({ name, legend, hint = '', options, value, onChange
           {hint}
         </p>
       )}
-      <div className="mt-3 grid grid-cols-5 gap-1.5 sm:gap-2">
+      {/* Below sm the gap and side padding are tight and the text is 12 px so the longest answer
+          ("Somewhat") fits whole at 390 px. Words never break mid-word; on narrower screens a word
+          that still does not fit breaks only with a hyphen. */}
+      <div className="mt-3 grid grid-cols-5 gap-[3px] sm:gap-2">
         {options.map((o, i) => {
           const selected = o.value === value;
           return (
@@ -54,7 +57,7 @@ export function ScaleButtons({ name, legend, hint = '', options, value, onChange
               onClick={() => onChange(o.value)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cx(
-                'min-h-11 rounded-control border px-1 py-1 text-[13px] leading-tight hyphens-auto [overflow-wrap:anywhere] sm:px-2 sm:text-[14px]',
+                'min-h-11 rounded-control border px-0 py-1 text-[12px] leading-tight hyphens-auto [overflow-wrap:normal] [word-break:normal] sm:px-2 sm:text-[14px]',
                 selected
                   ? 'border-action bg-action font-semibold text-action-ink'
                   : 'border-line bg-blush text-ink',

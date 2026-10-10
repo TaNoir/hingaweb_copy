@@ -358,3 +358,24 @@ by `check:placeholders`.
   therefore does not appear in the demo data. Backdating them would mean turning off more stamp
   triggers, which was not asked for.
 - How to use it: `docs/demo.md`.
+
+## UI polish (students)
+
+Branch `ui-students`. `ui-polish-2` does not exist, so items 1 to 3 were done. Every verify, e2e,
+and screenshot run used `VITE_DEMO_CONTENT=false`, because `.env.local` currently turns demo mode
+on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-students/`.
+
+1. **No mid-word breaks in the answer buttons.** `ScaleButtons.jsx`: the buttons override the
+   body's `overflow-wrap: anywhere` with `overflow-wrap: normal; word-break: normal` and keep
+   `hyphens: auto` (`<html lang="en">`). Below `sm`: side padding 0 (was 4 px), grid gap 3 px
+   (was 6 px), text 12 px (was 13 px); `CheckInPage.jsx` check-in question cards use 12 px padding
+   below `sm` (was 20 px). Reducing padding, gap, and card padding alone was not enough: at 13 px
+   "Somewhat" is 64.7 px wide (66.5 px when selected, semibold) and the widest a button can get at
+   390 px with sensible card padding is about 62 px, so the text also drops to 12 px below `sm`.
+   Measured at 390 px: button content 62 px, "Somewhat" 59.8 px (61.4 px selected): fits whole.
+   At 360 px it cannot fit (56 px), so it relies on `hyphens: auto` ("Some-what"). **Note:** the
+   headless Chromium used for screenshots on Windows has no hyphenation dictionary, so
+   `crop-360-somewhat-selected.png` shows the word cut at the button edge instead of hyphenated;
+   phone browsers (Android Chrome, iOS Safari) ship English hyphenation. Height stays 44 px. e2e 05
+   6/6. One unrelated unit test (`request.test.jsx`, a 1 s `findBy`) timed out once under full-suite
+   load; it passed alone 3/3 and on the next full verify, so no change was made.
