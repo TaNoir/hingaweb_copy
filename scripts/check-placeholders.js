@@ -10,8 +10,12 @@ export const PLACEHOLDER = /\[\[(GUIDANCE|TEAM|SCHOOL):[A-Za-z0-9_.:-]+\]\]/g;
 
 if (process.argv[1] && process.argv[1].endsWith('check-placeholders.js')) {
   const strict = process.argv.includes('--strict');
+  // Test files quote placeholders on purpose (to check they render as written), so they are
+  // not counted. Only app code and the seed are listed.
   const files = [
-    ...walk('src', ['.js', '.jsx', '.css', '.html']),
+    ...walk('src', ['.js', '.jsx', '.css', '.html']).filter(
+      (f) => !/\.test\.(js|jsx)$/.test(f) && !f.startsWith('src/test/'),
+    ),
     ...(existsSync(join(ROOT, 'supabase/seed.sql')) ? ['supabase/seed.sql'] : []),
   ];
 
@@ -52,6 +56,14 @@ if (process.argv[1] && process.argv[1].endsWith('check-placeholders.js')) {
     if (!existsSync(itemsPath)) problems.push('src/config/checkin-items.js is missing');
     else if ((await import(pathToFileURL(itemsPath).href)).CHECKIN_ITEMS_STATUS !== 'final')
       problems.push("checkin-items.js CHECKIN_ITEMS_STATUS is not 'final' (co-design not applied)");
+    const consentPath = join(ROOT, 'src/config/consent.js');
+    if (existsSync(consentPath)) {
+      const { ASSENT_COPY_STATUS } = await import(pathToFileURL(consentPath).href);
+      if (ASSENT_COPY_STATUS !== 'final')
+        problems.push(
+          "consent.js ASSENT_COPY_STATUS is not 'final' (validator panel has not confirmed the assent wording)",
+        );
+    }
     if (problems.length) {
       console.error('build:pilot blocked:\n- ' + problems.join('\n- '));
       process.exit(1);

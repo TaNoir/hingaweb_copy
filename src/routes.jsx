@@ -26,6 +26,8 @@ import { PhasePlaceholder } from './features/placeholder/PhasePlaceholder.jsx';
 import { LandingPage } from './features/public/LandingPage.jsx';
 import { GuidesPage } from './features/public/GuidesPage.jsx';
 import { HelpPage } from './features/public/HelpPage.jsx';
+import { AssentPage } from './features/assent/AssentPage.jsx';
+import { WaitingForConsentPage } from './features/assent/WaitingForConsentPage.jsx';
 
 export function AppRoutes() {
   return (
@@ -53,8 +55,8 @@ export function AppRoutes() {
       {/* Signed-in students, any consent state */}
       <Route element={<RequireStudent />}>
         <Route element={<BareLayout />}>
-          <Route path="welcome" element={<PhasePlaceholder phase="04" />} />
-          <Route path="waiting-for-consent" element={<PhasePlaceholder phase="04" />} />
+          <Route path="welcome" element={<AssentPage />} />
+          <Route path="waiting-for-consent" element={<WaitingForConsentPage />} />
           <Route path="crisis" element={<PhasePlaceholder phase="05" />} />
         </Route>
       </Route>
