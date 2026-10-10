@@ -13,12 +13,7 @@ export function PortalLayout() {
       <SkipLink />
       <header className="border-b border-line bg-canvas">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-2 md:px-6">
-          <div className="flex items-center gap-4">
-            <Logo to="/staff/login" />
-            <span className="hidden border-l border-line pl-4 text-[13px] tracking-[0.14em] text-ink-muted sm:inline">
-              {t('staff.portal.label')}
-            </span>
-          </div>
+          <Logo to="/staff/login" />
           <span className="flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-[13px] tracking-[0.14em] text-ink">
             <Lock aria-hidden="true" className="size-4" />
             {t('staff.portal.label')}

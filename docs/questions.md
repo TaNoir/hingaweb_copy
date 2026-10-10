@@ -289,3 +289,7 @@ affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 3
    `public.guides.freeAccess` removed from `src/copy/en/public.js` (it was used nowhere else). No unit
    test or e2e spec checked that text, so no test changed. Affects `/`, `/guides`, `/resources`.
    e2e 03 16/16, 06 3/3.
+6. **PortalLayout — one "STAFF PORTAL".** `src/components/layout/PortalLayout.jsx`: the duplicate
+   label beside the logo (shown from 640 px) is removed; the pill with the lock icon stays (copy key
+   `staff.portal.label` still used there). Applies to `/staff/login`, `/staff/verify`, `/staff/setup`.
+   No test referenced the label. e2e 02 28/28.
