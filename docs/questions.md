@@ -278,3 +278,9 @@ affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 3
    desktop. Measured: Tab order matches screen order at 390 and 1280 px on `/welcome`, `/check-in`,
    `/request`, the create-staff and deactivate dialogs. e2e 04, 05, 07, 09 pass. This resolves the
    Phase 07 "polish before defense" item.
+4. **HotlineList `variant`.** `src/features/public/HotlineList.jsx` takes `variant` (`'primary'`
+   default, `'outline'`; any other value falls back to primary) for the "Call …" buttons. `outline`
+   is used only in `src/features/public/NeedHelpCard.jsx` (landing page) and
+   `src/features/public/HelpPage.jsx`. `RequestPage.jsx` and `RequestSentPage.jsx` keep the default
+   primary style; the crisis screen does not use `HotlineList` (its own rows are unchanged). Existing
+   `outline` button tokens only (surface background, ink border and text). e2e 03 16/16, 07 3/3.
