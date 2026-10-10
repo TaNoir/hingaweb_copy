@@ -2,6 +2,7 @@
 import { publicCopy } from './public.js';
 import { assentCopy, waitingCopy } from './assent.js';
 import { checkinCopy, crisisCopy } from './checkin.js';
+import { trendsCopy, resourcesCopy } from './trends.js';
 
 export const sections = {
   public: publicCopy,
@@ -9,4 +10,6 @@ export const sections = {
   waiting: waitingCopy,
   checkin: checkinCopy,
   crisis: crisisCopy,
+  trends: trendsCopy,
+  resources: resourcesCopy,
 };

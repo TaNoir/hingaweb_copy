@@ -165,6 +165,66 @@ describe('SegmentedControl', () => {
     await userEvent.click(screen.getByRole('radio', { name: 'B' }));
     expect(onChange).toHaveBeenCalledWith('b');
   });
+
+  const three = [
+    { value: 'a', label: 'A' },
+    { value: 'b', label: 'B' },
+    { value: 'c', label: 'C' },
+  ];
+
+  it('is one Tab stop: the selected option, or the first when none is selected', () => {
+    const { rerender } = render(
+      <SegmentedControl label="Range" value="b" onChange={() => {}} options={three} />,
+    );
+    const tabIndexes = () => screen.getAllByRole('radio').map((r) => r.tabIndex);
+    expect(tabIndexes()).toEqual([-1, 0, -1]);
+    rerender(<SegmentedControl label="Range" value={null} onChange={() => {}} options={three} />);
+    expect(tabIndexes()).toEqual([0, -1, -1]);
+  });
+
+  it('moves focus with the arrow keys, wrapping, without selecting', async () => {
+    const onChange = vi.fn();
+    render(<SegmentedControl label="Range" value="a" onChange={onChange} options={three} />);
+    await userEvent.tab();
+    expect(screen.getByRole('radio', { name: 'A' })).toHaveFocus();
+    await userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByRole('radio', { name: 'B' })).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByRole('radio', { name: 'C' })).toHaveFocus();
+    await userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByRole('radio', { name: 'A' })).toHaveFocus();
+    await userEvent.keyboard('{ArrowLeft}');
+    expect(screen.getByRole('radio', { name: 'C' })).toHaveFocus();
+    await userEvent.keyboard('{ArrowUp}');
+    expect(screen.getByRole('radio', { name: 'B' })).toHaveFocus();
+    expect(onChange).not.toHaveBeenCalled();
+    expect(screen.getByRole('radio', { name: 'A' })).toHaveAttribute('aria-checked', 'true');
+  });
+
+  it('Home and End move focus to the first and last option without selecting', async () => {
+    const onChange = vi.fn();
+    render(<SegmentedControl label="Range" value="b" onChange={onChange} options={three} />);
+    await userEvent.tab();
+    expect(screen.getByRole('radio', { name: 'B' })).toHaveFocus();
+    await userEvent.keyboard('{End}');
+    expect(screen.getByRole('radio', { name: 'C' })).toHaveFocus();
+    await userEvent.keyboard('{Home}');
+    expect(screen.getByRole('radio', { name: 'A' })).toHaveFocus();
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('Enter and Space select the focused option', async () => {
+    const onChange = vi.fn();
+    render(<SegmentedControl label="Range" value="a" onChange={onChange} options={three} />);
+    await userEvent.tab();
+    await userEvent.keyboard('{ArrowRight}');
+    await userEvent.keyboard('{Enter}');
+    expect(onChange).toHaveBeenLastCalledWith('b');
+    await userEvent.keyboard('{ArrowRight}');
+    await userEvent.keyboard(' ');
+    expect(onChange).toHaveBeenLastCalledWith('c');
+    expect(onChange).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe('Dialog', () => {
