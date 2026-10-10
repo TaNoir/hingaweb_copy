@@ -231,3 +231,19 @@ to the queue"): those tests render with `MemoryRouter`, where `window.location` 
 unchanged-path check keeps every existing test expectation as it was. New unit test in
 `completeStaffSignIn.test.js`: from each sign-in step it navigates when the path is unchanged and
 does not navigate when the path changed before it finished (291 tests).
+
+## UI polish
+
+Branch `ui-polish` (from `main`). One commit per item; each checked with `npm run verify`, the
+affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 390, 768 and 1280 px
+(kept outside the repository, in `C:\Users\Modern15\hingaweb2-screenshots\ui-polish\`).
+
+1. **ScaleButtons — 5 columns at every width.** `src/components/ui/ScaleButtons.jsx`: grid is
+   `grid-cols-5` at all widths (was one column below 640 px); answers may wrap to two lines
+   (`leading-tight`, `py-1`); 13 px text and `px-1` below 640 px, 14 px and `px-2` from 640 px; min
+   height still 44 px; radio-group keyboard behaviour unchanged. At 390 px each answer is 58×44 px.
+   **Limitation:** "Somewhat" is 65–67 px wide at the 13 px minimum (00 §8.2), wider than a column
+   at 390 px, so it cannot stay on one line. `hyphens-auto` breaks it as "Some-/what" where the
+   browser has English hyphenation (Chrome on Android, Safari iOS, Firefox, Chrome on macOS);
+   elsewhere `overflow-wrap:anywhere` breaks it without a hyphen ("Somew/hat", seen in the headless
+   test browser). Nothing is clipped. Team may prefer to reword the scale label at co-design.

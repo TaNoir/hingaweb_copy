@@ -40,7 +40,7 @@ export function ScaleButtons({ name, legend, hint = '', options, value, onChange
           {hint}
         </p>
       )}
-      <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-5">
+      <div className="mt-3 grid grid-cols-5 gap-1.5 sm:gap-2">
         {options.map((o, i) => {
           const selected = o.value === value;
           return (
@@ -54,7 +54,7 @@ export function ScaleButtons({ name, legend, hint = '', options, value, onChange
               onClick={() => onChange(o.value)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cx(
-                'min-h-11 rounded-control border px-2 text-[14px]',
+                'min-h-11 rounded-control border px-1 py-1 text-[13px] leading-tight hyphens-auto [overflow-wrap:anywhere] sm:px-2 sm:text-[14px]',
                 selected
                   ? 'border-action bg-action font-semibold text-action-ink'
                   : 'border-line bg-blush text-ink',
