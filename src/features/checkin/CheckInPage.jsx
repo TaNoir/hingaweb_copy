@@ -19,6 +19,7 @@ import {
   Skeleton,
   Textarea,
 } from '../../components/ui/index.js';
+import { cx } from '../../components/ui/cx.js';
 import { FormMessage } from '../auth/AuthCard.jsx';
 import { clearDraft, loadDraft, saveDraft } from './checkinDraft.js';
 import { useCrisisItems } from './useCrisisItems.js';
@@ -36,6 +37,7 @@ export function CheckInPage() {
   const [prompt, setPrompt] = useState(null); // { checkinId, type } while Fig 15 is open
   const [dismissing, setDismissing] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [noteFocused, setNoteFocused] = useState(false);
   const crisisItems = useCrisisItems();
   const report = useCrisisReport(owner);
 
@@ -140,6 +142,8 @@ export function CheckInPage() {
             value={draft.note}
             placeholder={t('checkin.note.placeholder')}
             onChange={(e) => update({ note: e.target.value })}
+            onFocus={() => setNoteFocused(true)}
+            onBlur={() => setNoteFocused(false)}
           />
         </Field>
       </Card>
@@ -165,13 +169,22 @@ export function CheckInPage() {
       </section>
 
       <FormMessage>{error}</FormMessage>
-      {/* Below md the Save row sticks to the bottom of the screen. Sticky (not fixed) keeps its own
-          place after the last card, so at the end of the page it never covers a field. */}
-      <div className="checkin-savebar sticky bottom-0 z-10 -mx-4 flex flex-col gap-3 border-t border-line bg-surface px-4 py-3 md:static md:z-auto md:mx-0 md:border-t-0 md:bg-transparent md:p-0">
-        {!complete && <p className="text-[14px] text-ink-muted">{t('checkin.required')}</p>}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      {!complete && <p className="text-[14px] text-ink-muted">{t('checkin.required')}</p>}
+      {/* Below md only the Save button sticks to the bottom of the screen (bar under 80 px); the
+          wrapper is display: contents there, so the bar's sticky area is the whole page column.
+          Sticky (not fixed) keeps its own place after the last card, so at the end of the page it
+          never covers a field. While the note has focus the bar stops sticking (the phone keyboard
+          is open). From md up, Save and Cancel share one row as before. */}
+      <div className="max-md:contents md:flex md:items-center md:justify-between md:gap-3">
+        <div
+          className={cx(
+            'checkin-savebar -mx-4 border-t border-line bg-surface px-4 py-3 md:static md:mx-0 md:border-t-0 md:bg-transparent md:p-0',
+            noteFocused ? 'static' : 'sticky bottom-0 z-10',
+          )}
+        >
           <Button
             size="lg"
+            className="w-full md:w-auto"
             onClick={onSave}
             disabled={!complete}
             loading={saving}
@@ -179,10 +192,10 @@ export function CheckInPage() {
           >
             {t('checkin.save')}
           </Button>
-          <LinkButton to="/" variant="ghost">
-            {t('checkin.cancel')}
-          </LinkButton>
         </div>
+        <LinkButton to="/" variant="ghost" className="self-start">
+          {t('checkin.cancel')}
+        </LinkButton>
       </div>
 
       <PromptDialog open={prompt != null} busy={dismissing} onSend={onSend} onNotNow={onNotNow} />

@@ -379,3 +379,12 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
    phone browsers (Android Chrome, iOS Safari) ship English hyphenation. Height stays 44 px. e2e 05
    6/6. One unrelated unit test (`request.test.jsx`, a 1 s `findBy`) timed out once under full-suite
    load; it passed alone 3/3 and on the next full verify, so no change was made.
+2. **Only Save is sticky on phones.** `CheckInPage.jsx`: below `md` the sticky bar holds just the
+   full-width "Save check-in" button (bar 73 px tall at 360 and 390 px). The "Answer questions 1 to
+   6 to save. The note is optional." line sits in the normal page flow above it, and "Cancel and
+   return" sits in the flow below it. The Save/Cancel wrapper is `display: contents` below `md`, so
+   the bar's sticky area is still the whole page column; from `md` up the wrapper is the same single
+   row as before (Save left, Cancel right). While the note textarea has focus the bar is not sticky
+   (it returns to its own place after the safety box, off screen while typing), so it never sits
+   above the phone keyboard. `index.css`: `scroll-padding-bottom` 11rem → 6rem to match the smaller
+   bar. Checked with Tab at 360 and 390 px: no focused control ends up behind the bar. e2e 05 6/6.
