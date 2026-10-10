@@ -174,3 +174,60 @@ navigating; an error result still navigates; a thrown error still navigates). No
 1. **Phase 07 · `RequestPage.jsx` button order on phones** (see the Phase 07 observation above):
    below 640 px "Send request" shows above "Cancel" but Tab reaches "Cancel" first (WCAG 2.4.3).
    Team decision: leave as is for now; fix before the defense.
+
+## Phase 09 · local `SITE_URL` for the invitation e2e (environment only, no code change)
+
+`e2e/phase-09/admin.spec.js` › "accounts: lists staff and invites a new guidance account" failed
+only because the invitation link redirected to `http://localhost:5173/staff/setup` (the
+`admin-accounts` default `SITE_URL`), while Playwright serves the app on `http://localhost:4173`:
+`page.goto: net::ERR_CONNECTION_REFUSED … redirect_to=http://localhost:5173/staff/setup`.
+As agreed in advance, `SITE_URL=http://localhost:4173` was added to `supabase/functions/.env`
+(git-ignored, local only) and the functions server restarted. No code or spec change.
+Note: with this line, invitations sent while using `npm run dev` (port 5173) will point at 4173;
+remove or change the line for manual testing on the dev server. Hosted: 09 Step 12 sets
+`SITE_URL` to the production domain.
+
+## Phase 09 · e2e/phase-09/admin.spec.js · selector fixed (standing rule)
+
+Test "resources: a published resource appears on the public guides page" failed with a Playwright
+strict-mode violation: on `/guides`, `getByText('E2E published guide')` matched both the card's
+`<h3>` and the screen-reader text inside its "Read guide … (opens in a new tab)" link. The app was
+correct (the published guide was on the page). Selector changed to
+`p.getByRole('heading', { name: 'E2E published guide' })`; the test still expects it to be visible.
+`e2e/phase-09`: 6 passed on desktop, 6 skipped on mobile.
+
+## Phase 09 (found while checking) · staff sign-in navigates home twice; a fast click elsewhere is undone
+
+Measured in Chromium on a production build (`nav-trace`, admin.one): after "Verify",
+`/admin/accounts` at 1395 ms → user clicks "Consent" → `/admin/consent` at 1483 ms →
+**`/admin/accounts` again at 1624 ms**, and the user stays there. No full page reload happens; both
+are client-side navigations. Same pattern for guidance (`/staff/queue`).
+
+Cause: two things send the staff member home after the second factor:
+1. `RequireStaffSession` on `/staff/verify` (and `/staff/setup`) renders
+   `<Navigate to={homePathFor(...)} />` as soon as `AuthProvider` sees aal2 (from the
+   `MFA_CHALLENGE_VERIFIED` / `TOKEN_REFRESHED` events), and
+2. `completeStaffSignIn()` then finishes `refreshSession()` + `refresh()` and calls
+   `navigate(home, { replace: true })` regardless of where the user is now.
+In the Phase 02 code both fired at almost the same moment, so the gap was tiny; the Phase 08
+`refreshSession()` (team decision above) widened it to about 0.2 s. No Phase 02–09 spec clicks
+that fast, so all specs pass; it would surprise a quick user and it blocks a scripted check run.
+
+Proposed fix (not applied; change to `src/features/auth/completeStaffSignIn.js` only, the same file
+as the Phase 08 decision): navigate only if the browser is still on the sign-in step, e.g.
+`if (['/staff/verify', '/staff/setup'].includes(window.location.pathname)) navigate(...)`,
+plus one unit test that it does not navigate when the path has already changed. The aal2 refresh
+for Realtime stays as it is. What we need to know: may this be applied?
+
+**Team decision (10 Oct 2026), answering the question above — `completeStaffSignIn.js` only:**
+navigate home only while the browser is still on the sign-in step (`/staff/verify` or
+`/staff/setup`). `setLastActivity`, `timeoutFlag.clear()` and `refreshSession()` stay where they were.
+Implementation note: the function records `window.location.pathname` when it starts and navigates
+only if the path is unchanged after `refresh()`. Both callers are the `/staff/verify` and
+`/staff/setup` pages, so in the app this is exactly "still on /staff/verify or /staff/setup". A
+literal `['/staff/verify', '/staff/setup'].includes(window.location.pathname)` check was tried
+first and broke four tests, including the plan's own `StaffVerifyPage.test.jsx` ("on success … goes
+to the queue"): those tests render with `MemoryRouter`, where `window.location` stays at `/`. The
+unchanged-path check keeps every existing test expectation as it was. New unit test in
+`completeStaffSignIn.test.js`: from each sign-in step it navigates when the path is unchanged and
+does not navigate when the path changed before it finished (291 tests).

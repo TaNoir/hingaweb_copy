@@ -1,4 +1,4 @@
-// The route table from 00 Section 7. Later phases replace <PhasePlaceholder> elements with their screens.
+// The route table from 00 Section 7. Every route now has its real screen (Phase 09).
 import { Navigate, Route, Routes } from 'react-router';
 import {
   RequireGuest,
@@ -21,7 +21,6 @@ import { StaffLoginPage } from './features/auth/StaffLoginPage.jsx';
 import { StaffVerifyPage } from './features/auth/StaffVerifyPage.jsx';
 import { StaffSetupPage } from './features/auth/StaffSetupPage.jsx';
 import { NotFoundPage } from './features/auth/NotFoundPage.jsx';
-import { PhasePlaceholder } from './features/placeholder/PhasePlaceholder.jsx';
 import { LandingPage } from './features/public/LandingPage.jsx';
 import { GuidesPage } from './features/public/GuidesPage.jsx';
 import { HelpPage } from './features/public/HelpPage.jsx';
@@ -39,6 +38,12 @@ import { RequestDetailPage } from './features/guidance/RequestDetailPage.jsx';
 import { OfficeTagPage } from './features/guidance/OfficeTagPage.jsx';
 import { CrisisChannelPage } from './features/guidance/CrisisChannelPage.jsx';
 import { ReferralsPage } from './features/guidance/ReferralsPage.jsx';
+import { AccountsPage } from './features/admin/AccountsPage.jsx';
+import { ConsentPage } from './features/admin/ConsentPage.jsx';
+import { ReferencePage } from './features/admin/ReferencePage.jsx';
+import { ResourceLibraryPage } from './features/admin/ResourceLibraryPage.jsx';
+import { ResourceEditPage } from './features/admin/ResourceEditPage.jsx';
+import { AuditPage } from './features/admin/AuditPage.jsx';
 
 export function AppRoutes() {
   return (
@@ -110,13 +115,13 @@ export function AppRoutes() {
       <Route element={<RequireStaff role="administrator" />}>
         <Route element={<AdminLayout />}>
           <Route path="admin" element={<Navigate to="/admin/accounts" replace />} />
-          <Route path="admin/accounts" element={<PhasePlaceholder phase="09" />} />
-          <Route path="admin/consent" element={<PhasePlaceholder phase="09" />} />
-          <Route path="admin/reference" element={<PhasePlaceholder phase="09" />} />
-          <Route path="admin/resources" element={<PhasePlaceholder phase="09" />} />
-          <Route path="admin/resources/new" element={<PhasePlaceholder phase="09" />} />
-          <Route path="admin/resources/:id" element={<PhasePlaceholder phase="09" />} />
-          <Route path="admin/audit" element={<PhasePlaceholder phase="09" />} />
+          <Route path="admin/accounts" element={<AccountsPage />} />
+          <Route path="admin/consent" element={<ConsentPage />} />
+          <Route path="admin/reference" element={<ReferencePage />} />
+          <Route path="admin/resources" element={<ResourceLibraryPage />} />
+          <Route path="admin/resources/new" element={<ResourceEditPage />} />
+          <Route path="admin/resources/:id" element={<ResourceEditPage />} />
+          <Route path="admin/audit" element={<AuditPage />} />
         </Route>
       </Route>
 

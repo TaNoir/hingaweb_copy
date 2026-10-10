@@ -55,4 +55,30 @@ describe('completeStaffSignIn (Realtime gets the aal2 token after MFA verify)', 
     await completeStaffSignIn({ refresh: async () => GUIDANCE_AAL2, navigate });
     expect(navigate).toHaveBeenCalledWith('/staff/queue', { replace: true });
   });
+
+  it('navigates only while still on the sign-in step, so a fast click elsewhere is not undone', async () => {
+    mock.client.auth.refreshSession = vi.fn(async () => ({ data: {}, error: null }));
+    try {
+      for (const step of ['/staff/verify', '/staff/setup']) {
+        window.history.pushState({}, '', step);
+        const stays = vi.fn();
+        await completeStaffSignIn({ refresh: async () => GUIDANCE_AAL2, navigate: stays });
+        expect(stays).toHaveBeenCalledWith('/staff/queue', { replace: true });
+
+        window.history.pushState({}, '', step);
+        const movedAway = vi.fn();
+        await completeStaffSignIn({
+          refresh: async () => {
+            // The guard sent the user home and they opened another page before this finished.
+            window.history.pushState({}, '', '/staff/crisis');
+            return GUIDANCE_AAL2;
+          },
+          navigate: movedAway,
+        });
+        expect(movedAway).not.toHaveBeenCalled();
+      }
+    } finally {
+      window.history.pushState({}, '', '/');
+    }
+  });
 });

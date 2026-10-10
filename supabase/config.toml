@@ -438,3 +438,9 @@ entrypoint = "./functions/rank-resources/index.js"
 enabled = true
 verify_jwt = true
 entrypoint = "./functions/submit-support-request/index.js"
+
+# ---- Phase 09 ----
+[functions.admin-accounts]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/admin-accounts/index.js"
