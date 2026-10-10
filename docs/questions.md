@@ -330,3 +330,31 @@ affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 3
     `var(--color-blush-strong)`, `var(--color-line)`, `var(--color-ink)`. Width up to 420 px, scales
     down on phones. Landing stays in the main bundle; check:bundle OK (+~0.5 KB). e2e 03 16/16 (axe on
     `/` included).
+
+## Demo mode (team decision, branch `demo-mode`)
+
+**Decision (team):** a demo mode with sample data is allowed for local demos and screenshots only.
+For the demo file `src/content/demo-content.js` **only**, it overrides must-never 11 (and the
+matching rule 6 in 00 Section 1): that file holds two real public hotlines (NCMH Crisis Hotline,
+National Emergency Hotline 911), sample office hours, a sample room, and sample office numbers. The
+sample crisis items and protocol step exist only in `scripts/demo-seed.js`, which writes to the
+LOCAL database only. Everything fictional ends with "(sample)". `src/copy/ceb.js` and `tl.js` are
+untouched. The `[[...]]` placeholders in `site.js` and `directory.js` are unchanged and still listed
+by `check:placeholders`.
+
+- **Switch:** `import.meta.env.VITE_DEMO_CONTENT === 'true'`. Vite replaces this with a constant, so
+  with the flag off the demo module is unused and left out of the bundle. Checked: after a normal
+  `vite build`, `grep -rl "(sample)" dist` and `grep -rl NCMH dist` find nothing.
+- **Safety:** `check-placeholders.js --strict` (`build:pilot`) fails if `VITE_DEMO_CONTENT` is
+  `"true"` in the environment or in any root `.env*` file. Checked both cases.
+- **Demo seed:** `scripts/demo-seed.js` refuses unless `.env.local` `VITE_SUPABASE_URL` is
+  `127.0.0.1` or `localhost` (checked with a hosted-style URL: refused). It applies through
+  `docker exec … psql` (no new packages) and never touches `supabase/seed.sql` or migrations. Scores
+  and bands come from `saw.js` + `scoring-config.js`. Office tag values are read from
+  `src/config/vocabulary.js`, so the script itself holds no colour words. Only the check-in stamp
+  trigger is turned off (for the backdated rows) and it is turned on again in the same run.
+- **Note:** requests, audit rows, and crisis events are stamped by the database at seed time, so the
+  queue and audit trail all show the same minute; the "No first contact in 3 school days" marker
+  therefore does not appear in the demo data. Backdating them would mean turning off more stamp
+  triggers, which was not asked for.
+- How to use it: `docs/demo.md`.

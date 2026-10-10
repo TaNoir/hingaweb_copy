@@ -1,7 +1,7 @@
 // 00 Section 11.3. Lists every [[OWNER:KEY]] placeholder into docs/placeholders.md.
 // --strict (used by build:pilot): exit 1 if any placeholder remains in src/, if scoring is
-// PROVISIONAL, or if the check-in items are not final.
-import { writeFileSync, existsSync } from 'node:fs';
+// PROVISIONAL, if the check-in items are not final, or if demo mode (VITE_DEMO_CONTENT=true) is on.
+import { writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { ROOT, walk, read } from './lib.js';
@@ -48,6 +48,13 @@ if (process.argv[1] && process.argv[1].endsWith('check-placeholders.js')) {
     const problems = [];
     const inSrc = rows.filter((r) => r.file.startsWith('src/'));
     if (inSrc.length) problems.push(`${inSrc.length} placeholder(s) remain in src/`);
+    // Demo mode (docs/demo.md) swaps placeholders for sample values; a pilot build must never use it.
+    if (process.env.VITE_DEMO_CONTENT === 'true')
+      problems.push('VITE_DEMO_CONTENT is "true" in the environment (demo mode)');
+    for (const name of readdirSync(ROOT).filter((n) => /^\.env(\..+)?$/.test(n))) {
+      if (/^\s*VITE_DEMO_CONTENT\s*=\s*["']?true["']?\s*$/m.test(read(name)))
+        problems.push(`VITE_DEMO_CONTENT is "true" in ${name} (demo mode)`);
+    }
     const scoringPath = join(ROOT, 'supabase/functions/_shared/scoring-config.js');
     if (!existsSync(scoringPath)) problems.push('scoring-config.js is missing');
     else if ((await import(pathToFileURL(scoringPath).href)).PROVISIONAL !== false)
