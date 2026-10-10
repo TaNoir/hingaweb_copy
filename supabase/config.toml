@@ -432,3 +432,9 @@ entrypoint = "./functions/notify-crisis/index.js"
 enabled = true
 verify_jwt = true
 entrypoint = "./functions/rank-resources/index.js"
+
+# ---- Phase 07 ----
+[functions.submit-support-request]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/submit-support-request/index.js"

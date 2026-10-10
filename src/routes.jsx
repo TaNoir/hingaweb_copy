@@ -32,6 +32,8 @@ import { CheckInPage } from './features/checkin/CheckInPage.jsx';
 import { CrisisPage } from './features/crisis/CrisisPage.jsx';
 import { TrendsPage } from './features/trends/TrendsPage.jsx';
 import { ResourcesPage } from './features/resources/ResourcesPage.jsx';
+import { RequestPage } from './features/requests/RequestPage.jsx';
+import { RequestSentPage } from './features/requests/RequestSentPage.jsx';
 
 export function AppRoutes() {
   return (
@@ -71,8 +73,8 @@ export function AppRoutes() {
           <Route path="check-in" element={<CheckInPage />} />
           <Route path="trends" element={<TrendsPage />} />
           <Route path="resources" element={<ResourcesPage />} />
-          <Route path="request" element={<PhasePlaceholder phase="07" />} />
-          <Route path="request/sent" element={<PhasePlaceholder phase="07" />} />
+          <Route path="request" element={<RequestPage />} />
+          <Route path="request/sent" element={<RequestSentPage />} />
         </Route>
       </Route>
 

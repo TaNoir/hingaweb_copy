@@ -100,3 +100,28 @@ and audited, so selection must never happen just by moving focus. This intention
 changed. Affects `/trends` (range), `/resources` (topic), `/guides` (area filter), `/welcome` and
 `/crisis` (language switch). Re-checked: `npm run verify` (190 tests), e2e phases 02–06 (58 passed,
 14 skipped), Phase 06 check 11 and Phase 04 check 10.
+
+## Phase 07 · e2e/phase-07/request.spec.js · wait added after sign-in (standing rule)
+
+Test "a failed send keeps the note and says nothing was sent (Fig 17)" had the same race as Phase 06:
+`studentLogin()` then an immediate `page.goto('/request')`; the failure snapshot showed the `/login`
+page ("Welcome back"). Added `await expect(page).toHaveURL(/\/check-in$/);` after `studentLogin()`.
+Expected results unchanged. `e2e/phase-07`: 3 passed on desktop, 3 skipped on mobile.
+
+## Phase 07 · RequestPage.jsx · observation, no change made: button focus order on mobile
+
+The form's buttons are in DOM order "Cancel", "Send request" inside
+`flex flex-col-reverse … sm:flex-row`. On desktop they show left-to-right in DOM order, so Tab
+order matches. Below 640 px, `flex-col-reverse` shows "Send request" above "Cancel", but Tab still
+reaches "Cancel" first, so the focus order does not match the visual order on phones (WCAG 2.4.3).
+Acceptance check 12 (select → note → checkbox → buttons) still passes, so nothing was changed.
+Question for the team: should the DOM order be "Send request", "Cancel" with a desktop-only
+`sm:flex-row-reverse`, or is the current order intended?
+
+## Phase 07 · note: specs depend on a fresh seed (full-suite runs)
+
+Run the plan's way (`db reset` + `dev-enrol-totp.js`, then `npm run test:e2e -- e2e/phase-07`),
+Phase 07 passes 3/3. In a single run of the whole suite (02–07), the Phase 05/06 specs first add
+check-ins for `student.full`, so Phase 07's "with no check-in yet…" correctly sees a latest check-in
+and fails; the other two Phase 07 tests then do not run (serial). Not an app or timing issue; no
+change made. For regression runs, reset before each phase's specs (or run phase by phase).
