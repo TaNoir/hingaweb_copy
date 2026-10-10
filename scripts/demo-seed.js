@@ -294,56 +294,63 @@ sql.push(
   `insert into public.crisis_events (id, student_id, trigger_item_id) values ('ddddddd1-0000-4000-8000-000000000002', ${q(S.Dana)}, ${q(ITEMS[1][0])});`,
 );
 
-// ---- 10. Resources: 8 more published (all four areas) and one draft ----
+// ---- 10. Resources: real guide pages (YoungMinds, UK) for the demo library ----
+// The four published seed resources and the seed draft keep their titles and areas; only their
+// links change. "Sleep and routine" stays a draft (no verifier). The guidance office chooses the
+// real library before the pilot (docs/demo.md).
+const YM = 'https://www.youngminds.org.uk/young-person';
+const SEED_LINKS = [
+  ['bbbbbbb1-0000-4000-8000-000000000001', `${YM}/coping-with-life/exam-stress/`], // Managing exam pressure
+  ['bbbbbbb1-0000-4000-8000-000000000002', `${YM}/coping-with-life/money-and-mental-health/`], // Talking to family about money worries
+  ['bbbbbbb1-0000-4000-8000-000000000003', `${YM}/my-feelings/down-and-unable-to-cope/`], // When everything feels like too much
+  ['bbbbbbb1-0000-4000-8000-000000000004', `${YM}/coping-with-life/looking-after-yourself-at-uni/`], // Thinking about life after senior high
+  ['bbbbbbb1-0000-4000-8000-000000000005', `${YM}/my-feelings/sleep-problems/`], // Sleep and routine (draft)
+];
+for (const [id, url] of SEED_LINKS)
+  sql.push(`update public.resources set url = ${q(url)} where id = ${q(id)};`);
+
+// Added for the demo, all published. Each title matches its page; the highest value is the main area.
 const RESOURCES = [
   [
-    'Making a weekly study plan',
-    'study-plan',
-    { school_work: 5, home_family: 0, future: 2, managing: 2 },
+    'Problems at school',
+    `${YM}/coping-with-life/problems-at-school/`,
+    { school_work: 5, home_family: 0, future: 1, managing: 2 },
   ],
   [
-    'Asking a teacher for help',
-    'ask-teacher',
-    { school_work: 4, home_family: 0, future: 1, managing: 1 },
+    'Family',
+    `${YM}/coping-with-life/family/`,
+    { school_work: 1, home_family: 5, future: 0, managing: 2 },
   ],
   [
-    'When home feels tense',
-    'home-tense',
-    { school_work: 0, home_family: 5, future: 0, managing: 2 },
+    'Self-care',
+    `${YM}/coping-with-life/self-care/`,
+    { school_work: 1, home_family: 1, future: 0, managing: 5 },
   ],
   [
-    'Living with relatives while parents work abroad',
-    'parents-abroad',
-    { school_work: 1, home_family: 4, future: 1, managing: 2 },
+    'Believing in yourself',
+    `${YM}/coping-with-life/self-esteem-and-believing-in-yourself/`,
+    { school_work: 1, home_family: 0, future: 2, managing: 5 },
   ],
   [
-    'Choosing a college course',
-    'college-course',
-    { school_work: 2, home_family: 1, future: 5, managing: 0 },
+    'Friendships',
+    `${YM}/coping-with-life/friends/`,
+    { school_work: 2, home_family: 0, future: 0, managing: 4 },
   ],
   [
-    'Scholarships and how to apply',
-    'scholarships',
-    { school_work: 1, home_family: 2, future: 4, managing: 0 },
+    'Social media',
+    `${YM}/coping-with-life/social-media-and-mental-health/`,
+    { school_work: 1, home_family: 1, future: 0, managing: 4 },
   ],
   [
-    'Breathing exercises for stressful moments',
-    'breathing',
-    { school_work: 1, home_family: 0, future: 0, managing: 5 },
-  ],
-  [
-    'Taking breaks from your phone',
-    'phone-breaks',
-    { school_work: 2, home_family: 1, future: 0, managing: 4 },
+    'Young carers',
+    `${YM}/coping-with-life/young-carers/`,
+    { school_work: 2, home_family: 5, future: 1, managing: 3 },
   ],
 ];
 sql.push(
   `insert into public.resources (title, url, attributes, verified_by) values\n  ${RESOURCES.map(
-    ([title, slug, a]) =>
-      `(${q(title)}, ${q(`https://example.org/hingaweb-demo/${slug}`)}, ${j(a)}, ${q(GUIDANCE_ID)})`,
-  ).join(
-    ',\n  ',
-  )},\n  ('Making friends in a new section', 'https://example.org/hingaweb-demo/new-section', ${j({ school_work: 1, home_family: 0, future: 0, managing: 3 })}, null);`,
+    ([title, url, a]) => `(${q(title)}, ${q(url)}, ${j(a)}, ${q(GUIDANCE_ID)})`,
+  ).join(',\n  ')};`,
 );
 
 // ---- 11. Apply ----
@@ -351,5 +358,5 @@ psql(sql.join('\n\n') + '\n');
 console.log(
   `demo-seed: added ${STUDENTS.length} students, ${checkinRows.length} check-ins (${ANA_CHECKINS.length} for student.full), ` +
     `${REQUESTS.length} support requests (bands ${[...bands].join(', ')}), 3 sample crisis items, 2 crisis events, ` +
-    `${RESOURCES.length + 1} resources (1 draft).`,
+    `${RESOURCES.length} published resources, and YoungMinds links on the ${SEED_LINKS.length} seed resources.`,
 );
