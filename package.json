@@ -1,0 +1,58 @@
+{
+  "name": "hingaweb",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.15.0 <25"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:pilot": "node scripts/check-placeholders.js --strict && vite build",
+    "preview": "vite preview --port 4173",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:db": "supabase test db",
+    "test:e2e": "playwright test",
+    "check:placeholders": "node scripts/check-placeholders.js",
+    "check:copy": "node scripts/check-copy.js",
+    "check:colours": "node scripts/check-colour-words.js",
+    "verify": "npm run lint && npm run check:copy && npm run check:colours && npm run test && npm run build"
+  },
+  "dependencies": {
+    "@date-fns/tz": "1.5.0",
+    "@fontsource-variable/inter": "5.3.0",
+    "@supabase/supabase-js": "2.117.3",
+    "date-fns": "4.4.0",
+    "lucide-react": "1.54.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router": "7.18.4",
+    "workbox-window": "7.4.1",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.7",
+    "@vitejs/plugin-react": "6.1.2",
+    "eslint": "10.12.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "globals": "17.13.0",
+    "jsdom": "30.1.2",
+    "prettier": "3.9.9",
+    "supabase": "2.120.0",
+    "tailwindcss": "4.3.3",
+    "vite": "8.3.4",
+    "vite-plugin-pwa": "2.0.0",
+    "vitest": "5.0.3"
+  }
+}
