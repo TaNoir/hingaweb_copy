@@ -46,13 +46,20 @@ beforeEach(() => {
 });
 
 describe('translation files: crisis keys (00 Section 10.2)', () => {
-  it('ceb and tl have exactly the English crisis keys, all as team placeholders', () => {
+  it('ceb and tl have exactly the English crisis keys, all as team text or its placeholder', () => {
     const keys = Object.keys(crisisCopy).sort();
     expect(Object.keys(ceb.crisis).sort()).toEqual(keys);
     expect(Object.keys(tl.crisis).sort()).toEqual(keys);
     for (const k of keys) {
-      expect(ceb.crisis[k]).toBe(`[[TEAM:CEB:crisis.${k}]]`);
-      expect(tl.crisis[k]).toBe(`[[TEAM:TL:crisis.${k}]]`);
+      // Each value is the team's text, or (until filled) the placeholder for exactly this key.
+      for (const [dict, code] of [
+        [ceb, 'CEB'],
+        [tl, 'TL'],
+      ]) {
+        const value = dict.crisis[k];
+        expect(typeof value === 'string' && value.trim().length > 0).toBe(true);
+        if (value.startsWith('[[')) expect(value).toBe(`[[TEAM:${code}:crisis.${k}]]`);
+      }
     }
   });
 });
@@ -93,12 +100,10 @@ describe('CrisisPage (Fig 18; 2.1.6.1.6; 2.1.6.4.6)', () => {
     const user = userEvent.setup();
     const { container } = renderCrisis();
     await user.click(screen.getByRole('radio', { name: 'Bisaya' }));
-    expect(
-      screen.getByRole('heading', { level: 1, name: '[[TEAM:CEB:crisis.title]]' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: ceb.crisis.title })).toBeInTheDocument();
     expect(container.querySelector('[lang="ceb"]')).not.toBeNull();
     await user.click(screen.getByRole('radio', { name: 'Tagalog' }));
-    expect(screen.getByText('[[TEAM:TL:crisis.lead]]')).toBeInTheDocument();
+    expect(screen.getByText(tl.crisis.lead)).toBeInTheDocument();
   });
 
   it('after a tick, says what happens next and when the office has been told', async () => {

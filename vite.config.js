@@ -26,6 +26,13 @@ export default defineConfig({
       devOptions: { enabled: false },
     }),
   ],
+  build: {
+    // Phase 10 · scripts/check-bundle.js reads this manifest to measure each core view's first
+    // load. The real budget (2.1.6.1.2) is 500 KB COMPRESSED and is enforced there; this raw-size
+    // warning limit only keeps the build log quiet about the uncompressed main chunk.
+    manifest: true,
+    chunkSizeWarningLimit: 800,
+  },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setupTests.js'],

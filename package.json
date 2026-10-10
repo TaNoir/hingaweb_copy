@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:pilot": "node scripts/check-placeholders.js --strict && vite build",
+    "build:pilot": "node scripts/check-placeholders.js --strict && vite build && node scripts/check-bundle.js",
     "preview": "vite preview --port 4173",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -20,7 +20,11 @@
     "check:placeholders": "node scripts/check-placeholders.js",
     "check:copy": "node scripts/check-copy.js",
     "check:colours": "node scripts/check-colour-words.js",
-    "verify": "npm run lint && npm run check:copy && npm run check:colours && npm run test && npm run build"
+    "verify": "npm run lint && npm run check:copy && npm run check:colours && npm run test && npm run build && npm run check:bundle",
+    "check:bundle": "node scripts/check-bundle.js",
+    "backup": "node scripts/backup.js",
+    "ahp": "node scripts/ahp.js",
+    "build:vercel": "node scripts/vercel-build.js"
   },
   "dependencies": {
     "@date-fns/tz": "1.5.0",

@@ -1,4 +1,5 @@
-// The route table from 00 Section 7. Every route now has its real screen (Phase 09).
+// The route table from 00 Section 7. Every route has its real screen; staff, admin, trends,
+// resources, and request screens load on first visit (Phase 10).
 import { Navigate, Route, Routes } from 'react-router';
 import {
   RequireGuest,
@@ -6,6 +7,8 @@ import {
   RequireStaffSession,
   RequireStudent,
 } from './lib/auth/guards.jsx';
+import { lazyNamed } from './lib/lazyNamed.js';
+import { LazyPage } from './components/layout/LazyPage.jsx';
 import { PublicLayout } from './components/layout/PublicLayout.jsx';
 import { PublicOrStudentLayout } from './components/layout/PublicOrStudentLayout.jsx';
 import { StudentLayout } from './components/layout/StudentLayout.jsx';
@@ -17,9 +20,6 @@ import { LoginPage } from './features/auth/LoginPage.jsx';
 import { ForgotPasswordPage } from './features/auth/ForgotPasswordPage.jsx';
 import { ResetPasswordPage } from './features/auth/ResetPasswordPage.jsx';
 import { EmailConfirmedPage } from './features/auth/EmailConfirmedPage.jsx';
-import { StaffLoginPage } from './features/auth/StaffLoginPage.jsx';
-import { StaffVerifyPage } from './features/auth/StaffVerifyPage.jsx';
-import { StaffSetupPage } from './features/auth/StaffSetupPage.jsx';
 import { NotFoundPage } from './features/auth/NotFoundPage.jsx';
 import { LandingPage } from './features/public/LandingPage.jsx';
 import { GuidesPage } from './features/public/GuidesPage.jsx';
@@ -28,22 +28,67 @@ import { AssentPage } from './features/assent/AssentPage.jsx';
 import { WaitingForConsentPage } from './features/assent/WaitingForConsentPage.jsx';
 import { CheckInPage } from './features/checkin/CheckInPage.jsx';
 import { CrisisPage } from './features/crisis/CrisisPage.jsx';
-import { TrendsPage } from './features/trends/TrendsPage.jsx';
-import { ResourcesPage } from './features/resources/ResourcesPage.jsx';
-import { RequestPage } from './features/requests/RequestPage.jsx';
-import { RequestSentPage } from './features/requests/RequestSentPage.jsx';
-import { GuidanceLayout } from './features/guidance/GuidanceLayout.jsx';
-import { QueuePage } from './features/guidance/QueuePage.jsx';
-import { RequestDetailPage } from './features/guidance/RequestDetailPage.jsx';
-import { OfficeTagPage } from './features/guidance/OfficeTagPage.jsx';
-import { CrisisChannelPage } from './features/guidance/CrisisChannelPage.jsx';
-import { ReferralsPage } from './features/guidance/ReferralsPage.jsx';
-import { AccountsPage } from './features/admin/AccountsPage.jsx';
-import { ConsentPage } from './features/admin/ConsentPage.jsx';
-import { ReferencePage } from './features/admin/ReferencePage.jsx';
-import { ResourceLibraryPage } from './features/admin/ResourceLibraryPage.jsx';
-import { ResourceEditPage } from './features/admin/ResourceEditPage.jsx';
-import { AuditPage } from './features/admin/AuditPage.jsx';
+
+// Phase 10 · loaded on first visit (2.1.6.1.2). Student core screens, the crisis screen, and the
+// hotlines stay in the main bundle so they never wait for a download.
+const StaffLoginPage = lazyNamed(
+  () => import('./features/auth/StaffLoginPage.jsx'),
+  'StaffLoginPage',
+);
+const StaffVerifyPage = lazyNamed(
+  () => import('./features/auth/StaffVerifyPage.jsx'),
+  'StaffVerifyPage',
+);
+const StaffSetupPage = lazyNamed(
+  () => import('./features/auth/StaffSetupPage.jsx'),
+  'StaffSetupPage',
+);
+const TrendsPage = lazyNamed(() => import('./features/trends/TrendsPage.jsx'), 'TrendsPage');
+const ResourcesPage = lazyNamed(
+  () => import('./features/resources/ResourcesPage.jsx'),
+  'ResourcesPage',
+);
+const RequestPage = lazyNamed(() => import('./features/requests/RequestPage.jsx'), 'RequestPage');
+const RequestSentPage = lazyNamed(
+  () => import('./features/requests/RequestSentPage.jsx'),
+  'RequestSentPage',
+);
+const GuidanceLayout = lazyNamed(
+  () => import('./features/guidance/GuidanceLayout.jsx'),
+  'GuidanceLayout',
+);
+const QueuePage = lazyNamed(() => import('./features/guidance/QueuePage.jsx'), 'QueuePage');
+const RequestDetailPage = lazyNamed(
+  () => import('./features/guidance/RequestDetailPage.jsx'),
+  'RequestDetailPage',
+);
+const OfficeTagPage = lazyNamed(
+  () => import('./features/guidance/OfficeTagPage.jsx'),
+  'OfficeTagPage',
+);
+const CrisisChannelPage = lazyNamed(
+  () => import('./features/guidance/CrisisChannelPage.jsx'),
+  'CrisisChannelPage',
+);
+const ReferralsPage = lazyNamed(
+  () => import('./features/guidance/ReferralsPage.jsx'),
+  'ReferralsPage',
+);
+const AccountsPage = lazyNamed(() => import('./features/admin/AccountsPage.jsx'), 'AccountsPage');
+const ConsentPage = lazyNamed(() => import('./features/admin/ConsentPage.jsx'), 'ConsentPage');
+const ReferencePage = lazyNamed(
+  () => import('./features/admin/ReferencePage.jsx'),
+  'ReferencePage',
+);
+const ResourceLibraryPage = lazyNamed(
+  () => import('./features/admin/ResourceLibraryPage.jsx'),
+  'ResourceLibraryPage',
+);
+const ResourceEditPage = lazyNamed(
+  () => import('./features/admin/ResourceEditPage.jsx'),
+  'ResourceEditPage',
+);
+const AuditPage = lazyNamed(() => import('./features/admin/AuditPage.jsx'), 'AuditPage');
 
 export function AppRoutes() {
   return (
@@ -81,10 +126,38 @@ export function AppRoutes() {
       <Route element={<RequireStudent tier2 />}>
         <Route element={<StudentLayout />}>
           <Route path="check-in" element={<CheckInPage />} />
-          <Route path="trends" element={<TrendsPage />} />
-          <Route path="resources" element={<ResourcesPage />} />
-          <Route path="request" element={<RequestPage />} />
-          <Route path="request/sent" element={<RequestSentPage />} />
+          <Route
+            path="trends"
+            element={
+              <LazyPage>
+                <TrendsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="resources"
+            element={
+              <LazyPage>
+                <ResourcesPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="request"
+            element={
+              <LazyPage>
+                <RequestPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="request/sent"
+            element={
+              <LazyPage>
+                <RequestSentPage />
+              </LazyPage>
+            }
+          />
         </Route>
       </Route>
 
@@ -92,22 +165,84 @@ export function AppRoutes() {
       <Route path="staff" element={<PortalLayout />}>
         <Route index element={<Navigate to="/staff/login" replace />} />
         <Route element={<RequireGuest />}>
-          <Route path="login" element={<StaffLoginPage />} />
+          <Route
+            path="login"
+            element={
+              <LazyPage>
+                <StaffLoginPage />
+              </LazyPage>
+            }
+          />
         </Route>
         <Route element={<RequireStaffSession />}>
-          <Route path="verify" element={<StaffVerifyPage />} />
-          <Route path="setup" element={<StaffSetupPage />} />
+          <Route
+            path="verify"
+            element={
+              <LazyPage>
+                <StaffVerifyPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="setup"
+            element={
+              <LazyPage>
+                <StaffSetupPage />
+              </LazyPage>
+            }
+          />
         </Route>
       </Route>
 
       {/* Guidance (aal2) */}
       <Route element={<RequireStaff role="guidance" />}>
-        <Route element={<GuidanceLayout />}>
-          <Route path="staff/queue" element={<QueuePage />} />
-          <Route path="staff/requests/:id" element={<RequestDetailPage />} />
-          <Route path="staff/requests/:id/tag" element={<OfficeTagPage />} />
-          <Route path="staff/crisis" element={<CrisisChannelPage />} />
-          <Route path="staff/referrals" element={<ReferralsPage />} />
+        <Route
+          element={
+            <LazyPage>
+              <GuidanceLayout />
+            </LazyPage>
+          }
+        >
+          <Route
+            path="staff/queue"
+            element={
+              <LazyPage>
+                <QueuePage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="staff/requests/:id"
+            element={
+              <LazyPage>
+                <RequestDetailPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="staff/requests/:id/tag"
+            element={
+              <LazyPage>
+                <OfficeTagPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="staff/crisis"
+            element={
+              <LazyPage>
+                <CrisisChannelPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="staff/referrals"
+            element={
+              <LazyPage>
+                <ReferralsPage />
+              </LazyPage>
+            }
+          />
         </Route>
       </Route>
 
@@ -115,13 +250,62 @@ export function AppRoutes() {
       <Route element={<RequireStaff role="administrator" />}>
         <Route element={<AdminLayout />}>
           <Route path="admin" element={<Navigate to="/admin/accounts" replace />} />
-          <Route path="admin/accounts" element={<AccountsPage />} />
-          <Route path="admin/consent" element={<ConsentPage />} />
-          <Route path="admin/reference" element={<ReferencePage />} />
-          <Route path="admin/resources" element={<ResourceLibraryPage />} />
-          <Route path="admin/resources/new" element={<ResourceEditPage />} />
-          <Route path="admin/resources/:id" element={<ResourceEditPage />} />
-          <Route path="admin/audit" element={<AuditPage />} />
+          <Route
+            path="admin/accounts"
+            element={
+              <LazyPage>
+                <AccountsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="admin/consent"
+            element={
+              <LazyPage>
+                <ConsentPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="admin/reference"
+            element={
+              <LazyPage>
+                <ReferencePage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="admin/resources"
+            element={
+              <LazyPage>
+                <ResourceLibraryPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="admin/resources/new"
+            element={
+              <LazyPage>
+                <ResourceEditPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="admin/resources/:id"
+            element={
+              <LazyPage>
+                <ResourceEditPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="admin/audit"
+            element={
+              <LazyPage>
+                <AuditPage />
+              </LazyPage>
+            }
+          />
         </Route>
       </Route>
 

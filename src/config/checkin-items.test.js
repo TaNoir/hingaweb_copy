@@ -3,9 +3,10 @@ import { CHECKIN_ITEMS, CHECKIN_ITEMS_STATUS, storedValue, tappedValue } from '.
 import { checkinCopy } from '../copy/en/checkin.js';
 
 describe('check-in items (00 Section 6.3; D-08, D-09)', () => {
-  it('has the six columns in screen order and stays provisional until co-design', () => {
+  it('has the six columns in screen order and a known status', () => {
     expect(CHECKIN_ITEMS.map((i) => i.column)).toEqual(['c1', 'c2', 'c3', 'c4', 'mood', 'stress']);
-    expect(CHECKIN_ITEMS_STATUS).toBe('provisional');
+    // 'final' only after co-design (2.1.5.1.3); build:pilot checks it (Phase 10: test accepts both).
+    expect(['provisional', 'final']).toContain(CHECKIN_ITEMS_STATUS);
   });
 
   it('every item has English text', () => {
