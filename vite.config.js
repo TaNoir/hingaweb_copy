@@ -29,6 +29,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setupTests.js'],
-    include: ['src/**/*.test.{js,jsx}', 'supabase/functions/_shared/**/*.test.js', 'scripts/**/*.test.js'],
+    include: ['src/**/*.test.{js,jsx}', 'supabase/functions/**/*.test.js', 'scripts/**/*.test.js'],
   },
 });

@@ -1,6 +1,7 @@
-// Tagalog text for the assent walkthrough (2.1.6.3.1).
+// Tagalog text for the assent walkthrough and the crisis screen (2.1.6.3.1).
 // WRITTEN BY THE HINGAWEB TEAM, NOT BY AI TRANSLATION (00 Section 10.2).
-// Replace each placeholder with the team's text. Keep every key. Phase 05 adds the crisis keys.
+// Replace each placeholder with the team's text. Keep every key and every {name} token
+// (for example {number}) exactly as written, so the numbers still appear.
 export const tl = {
   assent: {
     step: '[[TEAM:TL:assent.step]]',
@@ -35,5 +36,26 @@ export const tl = {
     continue: '[[TEAM:TL:assent.continue]]',
     footer: '[[TEAM:TL:assent.footer]]',
     saveError: '[[TEAM:TL:assent.saveError]]',
+  },
+  crisis: {
+    notice: '[[TEAM:TL:crisis.notice]]',
+    chip: '[[TEAM:TL:crisis.chip]]',
+    languageLabel: '[[TEAM:TL:crisis.languageLabel]]',
+    title: '[[TEAM:TL:crisis.title]]',
+    lead: '[[TEAM:TL:crisis.lead]]',
+    hotlinesHeading: '[[TEAM:TL:crisis.hotlinesHeading]]',
+    call: '[[TEAM:TL:crisis.call]]',
+    callLabel: '[[TEAM:TL:crisis.callLabel]]',
+    officeTitle: '[[TEAM:TL:crisis.officeTitle]]',
+    officeCall: '[[TEAM:TL:crisis.officeCall]]',
+    officeCallLabel: '[[TEAM:TL:crisis.officeCallLabel]]',
+    nextTitle: '[[TEAM:TL:crisis.nextTitle]]',
+    nextBody: '[[TEAM:TL:crisis.nextBody]]',
+    statusSending: '[[TEAM:TL:crisis.statusSending]]',
+    statusSent: '[[TEAM:TL:crisis.statusSent]]',
+    statusRetrying: '[[TEAM:TL:crisis.statusRetrying]]',
+    statusOffline: '[[TEAM:TL:crisis.statusOffline]]',
+    statusFailed: '[[TEAM:TL:crisis.statusFailed]]',
+    back: '[[TEAM:TL:crisis.back]]',
   },
 };
