@@ -45,6 +45,10 @@
   main:focus {
     outline: none;
   }
+  /* ui-students item 4: the h1 that RouteFocus moves focus to is a heading, not a control */
+  [data-route-focus]:focus {
+    outline: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -400,3 +400,14 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
    "Create account" (primary). That is navigation, not a form action, and the usual order for
    sign-in/sign-up; swapping it would change every public page. No code change, so no screenshots
    or e2e for this item.
+4. **Focus and scroll on page change.** New `src/components/layout/RouteFocus.jsx`, mounted once in
+   `App.jsx` inside the router (not in each page). When the path changes (not on the first load, not
+   when the URL has a hash such as `/#how`, never on `/crisis`), it scrolls to the top and focuses
+   `main h1`, adding `tabindex="-1"` and `data-route-focus` if needed. Lazy pages: it waits up to 5 s
+   for the h1 to appear (MutationObserver). It never takes focus from a control inside the page that
+   the person is already using. `index.css`: `[data-route-focus]:focus { outline: none }` (a heading,
+   not a control), so mouse users see no outline; Tab after it shows the normal ring on the next
+   control. Checked at 360/390/1280 px: after sign-in, after "Cancel and return", and after Enter on
+   a nav link to a lazy page, focus is on the new h1 at `scrollY` 0; the landing `#how` link still
+   jumps to its section. New `RouteFocus.test.jsx` (4 tests; no existing test changed). Full e2e
+   02–09 passed.
