@@ -420,3 +420,15 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
    title equals its h1 plus " · HingaWeb" (list in `05-tab-titles/titles.txt`). Staff screens are
    not part of this item and show "HingaWeb". New `usePageTitle.test.jsx` (1 test). e2e 02–07
    passed.
+6. **Help link in the student header on phones.** `StudentLayout.jsx` passes a new `mobileAction`
+   to `AppHeader.jsx`: a link to `/help` with a `LifeBuoy` icon (aria-hidden) and the existing
+   `nav.public.needHelp` text ("Need help right now?"), blush background, ink text, 44×44 px minimum.
+   It sits next to the Menu button below `lg` (the desktop nav already has "Where to get help").
+   **The text does not fit at 360 px:** the header row has 328 px, the logo is 192 px and Menu 95 px.
+   So below `sm` only the icon shows and the text is `sr-only` (it stays the link's accessible
+   name); from `sm` to `lg` icon and text show on one line (192 px). To fit the 44 px icon at 360 px,
+   the student header only, below `sm`, uses 12 px side padding (was 16) and an 8 px gap (was 16),
+   and Menu's side padding is 8 px (was 12; still 87×44 px). Measured: no overflow at 360/390/768/
+   1023 px, header height unchanged (61 px), visible focus ring on the link. Public, staff, and admin
+   headers are unchanged. The link is outside the nav landmark, so the five nav items are unchanged.
+   e2e 03, 05, 06, 07 passed.
