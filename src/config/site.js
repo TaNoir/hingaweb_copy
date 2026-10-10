@@ -1,5 +1,10 @@
 // 00 Section 6.2. Values in [[...]] are placeholders filled by the guidance office or school.
-export const SITE = Object.freeze({
+// Demo mode (docs/demo.md): with VITE_DEMO_CONTENT=true the placeholders are swapped for the
+// sample values in src/content/demo-content.js. With the flag off, none of that file is bundled.
+// `?.` because Node scripts (check:copy) import this file outside Vite, where env is undefined.
+import { DEMO_SITE } from '../content/demo-content.js';
+
+const PLACEHOLDER_SITE = Object.freeze({
   appName: 'HingaWeb',
   tagline: 'SENIOR HIGH GUIDANCE',
   schoolName: 'Rizal Memorial Colleges, Inc.',
@@ -13,6 +18,15 @@ export const SITE = Object.freeze({
   officeHoursText: '[[GUIDANCE:office_hours_text]]',
   staffSupportContact: '[[SCHOOL:it_contact_for_lost_authenticator]]',
 });
+
+export const SITE =
+  import.meta.env?.VITE_DEMO_CONTENT === 'true'
+    ? Object.freeze({
+        ...PLACEHOLDER_SITE,
+        ...DEMO_SITE,
+        holidays: Object.freeze([...DEMO_SITE.holidays]),
+      })
+    : PLACEHOLDER_SITE;
 
 // Staff inactivity limit (2.1.6.2.9). Not a scoring number; lives here, not in scoring-config.js.
 export const STAFF_IDLE_TIMEOUT_MS = 15 * 60 * 1000;
