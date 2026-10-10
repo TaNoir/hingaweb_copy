@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { z } from 'zod';
 import * as config from '../_shared/scoring-config.js';
 import { makeEvaluateCheckin } from './handler.js';
+import { checkinPrompt } from '../_shared/saw.js';
 
 const ID = '0f8fad5b-d9cb-469f-a165-70867728950e';
 
@@ -78,15 +79,31 @@ describe('evaluate-checkin (2.1.5.1.7; N-01)', () => {
   });
 
   it.each([
-    [{ c1: 1, c2: 1, c3: 1, c4: 5 }, 'max_sev'],
-    [{ c1: 2, c2: 2, c3: 2, c4: 3 }, 'gray_zone'],
-    [{ c1: 1, c2: 1, c3: 1, c4: 1 }, null],
-  ])('ratings %j give prompt %s and nothing else', async (row, prompt) => {
+    { c1: 1, c2: 1, c3: 1, c4: 5 },
+    { c1: 2, c2: 2, c3: 2, c4: 3 },
+    { c1: 1, c2: 1, c3: 1, c4: 1 },
+    { c1: 4, c2: 3, c3: 2, c4: 2 },
+  ])('ratings %j give exactly the prompt saw.js decides, and nothing else', async (row) => {
     const { handler } = setup({ data: row, error: null });
     const res = await handler(post({ checkin_id: ID }));
     expect(res.status).toBe(200);
     const body = await res.json();
-    expect(body).toEqual({ prompt });
+    expect(body).toEqual({ prompt: checkinPrompt(row, config) });
     expect(Object.keys(body)).toEqual(['prompt']); // never a score, band, or rule
   });
+
+  // With the placeholder values (Phase 10: skipped once the scoring session sets real ones).
+  it.runIf(config.PROVISIONAL === true)(
+    'placeholder values: max_sev, gray_zone, null',
+    async () => {
+      for (const [row, prompt] of [
+        [{ c1: 1, c2: 1, c3: 1, c4: 5 }, 'max_sev'],
+        [{ c1: 2, c2: 2, c3: 2, c4: 3 }, 'gray_zone'],
+        [{ c1: 1, c2: 1, c3: 1, c4: 1 }, null],
+      ]) {
+        const { handler } = setup({ data: row, error: null });
+        expect(await (await handler(post({ checkin_id: ID }))).json()).toEqual({ prompt });
+      }
+    },
+  );
 });

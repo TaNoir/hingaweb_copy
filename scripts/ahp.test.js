@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { analyse, combine, parseEntry, toMatrix, weightsFrom, weightsLine } from './ahp.js';
-import { WEIGHTS } from '../supabase/functions/_shared/scoring-config.js';
+import { PROVISIONAL, WEIGHTS } from '../supabase/functions/_shared/scoring-config.js';
 
 const example = JSON.parse(readFileSync('scripts/ahp.example.json', 'utf8'));
 
@@ -19,7 +19,8 @@ describe('scripts/ahp.js (2.2.2.2; N-04)', () => {
     expect(combined).toEqual(r.weights);
   });
 
-  it('matches the provisional weights in scoring-config.js', () => {
+  // Only while scoring-config.js still holds the Table 7 placeholder weights (Phase 10).
+  it.runIf(PROVISIONAL === true)('matches the provisional weights in scoring-config.js', () => {
     expect(analyse(example).combined).toEqual([WEIGHTS.c1, WEIGHTS.c2, WEIGHTS.c3, WEIGHTS.c4]);
   });
 

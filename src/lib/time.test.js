@@ -20,13 +20,21 @@ const site = {
   officeCloses: '17:00',
   holidays: ['2026-10-14'],
 };
+// The office's values before the guidance office fills them in (kept here so this test still
+// passes after src/config/site.js has real hours and holidays).
+const unfilled = {
+  ...SITE,
+  officeOpens: '[[GUIDANCE:office_opens_hhmm]]',
+  officeCloses: '[[GUIDANCE:office_closes_hhmm]]',
+  holidays: ['[[GUIDANCE:holiday_dates_iso]]'],
+};
 const manila = (date, hhmm) => new Date(`${date}T${hhmm}:00+08:00`);
 
 describe('time.js (2.1.7.3; 2.1.3.8)', () => {
   it('reads HH:MM and ignores placeholders', () => {
     expect(parseHHMM('08:30')).toBe(510);
     expect(parseHHMM('[[GUIDANCE:office_opens_hhmm]]')).toBeNull();
-    expect(holidaysConfigured(SITE)).toBe(false);
+    expect(holidaysConfigured(unfilled)).toBe(false);
     expect(holidaysConfigured(site)).toBe(true);
   });
 
@@ -46,15 +54,15 @@ describe('time.js (2.1.7.3; 2.1.3.8)', () => {
     expect(officeStatus(manila('2026-10-12', '09:00'), site)).toBe('open');
     expect(officeStatus(manila('2026-10-12', '18:30'), site)).toBe('closed');
     expect(officeStatus(manila('2026-10-17', '09:00'), site)).toBe('closed');
-    expect(officeStatus(manila('2026-10-12', '09:00'), SITE)).toBe('unknown');
-    expect(officeStatus(manila('2026-10-17', '09:00'), SITE)).toBe('closed');
+    expect(officeStatus(manila('2026-10-12', '09:00'), unfilled)).toBe('unknown');
+    expect(officeStatus(manila('2026-10-17', '09:00'), unfilled)).toBe('closed');
   });
 
   it('starts the clock on the next school day after hours, weekends, and holidays', () => {
     expect(firstSchoolDayFor(manila('2026-10-12', '10:00'), site)).toBe('2026-10-12');
     expect(firstSchoolDayFor(manila('2026-10-12', '17:30'), site)).toBe('2026-10-13');
     expect(firstSchoolDayFor(manila('2026-10-17', '10:00'), site)).toBe('2026-10-19');
-    expect(firstSchoolDayFor(manila('2026-10-12', '17:30'), SITE)).toBe('2026-10-12'); // hours unknown
+    expect(firstSchoolDayFor(manila('2026-10-12', '17:30'), unfilled)).toBe('2026-10-12'); // hours unknown
   });
 
   it('first contact is due by the third school day', () => {

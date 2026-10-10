@@ -31,13 +31,20 @@ const studentAuth = (account, more = {}) =>
   });
 
 describe('translation files (00 Section 10.2)', () => {
-  it('ceb and tl have exactly the English assent keys, all as team placeholders', () => {
+  it('ceb and tl have exactly the English assent keys, all as team text or its placeholder', () => {
     const keys = Object.keys(assentCopy).sort();
     expect(Object.keys(ceb.assent).sort()).toEqual(keys);
     expect(Object.keys(tl.assent).sort()).toEqual(keys);
     for (const k of keys) {
-      expect(ceb.assent[k]).toBe(`[[TEAM:CEB:assent.${k}]]`);
-      expect(tl.assent[k]).toBe(`[[TEAM:TL:assent.${k}]]`);
+      // Each value is the team's text, or (until filled) the placeholder for exactly this key.
+      for (const [dict, code] of [
+        [ceb, 'CEB'],
+        [tl, 'TL'],
+      ]) {
+        const value = dict.assent[k];
+        expect(typeof value === 'string' && value.trim().length > 0).toBe(true);
+        if (value.startsWith('[[')) expect(value).toBe(`[[TEAM:${code}:assent.${k}]]`);
+      }
     }
   });
 });
@@ -81,13 +88,9 @@ describe('AssentPage (Fig 10, 2.1.5.1.1)', () => {
       auth: studentAuth(STUDENT_NO_ASSENT),
     });
     await userEvent.click(screen.getByRole('radio', { name: 'Bisaya' }));
-    expect(
-      screen.getByRole('heading', { level: 1, name: '[[TEAM:CEB:assent.title]]' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: ceb.assent.title })).toBeInTheDocument();
     await userEvent.click(screen.getByRole('radio', { name: 'Tagalog' }));
-    expect(
-      screen.getByRole('heading', { level: 1, name: '[[TEAM:TL:assent.title]]' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: tl.assent.title })).toBeInTheDocument();
   });
 
   it('records the assent with the language version, then routes by consent state', async () => {
@@ -100,8 +103,8 @@ describe('AssentPage (Fig 10, 2.1.5.1.1)', () => {
     }));
     renderWithAuth(<Route path="/welcome" element={<AssentPage />} />, { path: '/welcome', auth });
     await userEvent.click(screen.getByRole('radio', { name: 'Tagalog' }));
-    await userEvent.click(screen.getByLabelText('[[TEAM:TL:assent.understand]]'));
-    await userEvent.click(screen.getByRole('button', { name: '[[TEAM:TL:assent.continue]]' }));
+    await userEvent.click(screen.getByLabelText(tl.assent.understand));
+    await userEvent.click(screen.getByRole('button', { name: tl.assent.continue }));
     expect(mock.client.from).toHaveBeenCalledWith('consent_records');
     expect(q.calls[0]).toEqual([
       'insert',

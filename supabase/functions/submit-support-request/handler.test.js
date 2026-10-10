@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { z } from 'zod';
 import * as config from '../_shared/scoring-config.js';
 import { makeSubmitSupportRequest } from './handler.js';
+import { triage } from '../_shared/saw.js';
 
 const UID = '11111111-1111-4111-8111-111111111111';
 const CID = '0f8fad5b-d9cb-469f-a165-70867728950e';
@@ -76,21 +77,21 @@ describe('submit-support-request (2.1.5.1.6; 2.1.6.1.4)', () => {
     expect(body).toEqual({ request_id: RID, created_at: '2026-10-12T01:00:00Z' });
     const [name, args] = service.rpc.mock.calls[0];
     expect(name).toBe('create_support_request');
-    expect(args).toMatchObject({
+    const decision = triage({ c1: 5, c2: 5, c3: 1, c4: 1 }, config);
+    expect(args).toEqual({
       p_student_id: UID,
       p_checkin_id: CID,
       p_note: 'my own words',
       p_concern_type: 'academic',
-      p_score: 3.8588, // manuscript worked example (5, 5, 1, 1)
-      p_band: 'P1',
+      p_score: decision.score,
+      p_band: decision.band,
+      p_guardrails: decision.guardrails,
     });
-    expect(args.p_guardrails).toEqual({
-      fired: ['anySingleAtMax', 'twoOrMoreHigh'],
-      weights: { ...config.WEIGHTS },
-      thresholds: { ...config.THRESHOLDS },
-      grayZoneHalfWidth: config.GRAY_ZONE_HALF_WIDTH,
-      provisional: config.PROVISIONAL,
-    });
+    if (config.PROVISIONAL === true) {
+      // Manuscript worked example (5, 5, 1, 1) with the placeholder values.
+      expect([args.p_score, args.p_band]).toEqual([3.8588, 'P1']);
+      expect(args.p_guardrails.fired).toEqual(['anySingleAtMax', 'twoOrMoreHigh']);
+    }
   });
 
   it('with no check-in, sends For Review with no score', async () => {
