@@ -3,7 +3,17 @@
 // Ticking a crisis item opens /crisis at once (no server wait) and sends the event in the background.
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Check, Lock, Shield } from 'lucide-react';
+import {
+  BookOpen,
+  Check,
+  Compass,
+  Gauge,
+  HandHeart,
+  House,
+  Lock,
+  Shield,
+  Smile,
+} from 'lucide-react';
 import { t } from '../../copy/index.js';
 import { CHECKIN_ITEMS, storedValue } from '../../config/checkin-items.js';
 import { supabase } from '../../lib/supabase.js';
@@ -27,6 +37,16 @@ import { PromptDialog } from './PromptDialog.jsx';
 import { reportCrisisItem, useCrisisReport } from '../crisis/crisisReport.js';
 import { CrisisStatus } from '../crisis/CrisisStatus.jsx';
 import { usePageTitle } from '../../lib/usePageTitle.js';
+
+// One small icon per question card, a visual anchor only (aria-hidden; ui-students item 8).
+const QUESTION_ICONS = {
+  c1: BookOpen, // school work
+  c2: House, // home and family
+  c3: Compass, // future
+  c4: HandHeart, // managing
+  mood: Smile,
+  stress: Gauge,
+};
 
 export function CheckInPage() {
   const navigate = useNavigate();
@@ -139,6 +159,8 @@ export function CheckInPage() {
             options={item.scale}
             value={draft.answers[item.column] ?? null}
             onChange={(v) => answer(item.column, v)}
+            icon={QUESTION_ICONS[item.column]}
+            markAnswered
           />
         </Card>
       ))}

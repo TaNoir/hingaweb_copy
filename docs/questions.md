@@ -440,3 +440,10 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
    73 px (under 80 px): Save is first in the DOM, and on phones the row is reversed so the count is
    on the left and Save on the right; from `md` up Save is on the left, then the count, then Cancel
    at the far right. Checked: 0 → 2 (with a note typed, still 2) → 6. e2e 05 6/6.
+8. **Question card icons.** `ScaleButtons.jsx` gets two optional props: `icon` (a lucide icon in a
+   32 px blush square beside the question, aria-hidden) and `markAnswered` (a small `CircleCheck`,
+   aria-hidden, ink, at the end of the question line once a value is chosen). The legend `<p>` keeps
+   its id and text, so the radiogroup's name is unchanged. `CheckInPage.jsx` maps the icons:
+   c1 school work `BookOpen`, c2 home and family `House`, c3 future `Compass`, c4 managing
+   `HandHeart`, mood `Smile`, stress `Gauge`. Ink and blush tokens only. "Somewhat" still fits whole
+   at 390 px (the icon sits beside the question text, not the buttons). e2e 05 6/6 (axe included).

@@ -1,11 +1,23 @@
 import { useRef } from 'react';
+import { CircleCheck } from 'lucide-react';
 import { cx } from './cx.js';
 
 /**
  * A row of answer buttons that behaves as a radio group (arrow keys move the choice).
  * options: { value, label }[]; value: selected value or null.
+ * icon (optional): a lucide icon shown beside the question as a visual anchor (aria-hidden).
+ * markAnswered: show a small check (aria-hidden) once a value is chosen.
  */
-export function ScaleButtons({ name, legend, hint = '', options, value, onChange }) {
+export function ScaleButtons({
+  name,
+  legend,
+  hint = '',
+  options,
+  value,
+  onChange,
+  icon: Icon = null,
+  markAnswered = false,
+}) {
   const refs = useRef([]);
   const index = options.findIndex((o) => o.value === value);
   const focusable = index === -1 ? 0 : index;
@@ -32,9 +44,22 @@ export function ScaleButtons({ name, legend, hint = '', options, value, onChange
       aria-labelledby={`${name}-legend`}
       aria-describedby={hint ? `${name}-hint` : undefined}
     >
-      <p id={`${name}-legend`} className="text-[16px] font-semibold text-ink">
-        {legend}
-      </p>
+      <div className="flex items-start gap-3">
+        {Icon && (
+          <span
+            aria-hidden="true"
+            className="flex size-8 shrink-0 items-center justify-center rounded-control bg-blush"
+          >
+            <Icon className="size-[18px] text-ink" />
+          </span>
+        )}
+        <p id={`${name}-legend`} className="flex-1 text-[16px] font-semibold text-ink">
+          {legend}
+        </p>
+        {markAnswered && value != null && (
+          <CircleCheck aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-ink" />
+        )}
+      </div>
       {hint && (
         <p id={`${name}-hint`} className="mt-1 text-[13px] text-ink-muted">
           {hint}
