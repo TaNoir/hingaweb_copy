@@ -15,7 +15,12 @@ export function AdminLayout() {
       logoTo="/admin/accounts"
       navLabel={t('nav.admin.label')}
       items={items}
-      chip={<Chip>{t('nav.admin.console')}</Chip>}
+      // The chip hides on phones so the header fits at 390 px (Phase 09).
+      chip={
+        <span className="hidden sm:inline">
+          <Chip>{t('nav.admin.console')}</Chip>
+        </span>
+      }
       accountLabel={t('nav.admin.account')}
       signOutLabel={t('nav.admin.signOut')}
     />

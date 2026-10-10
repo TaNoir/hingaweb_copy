@@ -14,6 +14,13 @@ export function Dialog({ open, onClose, title, children, dismissible = true }) {
   const titleId = useId();
   const panel = useRef(null);
   const opener = useRef(null);
+  // Keep the latest onClose without re-running the focus effect on every render. If the effect
+  // depended on onClose, a parent re-render (for example typing in a field inside the dialog)
+  // would move focus back to the first control after each keystroke.
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!open) return undefined;
@@ -23,7 +30,7 @@ export function Dialog({ open, onClose, title, children, dismissible = true }) {
     const onKey = (e) => {
       if (e.key === 'Escape' && dismissible) {
         e.preventDefault();
-        onClose?.();
+        onCloseRef.current?.();
       }
       if (e.key === 'Tab' && panel.current) {
         const items = [...panel.current.querySelectorAll(FOCUSABLE)];
@@ -44,7 +51,7 @@ export function Dialog({ open, onClose, title, children, dismissible = true }) {
       document.removeEventListener('keydown', onKey);
       opener.current?.focus?.();
     };
-  }, [open, dismissible, onClose]);
+  }, [open, dismissible]);
 
   if (!open) return null;
   return (

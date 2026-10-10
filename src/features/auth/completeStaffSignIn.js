@@ -5,6 +5,8 @@ import { homePathFor } from '../../lib/auth/homePath.js';
 
 /** After the second factor succeeds: start the idle clock fresh, reload the account, go home. */
 export async function completeStaffSignIn({ refresh, navigate }) {
+  // Called only from /staff/verify and /staff/setup, so this is the sign-in step's path.
+  const signInPath = window.location.pathname;
   setLastActivity(Date.now());
   timeoutFlag.clear();
   // Team decision (Phase 08): supabase-js 2.117.3 does not pass the new aal2 token to Realtime
@@ -17,5 +19,10 @@ export async function completeStaffSignIn({ refresh, navigate }) {
     // ignore
   }
   const loaded = await refresh();
-  navigate(homePathFor(loaded.account, loaded.aal), { replace: true });
+  // Team decision (Phase 09): the sign-in step's guard may already have sent the user home, and
+  // they may have opened another page since. Navigate only while still on the sign-in step, so a
+  // fast click elsewhere is never undone.
+  if (window.location.pathname === signInPath) {
+    navigate(homePathFor(loaded.account, loaded.aal), { replace: true });
+  }
 }
