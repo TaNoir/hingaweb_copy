@@ -1,6 +1,7 @@
-// Cebuano (Bisaya) text for the assent walkthrough (2.1.6.3.1).
+// Cebuano (Bisaya) text for the assent walkthrough and the crisis screen (2.1.6.3.1).
 // WRITTEN BY THE HINGAWEB TEAM, NOT BY AI TRANSLATION (00 Section 10.2).
-// Replace each placeholder with the team's text. Keep every key. Phase 05 adds the crisis keys.
+// Replace each placeholder with the team's text. Keep every key and every {name} token
+// (for example {number}) exactly as written, so the numbers still appear.
 export const ceb = {
   assent: {
     step: '[[TEAM:CEB:assent.step]]',
@@ -35,5 +36,26 @@ export const ceb = {
     continue: '[[TEAM:CEB:assent.continue]]',
     footer: '[[TEAM:CEB:assent.footer]]',
     saveError: '[[TEAM:CEB:assent.saveError]]',
+  },
+  crisis: {
+    notice: '[[TEAM:CEB:crisis.notice]]',
+    chip: '[[TEAM:CEB:crisis.chip]]',
+    languageLabel: '[[TEAM:CEB:crisis.languageLabel]]',
+    title: '[[TEAM:CEB:crisis.title]]',
+    lead: '[[TEAM:CEB:crisis.lead]]',
+    hotlinesHeading: '[[TEAM:CEB:crisis.hotlinesHeading]]',
+    call: '[[TEAM:CEB:crisis.call]]',
+    callLabel: '[[TEAM:CEB:crisis.callLabel]]',
+    officeTitle: '[[TEAM:CEB:crisis.officeTitle]]',
+    officeCall: '[[TEAM:CEB:crisis.officeCall]]',
+    officeCallLabel: '[[TEAM:CEB:crisis.officeCallLabel]]',
+    nextTitle: '[[TEAM:CEB:crisis.nextTitle]]',
+    nextBody: '[[TEAM:CEB:crisis.nextBody]]',
+    statusSending: '[[TEAM:CEB:crisis.statusSending]]',
+    statusSent: '[[TEAM:CEB:crisis.statusSent]]',
+    statusRetrying: '[[TEAM:CEB:crisis.statusRetrying]]',
+    statusOffline: '[[TEAM:CEB:crisis.statusOffline]]',
+    statusFailed: '[[TEAM:CEB:crisis.statusFailed]]',
+    back: '[[TEAM:CEB:crisis.back]]',
   },
 };
