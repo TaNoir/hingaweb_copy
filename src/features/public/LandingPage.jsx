@@ -26,14 +26,6 @@ export function LandingPage() {
   const { status, resources, reload } = usePublishedResources();
   return (
     <div className="flex flex-col gap-12">
-      <p className="flex flex-col gap-1 rounded-card bg-blush px-4 py-2 text-[12px] font-semibold tracking-wide text-ink sm:flex-row sm:justify-between">
-        <span>
-          {t('public.landing.strip')}{' '}
-          <span className="font-normal">· {t('public.landing.stripDept')}</span>
-        </span>
-        <span className="font-normal">{t('public.landing.stripRight')}</span>
-      </p>
-
       <section className="grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-start">
         <div className="flex flex-col gap-4">
           <Chip className="self-start">{t('public.landing.chip')}</Chip>

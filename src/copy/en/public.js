@@ -1,9 +1,6 @@
 // Phase 03 copy: landing (Fig 7), guides, where to get help (Fig 14), hotlines, emergency notice.
 export const publicCopy = {
   landing: {
-    strip: 'RIZAL MEMORIAL COLLEGES GUIDANCE SERVICES',
-    stripDept: 'Senior High School Department (SHS)',
-    stripRight: 'Free · Private check-ins · No app to install',
     chip: 'SENIOR HIGH GUIDANCE PLATFORM',
     title: 'A private place to check in with yourself.',
     lead: "HingaWeb helps you notice how you are doing and connects you to your school's guidance office when you want support.",
