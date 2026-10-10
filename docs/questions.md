@@ -173,7 +173,7 @@ navigating; an error result still navigates; a thrown error still navigates). No
 
 1. **Phase 07 · `RequestPage.jsx` button order on phones** (see the Phase 07 observation above):
    below 640 px "Send request" shows above "Cancel" but Tab reaches "Cancel" first (WCAG 2.4.3).
-   Team decision: leave as is for now; fix before the defense.
+   Team decision: leave as is for now; fix before the defense. **Done in UI polish item 3.**
 
 ## Phase 09 · local `SITE_URL` for the invitation e2e (environment only, no code change)
 
@@ -263,3 +263,18 @@ affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 3
    load it hit Vitest's 5 s default and failed 2 of ~10 runs ("Test timed out in 5000ms"). Given a
    15 s per-test timeout; its steps and assertions are unchanged. Not caused by the UI items (jsdom
    ignores CSS breakpoints; RegisterPage does not use ScaleButtons).
+3. **Button rows: DOM order = screen order.** Every `flex-col-reverse` button row (11 rows in 7 files)
+   now lists the primary button first in the DOM and uses `flex flex-col … sm:flex-row …`:
+   `src/features/admin/AccountsPage.jsx` (3: change role, deactivate/reactivate, create staff account),
+   `src/features/admin/ConsentPage.jsx` (2: record consent, record withdrawal),
+   `src/features/admin/ReferencePage.jsx` (2: add agreed item, retire item),
+   `src/features/admin/ResourceEditPage.jsx` (1: delete resource),
+   `src/features/assent/AssentPage.jsx` (Continue / Not now),
+   `src/features/checkin/CheckInPage.jsx` (Save check-in / Cancel and return),
+   `src/features/requests/RequestPage.jsx` (Send request / Cancel). Buttons, props and copy unchanged.
+   At 390 px the look is unchanged (primary on top). **Desktop change:** from 640 px the primary
+   button is now first (left) instead of last, because a DOM order can only match one visual order;
+   keeping the old desktop look with `sm:flex-row-reverse` would just move the Tab mismatch to
+   desktop. Measured: Tab order matches screen order at 390 and 1280 px on `/welcome`, `/check-in`,
+   `/request`, the create-staff and deactivate dialogs. e2e 04, 05, 07, 09 pass. This resolves the
+   Phase 07 "polish before defense" item.

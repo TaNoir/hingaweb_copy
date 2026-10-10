@@ -258,12 +258,12 @@ function ParentalDialog({ row, onClose, onSaved }) {
           onChange={setConfirmed}
         />
         <FormMessage>{error}</FormMessage>
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button variant="outline" onClick={onClose}>
-            {k('cancel')}
-          </Button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <Button onClick={save} disabled={!confirmed} loading={saving}>
             {k('save')}
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            {k('cancel')}
           </Button>
         </div>
       </div>
@@ -323,12 +323,12 @@ function WithdrawalDialog({ row, onClose, onSaved }) {
           onChange={setConfirmed}
         />
         <FormMessage>{error}</FormMessage>
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button variant="outline" onClick={onClose}>
-            {k('cancel')}
-          </Button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <Button onClick={save} disabled={!confirmed || !type} loading={saving}>
             {k('save')}
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            {k('cancel')}
           </Button>
         </div>
       </div>

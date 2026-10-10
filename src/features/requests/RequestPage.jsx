@@ -213,10 +213,7 @@ export function RequestPage() {
           <p className="text-[13px] text-ink-muted">{t('request.failure.kept')}</p>
         )}
 
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <Button variant="ghost" onClick={() => navigate(-1)}>
-            {t('request.cancel')}
-          </Button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Button
             size="lg"
             onClick={onSend}
@@ -225,6 +222,9 @@ export function RequestPage() {
             iconRight={<ArrowRight aria-hidden="true" className="size-5" />}
           >
             {phase === 'failed' ? t('request.failure.retry') : t('request.send')}
+          </Button>
+          <Button variant="ghost" onClick={() => navigate(-1)}>
+            {t('request.cancel')}
           </Button>
         </div>
       </Card>

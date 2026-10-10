@@ -240,12 +240,12 @@ function AddItemDialog({ onClose, onSaved }) {
           onChange={setConfirmed}
         />
         <FormMessage>{error}</FormMessage>
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button variant="outline" onClick={onClose}>
-            {k('cancel')}
-          </Button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <Button onClick={save} disabled={!confirmed} loading={saving}>
             {k('save')}
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            {k('cancel')}
           </Button>
         </div>
       </div>
@@ -275,12 +275,12 @@ function RetireDialog({ item, onClose, onSaved }) {
       <div className="flex flex-col gap-4">
         <p className="text-[15px] text-ink">{k('body')}</p>
         <FormMessage>{error}</FormMessage>
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button variant="outline" onClick={onClose}>
-            {k('cancel')}
-          </Button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <Button onClick={save} loading={saving}>
             {k('confirm')}
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            {k('cancel')}
           </Button>
         </div>
       </div>

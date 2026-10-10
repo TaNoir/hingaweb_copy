@@ -166,10 +166,7 @@ export function CheckInPage() {
 
       <FormMessage>{error}</FormMessage>
       {!complete && <p className="text-[14px] text-ink-muted">{t('checkin.required')}</p>}
-      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <LinkButton to="/" variant="ghost">
-          {t('checkin.cancel')}
-        </LinkButton>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Button
           size="lg"
           onClick={onSave}
@@ -179,6 +176,9 @@ export function CheckInPage() {
         >
           {t('checkin.save')}
         </Button>
+        <LinkButton to="/" variant="ghost">
+          {t('checkin.cancel')}
+        </LinkButton>
       </div>
 
       <PromptDialog open={prompt != null} busy={dismissing} onSend={onSend} onNotNow={onNotNow} />
