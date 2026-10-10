@@ -388,3 +388,15 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
    (it returns to its own place after the safety box, off screen while typing), so it never sits
    above the phone keyboard. `index.css`: `scroll-padding-bottom` 11rem → 6rem to match the smaller
    bar. Checked with Tab at 360 and 390 px: no focused control ends up behind the bar. e2e 05 6/6.
+3. **Primary button first: audit only, nothing to fix.** Checked every file with more than one
+   button. Each action row and dialog footer already has the primary button first in the DOM, so it
+   is on the left from `sm` up and on top on phones: AccountsPage (3 dialogs), ConsentPage (2),
+   ReferencePage (2), ResourceEditPage (page row and delete dialog), AssentPage,
+   WaitingForConsentPage, CheckInPage (save row, saved card), PromptDialog, RequestPage,
+   RequestSentPage, ResourcesPage (no check-in yet), OfficeTagPage, CrisisChannelPage,
+   RequestDetailPage (follow-up row), StaffVerifyPage, LandingPage hero. Rows with only outline
+   buttons (RequestDetailPage tag/directory links) or one button have no primary to move. Not
+   changed, **for review:** the public header and its phone menu show "Log in" (outline) before
+   "Create account" (primary). That is navigation, not a form action, and the usual order for
+   sign-in/sign-up; swapping it would change every public page. No code change, so no screenshots
+   or e2e for this item.
