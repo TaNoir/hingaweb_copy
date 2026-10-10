@@ -467,3 +467,10 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
     in view with the focus ring. New `focusFirstError.test.jsx` (3 tests). The helper calls
     `scrollIntoView` only when it exists (jsdom has none; the unchanged `RegisterPage.test.jsx`
     hit that). e2e 02 28/28.
+11. **Focus after saving a check-in.** `CheckInPage.jsx` `SavedCard`: on mount, focus moves to the
+    "Your check-in is saved" h1 (it already had `tabIndex={-1}`; now also `data-route-focus` so it
+    shows no outline, like item 4). Works for both paths to the saved card: straight after Save and
+    after "Not now" on the prompt. Checked at 360/390/1280 px: focus on the h1, in view, no outline.
+    New `savedFocus.test.jsx` (2 tests). One full verify run failed with Vitest workers that could
+    not start and four unrelated tests timing out (machine under load; 299 of 311 tests ran); the
+    next run passed 313/313 with no change. e2e 05 6/6.

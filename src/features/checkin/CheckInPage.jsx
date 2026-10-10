@@ -1,7 +1,7 @@
 // Fig 11 · private check-in (2.1.5.1.3, 2.1.5.1.4, 2.1.5.1.7, 2.1.6.2.7; D-08, D-09; N-01).
 // Owner-only: the row is written with the student's own session and RLS. No score is ever shown.
 // Ticking a crisis item opens /crisis at once (no server wait) and sends the event in the background.
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import {
   BookOpen,
@@ -299,13 +299,24 @@ function SafetyItems({ crisisItems, ticked, onTick }) {
 }
 
 function SavedCard() {
+  // Once saved, focus moves to the heading so screen reader and keyboard users hear the result
+  // (ui-students item 11). It is a heading, not a control, so it shows no outline (data-route-focus).
+  const heading = useRef(null);
+  useEffect(() => {
+    heading.current?.focus();
+  }, []);
   return (
     <Card className="flex flex-col gap-4">
       <Chip className="self-start">
         <Check aria-hidden="true" className="size-4" />
         {t('checkin.saved.chip')}
       </Chip>
-      <h1 tabIndex={-1} className="text-[24px] font-semibold leading-8 text-ink">
+      <h1
+        ref={heading}
+        tabIndex={-1}
+        data-route-focus=""
+        className="text-[24px] font-semibold leading-8 text-ink"
+      >
         {t('checkin.saved.title')}
       </h1>
       <p role="status" className="text-base text-ink-muted">
