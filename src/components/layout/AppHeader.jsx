@@ -5,7 +5,7 @@ import { Logo } from './Logo.jsx';
 import { NavItems } from './NavItems.jsx';
 
 /**
- * Shared header. Desktop: logo, nav, extras on the right. Mobile (< md): logo + "Menu" sheet.
+ * Shared header. Desktop: logo, nav, extras on the right. Below lg (1024 px): logo + "Menu" sheet.
  * @param {{ logoTo: string, navLabel: string, items: object[], chip?: node, right?: node, mobileExtras?: node }} props
  */
 export function AppHeader({
@@ -24,13 +24,13 @@ export function AppHeader({
           <Logo to={logoTo} />
           {chip}
         </div>
-        <nav aria-label={navLabel} className="hidden md:block">
+        <nav aria-label={navLabel} className="hidden lg:block">
           <NavItems items={items} />
         </nav>
-        <div className="hidden items-center gap-2 md:flex">{right}</div>
+        <div className="hidden items-center gap-2 lg:flex">{right}</div>
         <button
           type="button"
-          className="flex min-h-11 items-center gap-2 rounded-control px-3 md:hidden"
+          className="flex min-h-11 items-center gap-2 rounded-control px-3 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           onClick={() => setOpen((o) => !o)}
@@ -44,7 +44,7 @@ export function AppHeader({
         </button>
       </div>
       {open && (
-        <div id="mobile-menu" className="border-t border-line px-4 pb-4 md:hidden">
+        <div id="mobile-menu" className="border-t border-line px-4 pb-4 lg:hidden">
           <nav aria-label={navLabel} className="pt-2">
             <NavItems items={items} vertical onNavigate={() => setOpen(false)} />
           </nav>

@@ -247,3 +247,19 @@ affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 3
    browser has English hyphenation (Chrome on Android, Safari iOS, Firefox, Chrome on macOS);
    elsewhere `overflow-wrap:anywhere` breaks it without a hyphen ("Somew/hat", seen in the headless
    test browser). Nothing is clipped. Team may prefer to reword the scale label at co-design.
+2. **AppHeader — full nav from lg (1024 px).** `src/components/layout/AppHeader.jsx`: the nav, the
+   right-hand extras, the "Menu" button and its sheet now switch at `lg` instead of `md` (page padding
+   `md:px-6` unchanged). Measured header height (one row = 61 px): public, student, guidance and admin
+   are 61 px at 390, 768, 1024 and 1280 px, except admin at 1024 px (below). Before: admin 114 px and
+   student 66 px at 768 px (wrapped). e2e phase-02 28/28, phase-03 16/16.
+   **Found, not changed (pre-existing, needs a decision):** between 1024 px and about 1150 px the
+   admin header (chip "ADMIN CONSOLE" + five nav items + display name) does not fit, and nav labels
+   break mid-word ("Accoun/ts", "Conse/nt"); it fits from about 1180 px. This was already so before
+   item 2 (the full nav showed from 768 px). Options: hide the "ADMIN CONSOLE" chip below `xl`, or
+   keep the admin "Menu" sheet below `xl`. Screenshots: `02-header/admin-header-crop-1024.png`,
+   `-1100.png`, `-1180.png`.
+   **Unit test timeout (separate commit):** `src/features/auth/RegisterPage.test.jsx` › "signs up
+   with exactly the student metadata…" types ~80 characters key by key and takes ~3.5 s here; under
+   load it hit Vitest's 5 s default and failed 2 of ~10 runs ("Test timed out in 5000ms"). Given a
+   15 s per-test timeout; its steps and assertions are unchanged. Not caused by the UI items (jsdom
+   ignores CSS breakpoints; RegisterPage does not use ScaleButtons).
