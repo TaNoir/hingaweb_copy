@@ -30,6 +30,8 @@ import { AssentPage } from './features/assent/AssentPage.jsx';
 import { WaitingForConsentPage } from './features/assent/WaitingForConsentPage.jsx';
 import { CheckInPage } from './features/checkin/CheckInPage.jsx';
 import { CrisisPage } from './features/crisis/CrisisPage.jsx';
+import { TrendsPage } from './features/trends/TrendsPage.jsx';
+import { ResourcesPage } from './features/resources/ResourcesPage.jsx';
 
 export function AppRoutes() {
   return (
@@ -67,8 +69,8 @@ export function AppRoutes() {
       <Route element={<RequireStudent tier2 />}>
         <Route element={<StudentLayout />}>
           <Route path="check-in" element={<CheckInPage />} />
-          <Route path="trends" element={<PhasePlaceholder phase="06" />} />
-          <Route path="resources" element={<PhasePlaceholder phase="06" />} />
+          <Route path="trends" element={<TrendsPage />} />
+          <Route path="resources" element={<ResourcesPage />} />
           <Route path="request" element={<PhasePlaceholder phase="07" />} />
           <Route path="request/sent" element={<PhasePlaceholder phase="07" />} />
         </Route>

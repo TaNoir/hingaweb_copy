@@ -426,3 +426,9 @@ enabled = true
 # is checked instead (Phase 05).
 verify_jwt = false
 entrypoint = "./functions/notify-crisis/index.js"
+
+# ---- Phase 06 ----
+[functions.rank-resources]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/rank-resources/index.js"

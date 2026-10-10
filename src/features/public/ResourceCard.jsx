@@ -1,12 +1,16 @@
 // One verified resource: area chip, title, and a link that opens the source in a new tab.
-// Phase 06 reuses this card and passes onOpen to record a resource view.
+// Phase 06 reuses this card: it passes `area` (computed on the server, so no attribute vector
+// reaches the browser, 2.1.6.1.5) and onOpen to record a resource view.
 import { ArrowRight } from 'lucide-react';
 import { t } from '../../copy/index.js';
 import { Card, Chip } from '../../components/ui/index.js';
+import { CRITERIA } from '../../config/vocabulary.js';
 import { primaryArea } from './primaryArea.js';
 
 export function ResourceCard({ resource, onOpen }) {
-  const area = primaryArea(resource.attributes);
+  const area = resource.area
+    ? { label: CRITERIA.find((c) => c.attribute === resource.area)?.studentLabel ?? '' }
+    : primaryArea(resource.attributes);
   return (
     <Card as="article" className="flex flex-col gap-3">
       <Chip className="self-start">{area.label}</Chip>
