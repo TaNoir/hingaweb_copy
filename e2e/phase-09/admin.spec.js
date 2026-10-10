@@ -114,6 +114,10 @@ test.describe('Phase 09 · administrator console (Figs 27-33)', () => {
     await page.getByRole('button', { name: 'Retire the item E2E agreed item' }).click();
     await page.getByRole('button', { name: 'Retire item' }).click();
     await expect(page.getByText('Saved.')).toBeVisible();
+    // "Saved." is still on screen from adding the item; wait until the retire itself is stored.
+    await expect(
+      page.getByRole('button', { name: 'Retire the item E2E agreed item' }),
+    ).toHaveCount(0);
     await s.reload();
     await expect(s.getByLabel('[[GUIDANCE:crisis_item_1]]')).toBeVisible();
     await expect(s.getByLabel('E2E agreed item')).toHaveCount(0);
