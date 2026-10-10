@@ -293,3 +293,16 @@ affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 3
    label beside the logo (shown from 640 px) is removed; the pill with the lock icon stays (copy key
    `staff.portal.label` still used there). Applies to `/staff/login`, `/staff/verify`, `/staff/setup`.
    No test referenced the label. e2e 02 28/28.
+7. **Table — each row its own card below md.** `src/components/ui/Table.jsx`: below 768 px the outer
+   box has no border/background, `<tbody>` is a column with a 12 px gap, and each row is a card
+   (`bg-surface`, `rounded-card`, `border-line`, `px-4 py-3`). From `md` it is the previous table
+   (one bordered card, rows separated by lines, header row shown). Used by the queue, crisis channel
+   (resolved list), trends table, and the accounts, consent, reference, resource library and audit
+   screens. Measured at 390 px: tables are still exposed as tables with rows and cells
+   (`getByRole('table', { name })`), axe 0 violations on the queue, accounts, consent and reference
+   screens. e2e 06 3/3, 08 6/6, 09 6/6.
+   **Spec timing fix (separate commit, standing rule):** `e2e/phase-09/admin.spec.js` › "reference
+   data: … a retired one disappears" failed once: after "Add item", the page already shows "Saved.",
+   so the wait for "Saved." after "Retire item" could pass before the retire was stored, and the
+   student page reloaded too early. Added a wait for the item's "Retire" button to disappear before
+   the reload. Expected results unchanged. Pre-existing race, not caused by the table change.

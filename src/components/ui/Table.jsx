@@ -1,11 +1,12 @@
 /**
- * Accessible table. On narrow screens each row becomes a stacked card (labels from data-label).
+ * Accessible table. Below md each row is its own card (labels from data-label), with a gap between
+ * cards; from md it is a normal table inside one bordered card.
  * columns: { key, header, render?: (row) => node }[]
  */
 export function Table({ columns, rows, caption, getRowKey }) {
   return (
-    <div className="overflow-hidden rounded-card border border-line bg-surface">
-      <table className="w-full border-collapse text-left text-[14px]">
+    <div className="md:overflow-hidden md:rounded-card md:border md:border-line md:bg-surface">
+      <table className="block w-full border-collapse text-left text-[14px] md:table">
         <caption className="sr-only">{caption}</caption>
         <thead className="hidden bg-canvas md:table-header-group">
           <tr>
@@ -20,11 +21,11 @@ export function Table({ columns, rows, caption, getRowKey }) {
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="flex flex-col gap-3 md:table-row-group">
           {rows.map((row) => (
             <tr
               key={getRowKey(row)}
-              className="block border-t border-line px-4 py-3 md:table-row md:p-0"
+              className="block rounded-card border border-line bg-surface px-4 py-3 md:table-row md:rounded-none md:border-0 md:border-t md:bg-transparent md:p-0"
             >
               {columns.map((c) => (
                 <td
