@@ -490,3 +490,12 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
   contains neither; the demo build has no "(sample)". **Not changed:** the demo seed's crisis items and
   protocol step still end with "(sample)" (they live only in the local database); say if those
   should change too.
+
+## Logo caption changed (user request, 2026-10-11)
+
+The caption under "HingaWeb" (`SITE.tagline` in `src/config/site.js`) is now "Start with a breath",
+written exactly as given (sentence case). This changes 00 Section 8.5 / 6.2, which specified
+"SENIOR HIGH GUIDANCE" in 10px letter-spaced caps; the 10 px size and letter spacing stay. The logo
+is now 158 px wide (was 192), so the student phone header still fits at 360 px. No test referred to
+the old caption. verify 313/313, e2e 02 28/28, 03 16/16. The landing chip "SENIOR HIGH GUIDANCE
+PLATFORM" is a separate copy key and is unchanged.

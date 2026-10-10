@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 import { Waves } from 'lucide-react';
 import { SITE } from '../../config/site.js';
 
-/** "HingaWeb" wordmark with the SENIOR HIGH GUIDANCE caption (00 Section 8.5). */
+/** "HingaWeb" wordmark with the "Start with a breath" caption (00 Section 8.5; caption changed at the user's request). */
 export function Logo({ to = '/' }) {
   return (
     <Link
