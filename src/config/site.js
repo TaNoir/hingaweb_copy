@@ -6,7 +6,7 @@ import { DEMO_SITE } from '../content/demo-content.js';
 
 const PLACEHOLDER_SITE = Object.freeze({
   appName: 'HingaWeb',
-  tagline: 'SENIOR HIGH GUIDANCE',
+  tagline: 'Start with a breath',
   schoolName: 'Rizal Memorial Colleges, Inc.',
   footerLine: 'Rizal Memorial Colleges, Inc. senior high school guidance office.',
   timeZone: 'Asia/Manila',
