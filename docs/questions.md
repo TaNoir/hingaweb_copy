@@ -411,3 +411,12 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
    a nav link to a lazy page, focus is on the new h1 at `scrollY` 0; the landing `#how` link still
    jumps to its section. New `RouteFocus.test.jsx` (4 tests; no existing test changed). Full e2e
    02–09 passed.
+5. **Tab titles.** New `src/lib/usePageTitle.js`: `document.title = "<h1 text> · HingaWeb"` (app
+   name from `SITE.appName`), back to "HingaWeb" when the page closes. Each student and public screen
+   passes the same copy key its h1 shows, including the alternate states (registration sent,
+   reset-link sent, reset link expired / password changed, check-in saved, waiting for consent /
+   consent withdrawn, assent and crisis in the chosen language). No new text. The landing page
+   keeps "HingaWeb". Hooks sit before every early return. Checked in the browser: 20 screens, every
+   title equals its h1 plus " · HingaWeb" (list in `05-tab-titles/titles.txt`). Staff screens are
+   not part of this item and show "HingaWeb". New `usePageTitle.test.jsx` (1 test). e2e 02–07
+   passed.

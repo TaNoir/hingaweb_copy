@@ -38,6 +38,7 @@ import { FormMessage } from '../auth/AuthCard.jsx';
 import { HotlineList } from '../public/HotlineList.jsx';
 import { EmergencyNotice } from '../public/EmergencyNotice.jsx';
 import { useRequestPreview } from './useRequestPreview.js';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 const CRITERION_ITEMS = CHECKIN_ITEMS.slice(0, 4); // c1..c4: the only answers that are shared
 export const SEND_TIMEOUT_MS = 20000;
@@ -60,6 +61,7 @@ export function RequestPage() {
   const [note, setNote] = useState('');
   const [ack, setAck] = useState(false);
   const [phase, setPhase] = useState('idle'); // idle | sending | failed | stale | notAllowed
+  usePageTitle(t('request.title'));
   const prompt = location.state?.promptCheckinId ? location.state : null;
 
   const now = new Date();

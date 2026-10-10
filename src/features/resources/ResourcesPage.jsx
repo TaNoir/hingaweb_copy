@@ -17,6 +17,7 @@ import {
   Skeleton,
 } from '../../components/ui/index.js';
 import { ResourceCard } from '../public/ResourceCard.jsx';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 const FILTERS = [
   { value: 'all', label: () => t('resources.all') },
@@ -27,6 +28,7 @@ export function ResourcesPage() {
   const { session } = useAuth();
   const owner = session.user.id;
   const [filter, setFilter] = useState('all');
+  usePageTitle(t('resources.title'));
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState({
     attempt: -1,

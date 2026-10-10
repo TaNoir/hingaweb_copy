@@ -7,6 +7,7 @@ import { useAuth } from '../../lib/auth/useAuth.js';
 import { homePathFor } from '../../lib/auth/homePath.js';
 import { Button, Card } from '../../components/ui/index.js';
 import { EmergencyNotice } from '../public/EmergencyNotice.jsx';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 export function WaitingForConsentPage() {
   const navigate = useNavigate();
@@ -15,6 +16,9 @@ export function WaitingForConsentPage() {
   const [stillWaiting, setStillWaiting] = useState(false);
 
   const home = homePathFor(account, aal);
+  usePageTitle(
+    t(account.parental === 'withdrawn' ? 'waiting.withdrawnTitle' : 'waiting.noneTitle'),
+  );
   if (home !== '/waiting-for-consent') return <Navigate to={home} replace />;
 
   const withdrawn = account.parental === 'withdrawn';

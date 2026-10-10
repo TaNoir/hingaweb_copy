@@ -1,7 +1,9 @@
 import { t } from '../../copy/index.js';
 import { LinkButton } from '../../components/ui/index.js';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 export function NotFoundPage() {
+  usePageTitle(t('notFound.title'));
   return (
     <div className="flex flex-col items-start gap-3">
       <h1 className="text-[28px] font-semibold text-ink">{t('notFound.title')}</h1>

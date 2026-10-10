@@ -8,10 +8,12 @@ import { firstSchoolDayFor, formatSchoolDate, officeStatus } from '../../lib/tim
 import { Card, Chip, LinkButton } from '../../components/ui/index.js';
 import { HotlineList } from '../public/HotlineList.jsx';
 import { EmergencyNotice } from '../public/EmergencyNotice.jsx';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 export function RequestSentPage() {
   const location = useLocation();
   const sent = location.state;
+  usePageTitle(t('request.sent.title'));
   if (!sent?.requestId) return <Navigate to="/request" replace />;
   const closed = officeStatus(new Date(sent.createdAt)) === 'closed';
   return (

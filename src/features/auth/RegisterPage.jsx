@@ -17,6 +17,7 @@ import {
 import { AuthCard, FormMessage } from './AuthCard.jsx';
 import { registerSchema } from './schemas.js';
 import { useForm } from './useForm.js';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -68,6 +69,8 @@ export function RegisterPage() {
     // Same message whether or not the email was already registered (no account enumeration).
     setSentTo(v.email);
   };
+
+  usePageTitle(sentTo ? t('auth.register.sentTitle') : t('auth.register.title'));
 
   if (sentTo) {
     return (

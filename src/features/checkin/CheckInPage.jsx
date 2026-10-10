@@ -26,6 +26,7 @@ import { useCrisisItems } from './useCrisisItems.js';
 import { PromptDialog } from './PromptDialog.jsx';
 import { reportCrisisItem, useCrisisReport } from '../crisis/crisisReport.js';
 import { CrisisStatus } from '../crisis/CrisisStatus.jsx';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 export function CheckInPage() {
   const navigate = useNavigate();
@@ -106,6 +107,8 @@ export function CheckInPage() {
     setPrompt(null);
     setSaved(true);
   };
+
+  usePageTitle(saved ? t('checkin.saved.title') : t('checkin.title'));
 
   if (saved) return <SavedCard />;
 

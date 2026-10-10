@@ -8,12 +8,14 @@ import { Button, Field, TextInput } from '../../components/ui/index.js';
 import { AuthCard, FormMessage } from './AuthCard.jsx';
 import { emailOnlySchema } from './schemas.js';
 import { useForm } from './useForm.js';
+import { usePageTitle } from '../../lib/usePageTitle.js';
 
 export function ForgotPasswordPage() {
   const { bind, errors, validate } = useForm({ email: '' });
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [sent, setSent] = useState(false);
+  usePageTitle(sent ? t('auth.forgot.sentTitle') : t('auth.forgot.title'));
 
   const onSubmit = async (e) => {
     e.preventDefault();
