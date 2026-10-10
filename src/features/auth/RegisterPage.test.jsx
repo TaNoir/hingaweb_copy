@@ -71,5 +71,6 @@ describe('RegisterPage (Fig 8, 2.1.5.1.1, D-01)', () => {
       },
     });
     expect(await screen.findByRole('heading', { name: 'Check your email' })).toBeInTheDocument();
-  });
+    // Types about 80 characters key by key (~3.5 s here); the 5 s default timed out under load.
+  }, 15000);
 });
