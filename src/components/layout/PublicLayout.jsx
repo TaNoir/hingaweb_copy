@@ -6,7 +6,8 @@ import { Footer } from './Footer.jsx';
 import { Main } from './Main.jsx';
 import { SkipLink } from './SkipLink.jsx';
 
-export function PublicLayout() {
+/** width: 'reading' (768px) or 'wide' (1200px; the landing page). */
+export function PublicLayout({ width = 'reading' }) {
   const items = [
     { to: '/guides', label: t('nav.public.guides') },
     { to: '/help', label: t('nav.public.help') },
@@ -30,7 +31,7 @@ export function PublicLayout() {
         mobileExtras={actions}
       />
       <div className="flex-1">
-        <Main>
+        <Main width={width}>
           <Outlet />
         </Main>
       </div>

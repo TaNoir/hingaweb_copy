@@ -34,6 +34,8 @@
     min-height: 100vh;
     font-size: 16px;
     line-height: 24px;
+    /* long emails, links, and names wrap instead of pushing the page sideways (no horizontal scroll) */
+    overflow-wrap: anywhere;
   }
   /* 00 Section 8.4: visible focus on every interactive element */
   :focus-visible {
