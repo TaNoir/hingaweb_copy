@@ -12,6 +12,7 @@ import { AuthCard, FormMessage } from './AuthCard.jsx';
 import { loginSchema } from './schemas.js';
 import { useForm } from './useForm.js';
 import { usePageTitle } from '../../lib/usePageTitle.js';
+import { focusFirstError } from '../../lib/focusFirstError.js';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -26,7 +27,10 @@ export function LoginPage() {
     e.preventDefault();
     setFormError(null);
     const v = validate(loginSchema);
-    if (!v) return;
+    if (!v) {
+      focusFirstError(e.currentTarget);
+      return;
+    }
     setSubmitting(true);
     setAuthBusy(true);
     try {

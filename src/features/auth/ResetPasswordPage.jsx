@@ -11,6 +11,7 @@ import { AuthCard, FormMessage } from './AuthCard.jsx';
 import { newPasswordSchema } from './schemas.js';
 import { useForm } from './useForm.js';
 import { usePageTitle } from '../../lib/usePageTitle.js';
+import { focusFirstError } from '../../lib/focusFirstError.js';
 
 export function ResetPasswordPage() {
   const navigate = useNavigate();
@@ -52,7 +53,10 @@ export function ResetPasswordPage() {
     e.preventDefault();
     setFormError('');
     const v = validate(newPasswordSchema);
-    if (!v) return;
+    if (!v) {
+      focusFirstError(e.currentTarget);
+      return;
+    }
     setSubmitting(true);
     const { error } = await supabase.auth.updateUser({ password: v.password });
     setSubmitting(false);

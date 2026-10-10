@@ -9,6 +9,7 @@ import { AuthCard, FormMessage } from './AuthCard.jsx';
 import { emailOnlySchema } from './schemas.js';
 import { useForm } from './useForm.js';
 import { usePageTitle } from '../../lib/usePageTitle.js';
+import { focusFirstError } from '../../lib/focusFirstError.js';
 
 export function ForgotPasswordPage() {
   const { bind, errors, validate } = useForm({ email: '' });
@@ -21,7 +22,10 @@ export function ForgotPasswordPage() {
     e.preventDefault();
     setFormError('');
     const v = validate(emailOnlySchema);
-    if (!v) return;
+    if (!v) {
+      focusFirstError(e.currentTarget);
+      return;
+    }
     setSubmitting(true);
     const { error } = await supabase.auth.resetPasswordForEmail(v.email, {
       redirectTo: `${window.location.origin}/reset-password`,

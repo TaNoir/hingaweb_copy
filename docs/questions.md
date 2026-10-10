@@ -456,3 +456,14 @@ on (and Vitest reads `.env.local` too). Screenshots: `hingaweb2-screenshots/ui-s
    reload with one answer = one `beforeunload` prompt; tick a safety item and come back = none;
    reload after save = none. New `unsavedWarning.test.jsx` (3 tests). Not visible in screenshots
    (the prompt is the browser's). e2e 05, 06, 07 passed.
+10. **Focus the first field with an error.** New `src/lib/focusFirstError.js`: after a submit finds
+    problems, on the next frame it focuses the first `[aria-invalid="true"]` in the form (set by
+    `Field`) and scrolls it to the middle of the screen. Called from `/register`, `/login`,
+    `/forgot-password`, and `/reset-password` when validation fails. No text changes; the existing
+    error messages (role="alert") still show. **`/request`: not applicable, so nothing changed:**
+    the request page has no field errors. "Send" stays disabled until a concern is chosen and the
+    acknowledgement is ticked, so a submit can never find problems. Checked at 360/390/1280 px:
+    empty register → "Full name", empty login and forgot-password → "School email address", each
+    in view with the focus ring. New `focusFirstError.test.jsx` (3 tests). The helper calls
+    `scrollIntoView` only when it exists (jsdom has none; the unchanged `RegisterPage.test.jsx`
+    hit that). e2e 02 28/28.
