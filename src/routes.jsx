@@ -11,7 +11,6 @@ import { PublicOrStudentLayout } from './components/layout/PublicOrStudentLayout
 import { StudentLayout } from './components/layout/StudentLayout.jsx';
 import { BareLayout } from './components/layout/BareLayout.jsx';
 import { PortalLayout } from './components/layout/PortalLayout.jsx';
-import { StaffLayout } from './components/layout/StaffLayout.jsx';
 import { AdminLayout } from './components/layout/AdminLayout.jsx';
 import { RegisterPage } from './features/auth/RegisterPage.jsx';
 import { LoginPage } from './features/auth/LoginPage.jsx';
@@ -34,6 +33,12 @@ import { TrendsPage } from './features/trends/TrendsPage.jsx';
 import { ResourcesPage } from './features/resources/ResourcesPage.jsx';
 import { RequestPage } from './features/requests/RequestPage.jsx';
 import { RequestSentPage } from './features/requests/RequestSentPage.jsx';
+import { GuidanceLayout } from './features/guidance/GuidanceLayout.jsx';
+import { QueuePage } from './features/guidance/QueuePage.jsx';
+import { RequestDetailPage } from './features/guidance/RequestDetailPage.jsx';
+import { OfficeTagPage } from './features/guidance/OfficeTagPage.jsx';
+import { CrisisChannelPage } from './features/guidance/CrisisChannelPage.jsx';
+import { ReferralsPage } from './features/guidance/ReferralsPage.jsx';
 
 export function AppRoutes() {
   return (
@@ -92,12 +97,12 @@ export function AppRoutes() {
 
       {/* Guidance (aal2) */}
       <Route element={<RequireStaff role="guidance" />}>
-        <Route element={<StaffLayout />}>
-          <Route path="staff/queue" element={<PhasePlaceholder phase="08" />} />
-          <Route path="staff/requests/:id" element={<PhasePlaceholder phase="08" />} />
-          <Route path="staff/requests/:id/tag" element={<PhasePlaceholder phase="08" />} />
-          <Route path="staff/crisis" element={<PhasePlaceholder phase="08" />} />
-          <Route path="staff/referrals" element={<PhasePlaceholder phase="08" />} />
+        <Route element={<GuidanceLayout />}>
+          <Route path="staff/queue" element={<QueuePage />} />
+          <Route path="staff/requests/:id" element={<RequestDetailPage />} />
+          <Route path="staff/requests/:id/tag" element={<OfficeTagPage />} />
+          <Route path="staff/crisis" element={<CrisisChannelPage />} />
+          <Route path="staff/referrals" element={<ReferralsPage />} />
         </Route>
       </Route>
 

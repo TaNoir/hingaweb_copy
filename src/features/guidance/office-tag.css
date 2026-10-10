@@ -1,0 +1,18 @@
+/* Phase 08 · the office's own tag colours (Table 13; 2.1.3.4). The ONLY stylesheet allowed to name
+   these colours (00 Section 10.4). Used only by OfficeTag*.jsx, only for a tag a staff member chose. */
+.office-tag-dot {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-ink);
+}
+.office-tag-dot[data-tag='green'] {
+  background: #2e7d32;
+}
+.office-tag-dot[data-tag='yellow'] {
+  background: #f9a825;
+}
+.office-tag-dot[data-tag='red'] {
+  background: #c62828;
+}

@@ -125,3 +125,52 @@ Phase 07 passes 3/3. In a single run of the whole suite (02–07), the Phase 05/
 check-ins for `student.full`, so Phase 07's "with no check-in yet…" correctly sees a latest check-in
 and fails; the other two Phase 07 tests then do not run (serial). Not an app or timing issue; no
 change made. For regression runs, reset before each phase's specs (or run phase by phase).
+
+## Phase 08 · live crisis alert never reaches guidance after the second factor (app bug, not a race)
+
+`e2e/phase-08/guidance.spec.js` › "a crisis tick reaches an open dashboard at once…" fails: the
+student's crisis event is saved (201, "The guidance office has been told."), but the guidance page
+never shows "A new crisis event was raised." (also with the Realtime container healthy first).
+
+Diagnosis (measured):
+- Database side is correct: `crisis_events` is in `supabase_realtime`; policy
+  `crisis_events_select_guidance` uses `is_guidance()` (requires aal2). A Node probe signed in as
+  guidance at aal2, with that token given to Realtime, received the INSERT in 421 ms.
+- The browser joins `realtime:guidance-crisis-events` with an **aal1** token (captured `phx_join`
+  frame, decoded: `aal=aal1`) although the page is already on `/staff/queue` after
+  `/staff/verify`. RLS then filters every event, so nothing arrives. The join itself replies "ok".
+- Cause: supabase-js 2.117.3 (`SupabaseClient._handleTokenChanged`) passes a new token to Realtime
+  only on `SIGNED_IN`, `TOKEN_REFRESHED`, or `INITIAL_SESSION`. `mfa.challengeAndVerify` emits
+  `MFA_CHALLENGE_VERIFIED`, which it ignores. `completeStaffSignIn` reloads the account but does
+  not refresh the Supabase session, so Realtime keeps the aal1 token from the password step until
+  a page reload or the hourly token refresh. (Plan 02 §3.7 says "session refreshed" on success.)
+- Effect today: after signing in, the alert and the live Crisis count do not update until the
+  60-second poll (count only) or a reload. 2.1.6.1.6 / P08-D14 ("at once") is not met.
+
+Two possible fixes (not applied; app code, not a spec wait):
+1. `src/features/auth/StaffVerifyPage.jsx` and `StaffSetupPage.jsx`: after a successful
+   `challengeAndVerify`, `await supabase.auth.refreshSession()` before `completeStaffSignIn()`.
+   This emits `TOKEN_REFRESHED`, so supabase-js gives Realtime the aal2 token. Matches 02 §3.7
+   "session refreshed". (Phase 02 files.)
+2. `src/features/guidance/crisisFeed.js`: before `.subscribe()`, read the current session and call
+   `supabase.realtime.setAuth(session.access_token)`. Local to Phase 08, but other future Realtime
+   users would need the same.
+What we need to know: which fix (1 recommended), and may it be applied?
+
+**Team decision (10 Oct 2026), answering the question above — change to a Phase 02 file (option 1,
+in one place):** `src/features/auth/completeStaffSignIn.js` now calls
+`await supabase.auth.refreshSession()` after `setLastActivity` and `timeoutFlag.clear()`, before
+`refresh()` and `navigate()`. Reason: supabase-js 2.117.3 does not pass the aal2 token to Realtime
+after MFA verify (`MFA_CHALLENGE_VERIFIED` is not handled), so the guidance crisis subscription
+joined at aal1 and RLS filtered every event. Refreshing emits `TOKEN_REFRESHED`, which updates
+Realtime. If the refresh returns an error (or throws), sign-in continues anyway: the second factor
+already succeeded and the 60-second poll still covers the crisis count. Both `/staff/verify` and
+`/staff/setup` use this function; `StaffVerifyPage.jsx` and `StaffSetupPage.jsx` are unchanged.
+New test `src/features/auth/completeStaffSignIn.test.js` (3 tests: refresh happens before
+navigating; an error result still navigates; a thrown error still navigates). No existing test changed.
+
+## Polish before defense
+
+1. **Phase 07 · `RequestPage.jsx` button order on phones** (see the Phase 07 observation above):
+   below 640 px "Send request" shows above "Cancel" but Tab reaches "Cancel" first (WCAG 2.4.3).
+   Team decision: leave as is for now; fix before the defense.

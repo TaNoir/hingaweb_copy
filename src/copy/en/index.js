@@ -4,6 +4,7 @@ import { assentCopy, waitingCopy } from './assent.js';
 import { checkinCopy, crisisCopy } from './checkin.js';
 import { trendsCopy, resourcesCopy } from './trends.js';
 import { requestCopy } from './request.js';
+import { guidanceCopy } from './guidance.js';
 
 export const sections = {
   public: publicCopy,
@@ -14,4 +15,5 @@ export const sections = {
   trends: trendsCopy,
   resources: resourcesCopy,
   request: requestCopy,
+  guidance: guidanceCopy,
 };

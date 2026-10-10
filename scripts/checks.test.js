@@ -11,6 +11,11 @@ describe('check-copy', () => {
   it('lets staff copy use priority words', () => {
     expect(findViolations({ staff: { queue: { a: 'P1 requests first' } } }, [])).toEqual([]);
   });
+  it('treats guidance.* (Phase 08 dashboard) as staff copy, but still bans diagnostic words there', () => {
+    expect(findViolations({ guidance: { queue: { a: 'P1 first; For Review; score S' } } }, [])).toEqual([]);
+    expect(findViolations({ guidance: { a: 'possible depression' } }, [])).toHaveLength(1);
+    expect(findViolations({ guidancex: { a: 'P1 first' } }, [])).toHaveLength(1);
+  });
   it('honours the exact-sentence allowlist', () => {
     const s = 'It is not a diagnosis and it is not a replacement for talking to someone.';
     expect(findViolations({ landing: { a: s } }, [s])).toEqual([]);
