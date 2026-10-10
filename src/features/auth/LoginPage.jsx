@@ -1,7 +1,8 @@
-// Fig 9 · student log in. Staff accounts are refused here and pointed to the staff portal.
+// Fig 9 · student log in. Staff accounts are refused here and pointed to the staff portal; a link
+// to the staff sign-in is also always shown under the form (user request).
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { ArrowLeft, Shield } from 'lucide-react';
+import { ArrowLeft, KeyRound, Shield } from 'lucide-react';
 import { t } from '../../copy/index.js';
 import { supabase } from '../../lib/supabase.js';
 import { useAuth } from '../../lib/auth/useAuth.js';
@@ -137,6 +138,15 @@ export function LoginPage() {
           {t('auth.login.create')}
         </Link>
       </p>
+      {/* Staff who arrive here from the landing page's "Log in" can go straight to their own sign-in
+          (user request). The staff portal and its second factor are unchanged. */}
+      <Link
+        to="/staff/login"
+        className="mx-auto mt-2 flex min-h-11 w-fit items-center gap-2 text-[15px] font-semibold text-ink underline"
+      >
+        <KeyRound aria-hidden="true" className="size-4" />
+        {t('staff.login.title')}
+      </Link>
     </AuthCard>
   );
 }

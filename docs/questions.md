@@ -499,3 +499,15 @@ written exactly as given (sentence case). This changes 00 Section 8.5 / 6.2, whi
 is now 158 px wide (was 192), so the student phone header still fits at 360 px. No test referred to
 the old caption. verify 313/313, e2e 02 28/28, 03 16/16. The landing chip "SENIOR HIGH GUIDANCE
 PLATFORM" is a separate copy key and is unchanged.
+
+## Student log in links to the staff sign-in (user request, 2026-10-11)
+
+`LoginPage.jsx`: under "New here? Create an account" there is now always a link to `/staff/login`,
+labelled with the existing `staff.login.title` ("Guidance office sign in"), with a `KeyRound` icon
+(aria-hidden), 44 px tall. Staff who use the landing page's "Log in" can switch to their own sign-in.
+Logins are still separate: staff sign in at `/staff/login` with the second factor, and a staff
+account entered on `/login` is still refused with the existing message (the Fig 9 tests are
+unchanged). No new text. New `loginStaffLink.test.jsx` (1 test). verify 314/314, e2e 02 28/28. The
+first e2e 02 run failed 18 tests at about 6 s each while the local Supabase containers were
+restarting (edge runtime up 1 s, the logging container in a restart loop); the re-run passed
+with no change.
