@@ -1,7 +1,9 @@
 // All English UI text (00 Section 10.1). Components call t('key.path').
-// Each later phase ADDS keys under its own section; never change a key another phase owns.
+// Phase 02 keys live in this file. From Phase 03 on, each phase adds ONE file in src/copy/en/
+// and registers it in src/copy/en/index.js. Never change a key another phase owns.
 // Colour words are allowed only between the office-tags markers (00 Section 10.4).
 import { SITE } from '../config/site.js';
+import { sections } from './en/index.js';
 
 export const en = {
   common: {
@@ -225,5 +227,9 @@ export const en = {
 
   dev: {
     placeholder: 'This screen is built in Phase {phase}.',
+    missingConfig:
+      'HingaWeb is not configured. Copy .env.example to .env.local, fill both values, then restart.',
   },
+
+  ...sections,
 };

@@ -8,7 +8,8 @@ import { Footer } from './Footer.jsx';
 import { Main } from './Main.jsx';
 import { SkipLink } from './SkipLink.jsx';
 
-export function StudentLayout() {
+/** width: 'reading' (768px) or 'wide' (1200px; the landing page). */
+export function StudentLayout({ width = 'reading' }) {
   const { signOut } = useAuth();
   const navigate = useNavigate();
   const logOut = async () => {
@@ -43,7 +44,7 @@ export function StudentLayout() {
         }
       />
       <div className="flex-1">
-        <Main>
+        <Main width={width}>
           <Outlet />
         </Main>
       </div>

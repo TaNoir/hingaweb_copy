@@ -23,15 +23,20 @@ import { StaffVerifyPage } from './features/auth/StaffVerifyPage.jsx';
 import { StaffSetupPage } from './features/auth/StaffSetupPage.jsx';
 import { NotFoundPage } from './features/auth/NotFoundPage.jsx';
 import { PhasePlaceholder } from './features/placeholder/PhasePlaceholder.jsx';
+import { LandingPage } from './features/public/LandingPage.jsx';
+import { GuidesPage } from './features/public/GuidesPage.jsx';
+import { HelpPage } from './features/public/HelpPage.jsx';
 
 export function AppRoutes() {
   return (
     <Routes>
       {/* Tier 1: public pages; a signed-in student keeps the student header */}
+      <Route element={<PublicOrStudentLayout width="wide" />}>
+        <Route index element={<LandingPage />} />
+      </Route>
       <Route element={<PublicOrStudentLayout />}>
-        <Route index element={<PhasePlaceholder phase="03" />} />
-        <Route path="guides" element={<PhasePlaceholder phase="03" />} />
-        <Route path="help" element={<PhasePlaceholder phase="03" />} />
+        <Route path="guides" element={<GuidesPage />} />
+        <Route path="help" element={<HelpPage />} />
       </Route>
 
       {/* Student account pages */}

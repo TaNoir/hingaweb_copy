@@ -33,7 +33,13 @@ export default [
     rules: { 'react-refresh/only-export-components': 'off' },
   },
   {
-    files: ['scripts/**/*.js', 'supabase/functions/**/*.js', 'e2e/**/*.js', '*.config.js'],
+    // Playwright specs run in Node but page.evaluate() bodies run in the browser.
+    files: ['e2e/**/*.js'],
+    languageOptions: { ecmaVersion: 'latest', sourceType: 'module', globals: { ...globals.node, ...globals.browser } },
+    rules: { ...js.configs.recommended.rules },
+  },
+  {
+    files: ['scripts/**/*.js', 'supabase/functions/**/*.js', '*.config.js'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
