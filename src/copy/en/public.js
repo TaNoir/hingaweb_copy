@@ -44,7 +44,6 @@ export const publicCopy = {
     lead: 'Short guides for high school life. Free to read anytime without creating an account.',
     filterLabel: 'Filter guides by area',
     all: 'All',
-    freeAccess: 'Free access',
     read: 'Read guide',
     opensNewTab: '(opens in a new tab)',
     emptyTitle: 'No guides yet',

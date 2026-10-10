@@ -284,3 +284,8 @@ affected phase's e2e (after `db reset` + `dev-enrol-totp`), and screenshots at 3
    `src/features/public/HelpPage.jsx`. `RequestPage.jsx` and `RequestSentPage.jsx` keep the default
    primary style; the crisis screen does not use `HotlineList` (its own rows are unchanged). Existing
    `outline` button tokens only (surface background, ink border and text). e2e 03 16/16, 07 3/3.
+5. **ResourceCard — "Free access" removed.** `src/features/public/ResourceCard.jsx`: the "Free access"
+   line is gone; the card footer keeps the "Read guide" link on the right (`justify-end`). Copy key
+   `public.guides.freeAccess` removed from `src/copy/en/public.js` (it was used nowhere else). No unit
+   test or e2e spec checked that text, so no test changed. Affects `/`, `/guides`, `/resources`.
+   e2e 03 16/16, 06 3/3.
