@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { cx } from './cx.js';
 
 /**
@@ -9,6 +9,9 @@ import { cx } from './cx.js';
  * nowrap (the language switcher): from 640 px every option stays on one line and the group never
  * shrinks; below 640 px the group fills its row as equal-width columns (one per option), so there
  * is no blank space beside it. Without it the options wrap onto more rows when space runs out.
+ * The dark "selected" pill is one element that slides to the chosen option (200 ms ease-out; no
+ * movement with reduced motion). Until it has been measured, the selected button paints its own
+ * dark background, so the selection is never invisible.
  */
 export function SegmentedControl({
   label,
@@ -21,6 +24,29 @@ export function SegmentedControl({
   const refs = useRef([]);
   const index = options.findIndex((o) => o.value === value);
   const focusable = index === -1 ? 0 : index;
+  const groupRef = useRef(null);
+  const [pill, setPill] = useState(null); // { left, top, width, height } of the selected button
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const el = refs.current[index];
+      setPill(
+        el && el.offsetWidth > 0
+          ? {
+              left: el.offsetLeft,
+              top: el.offsetTop,
+              width: el.offsetWidth,
+              height: el.offsetHeight,
+            }
+          : null,
+      );
+    };
+    measure();
+    if (typeof ResizeObserver === 'undefined' || !groupRef.current) return undefined;
+    const ro = new ResizeObserver(measure);
+    ro.observe(groupRef.current);
+    return () => ro.disconnect();
+  }, [index, options.length]);
 
   const focusAt = (to) => {
     const i = (to + options.length) % options.length;
@@ -45,10 +71,11 @@ export function SegmentedControl({
 
   return (
     <div
+      ref={groupRef}
       role="radiogroup"
       aria-label={label}
       className={cx(
-        'gap-1 rounded-control bg-blush p-1',
+        'relative gap-1 rounded-control bg-blush p-1',
         nowrap
           ? 'grid w-full grid-cols-[repeat(var(--seg-cols),minmax(0,1fr))] sm:inline-flex sm:w-auto sm:shrink-0 sm:flex-nowrap sm:whitespace-nowrap'
           : 'inline-flex flex-wrap',
@@ -56,6 +83,13 @@ export function SegmentedControl({
       )}
       style={nowrap ? { '--seg-cols': options.length } : undefined}
     >
+      {pill && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute rounded-control bg-action transition-[left,top,width,height] duration-200 ease-out motion-reduce:transition-none"
+          style={pill}
+        />
+      )}
       {options.map((o, i) => {
         const selected = o.value === value;
         return (
@@ -69,9 +103,14 @@ export function SegmentedControl({
             onClick={() => onChange(o.value)}
             onKeyDown={(e) => onKeyDown(e, i)}
             className={cx(
-              'min-h-11 rounded-control px-4 text-[14px] font-semibold',
+              'relative min-h-11 rounded-control px-4 text-[14px] font-semibold',
               nowrap && 'justify-center text-center whitespace-nowrap sm:shrink-0',
-              selected ? 'bg-action text-action-ink' : 'bg-transparent text-ink',
+              selected
+                ? cx(
+                    'text-action-ink transition-colors duration-200',
+                    pill ? 'bg-transparent' : 'bg-action',
+                  )
+                : 'bg-transparent text-ink transition-colors duration-200',
             )}
           >
             {o.label}

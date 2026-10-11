@@ -68,3 +68,80 @@
     scroll-padding-bottom: 6rem;
   }
 }
+
+/* ui-interactive Part 1: tap and hover feedback. 150–300 ms, ease-out, CSS only. Reduced motion
+   removes all movement (no lift, press, slide, or growing underline). The crisis screen sits in
+   .no-motion: no new movement or transitions there at all. */
+.btn-motion {
+  transition:
+    translate 200ms ease-out,
+    scale 150ms ease-out,
+    box-shadow 200ms ease-out,
+    background-color 200ms ease-out;
+}
+.btn-motion:hover:not(:disabled) {
+  translate: 0 -1px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+}
+.btn-motion:active:not(:disabled) {
+  translate: 0 0;
+  scale: 0.98;
+  box-shadow: none;
+}
+
+/* Cards (guides, "How HingaWeb works", hotline cards): lift 2 px, blush-strong border, and the
+   "Read guide" arrow slides 4 px right. Keyboard focus inside the card shows the same state. */
+.card-hover {
+  transition:
+    translate 200ms ease-out,
+    border-color 200ms ease-out;
+}
+.card-hover:hover,
+.card-hover:focus-within {
+  translate: 0 -2px;
+  border-color: var(--color-blush-strong);
+}
+.card-hover .arrow-slide {
+  transition: translate 200ms ease-out;
+}
+.card-hover:hover .arrow-slide,
+.card-hover:focus-within .arrow-slide {
+  translate: 4px 0;
+}
+
+/* Links and nav items: an underline that grows from left to right on hover. */
+.link-grow {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1.5px;
+  transition: background-size 200ms ease-out;
+}
+.link-grow:hover,
+:hover > .link-grow {
+  background-size: 100% 1.5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-motion:hover:not(:disabled),
+  .btn-motion:active:not(:disabled),
+  .card-hover:hover,
+  .card-hover:focus-within,
+  .card-hover:hover .arrow-slide,
+  .card-hover:focus-within .arrow-slide {
+    translate: none;
+    scale: none;
+  }
+  .link-grow {
+    transition: none;
+  }
+}
+
+.no-motion :is(a, button, li, span) {
+  transition: none !important;
+  translate: none !important;
+  scale: none !important;
+}
+.no-motion :is(a, button):hover {
+  box-shadow: none !important;
+}

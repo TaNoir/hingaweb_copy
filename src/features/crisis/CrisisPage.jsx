@@ -35,7 +35,8 @@ export function CrisisPage() {
   }, []);
 
   return (
-    <div lang={lang} className="flex flex-col gap-6">
+    // no-motion: the crisis screen gets none of the hover/tap/slide motion (ui-interactive).
+    <div lang={lang} className="no-motion flex flex-col gap-6">
       <div className="flex flex-col gap-3 rounded-card border-2 border-ink bg-surface p-4 sm:flex-row sm:items-center">
         <Info aria-hidden="true" className="size-5 shrink-0 text-ink" />
         <p className="flex-1 text-[15px] text-ink">

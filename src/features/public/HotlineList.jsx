@@ -15,7 +15,7 @@ export function HotlineList({ lang = 'en', variant = 'primary' }) {
       {HOTLINES.map((h) => (
         <li
           key={h.id}
-          className="flex flex-col gap-3 rounded-card border border-line bg-surface-muted p-4"
+          className="card-hover flex flex-col gap-3 rounded-card border border-line bg-surface-muted p-4"
         >
           <div>
             <p className="font-semibold text-ink">{h.name}</p>
