@@ -1,23 +1,41 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
+/* Headings (ui-landing-v2): Bricolage Grotesque 700/800, self-hosted (latin only), no Google Fonts call. */
+@import '@fontsource/bricolage-grotesque/latin-700.css';
+@import '@fontsource/bricolage-grotesque/latin-800.css';
 
-/* 00 Section 8.1 — the ONLY colours the app may use. The default palette is removed. */
+/* 00 Section 8.1 — the ONLY colours the app may use. The default palette is removed.
+   ui-landing-v2 (user request, design docs/design/HingaWeb-Landing.pdf): new palette for the whole
+   app. blush / blush-strong / surface-muted / canvas-alt keep their names (used across the app) and
+   now sit in the lavender family; blush-strong (#d3c7ef) and surface-muted (#f7f5fb) are derived
+   shades, not in the design's list. None of these colours carries a good/bad meaning. */
 @theme {
   --color-*: initial;
-  --color-canvas: #fff1f4;
-  --color-canvas-alt: #f8f6f4;
+  --color-canvas: #f3f0f9;
+  --color-canvas-alt: #f3f0f9;
   --color-surface: #ffffff;
-  --color-surface-muted: #f5f2f2;
-  --color-blush: #fde4ea;
-  --color-blush-strong: #f9ccd7;
-  --color-line: #f0dce1;
-  --color-ink: #1e1e1e;
-  --color-ink-muted: #5c5c5c;
-  --color-action: #2a2a2a;
-  --color-action-ink: #f6b3c4;
+  --color-surface-muted: #f7f5fb;
+  --color-blush: #e3daf5;
+  --color-blush-strong: #d3c7ef;
+  --color-line: #e4def0;
+  --color-ink: #28223e;
+  --color-ink-muted: #5e5873;
+  --color-action: #28223e;
+  --color-action-ink: #ffffff;
+  --color-accent: #4e3e93;
+  --color-lavender: #e3daf5;
+  --color-mint: #dcede3;
+  --color-mint-ink: #1f3f32;
+  --color-peach: #ffe6d9;
+  --color-butter: #f7e7a8;
+  --color-help-bg: #f9e2e8;
+  --color-help-strip: #f9d3de;
+  --color-help-ink: #4a152f;
+  --color-footer: #28223e;
   --color-white: #ffffff;
   --color-transparent: transparent;
   --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Inter Variable', system-ui, sans-serif;
   --radius-card: 16px;
   --radius-control: 12px;
 }
@@ -44,6 +62,13 @@
   }
   main:focus {
     outline: none;
+  }
+  /* Headings use the display face (design: Bricolage Grotesque 700–800). */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
   }
   /* ui-students item 4: the h1 that RouteFocus moves focus to is a heading, not a control */
   [data-route-focus]:focus {
