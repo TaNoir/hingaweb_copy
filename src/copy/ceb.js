@@ -191,4 +191,34 @@ export const ceb = {
       source: 'Gikan sa {source} · moabli sa bag-ong tab',
     },
   },
+  // "My requests" card on /check-in (user request 2026-10-11; AI draft; no language switch there yet).
+  request: {
+    mine: {
+      title: 'Ang akong mga request sa guidance office',
+      lead: 'Kanus-a nimo gipadala ang matag request ug kung nakita na ba kini sa guidance office. Wala dinhi gipakita ang imong note.',
+      sentOn: 'Gipadala {date}',
+      stepsLabel: 'Progress sa {ref}',
+      steps: {
+        sent: 'Napadala',
+        seen: 'Nakita na sa guidance office',
+        closed: 'Sirado na',
+      },
+      state: {
+        done: '(nahuman)',
+        now: '(karon)',
+        later: '(wala pa)',
+      },
+      explain: {
+        sent: 'Wala pa kini maablihi sa guidance office. Naay taga-office nga mo-follow up nimo sa school.',
+        seen: 'Giablihan sa guidance office ang imong request niadtong {date}. Naay taga-office nga mo-follow up nimo sa school.',
+        seenNoDate:
+          'Giablihan na sa guidance office ang imong request. Naay taga-office nga mo-follow up nimo sa school.',
+        closed:
+          'Gisirado sa guidance office kini nga request niadtong {date}. Kung gusto nimo silang makaistorya pag-usab, pwede ka mopadala og bag-ong request.',
+        closedNoDate:
+          'Gisirado na sa guidance office kini nga request. Kung gusto nimo silang makaistorya pag-usab, pwede ka mopadala og bag-ong request.',
+      },
+      loadError: 'Dili namo ma-load ang imong mga request karon.',
+    },
+  },
 };

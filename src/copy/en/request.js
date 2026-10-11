@@ -76,4 +76,33 @@ export const requestCopy = {
     home: 'Back to home',
     checkin: 'Go to my check-in',
   },
+  // User request 2026-10-11 ("My requests"): the student follows their own requests on the check-in
+  // page. Three plain steps only; the office's own status words are never shown.
+  mine: {
+    title: 'My requests to the guidance office',
+    lead: 'When you sent each request and whether the guidance office has seen it. Your note is not shown here.',
+    sentOn: 'Sent {date}',
+    stepsLabel: 'Progress of {ref}',
+    steps: {
+      sent: 'Sent',
+      seen: 'Seen by the guidance office',
+      closed: 'Closed',
+    },
+    state: {
+      done: '(done)',
+      now: '(now)',
+      later: '(not yet)',
+    },
+    explain: {
+      sent: 'The guidance office has not opened it yet. Someone from the office will follow up with you at school.',
+      seen: 'The guidance office opened your request on {date}. Someone from the office will follow up with you at school.',
+      seenNoDate:
+        'The guidance office has opened your request. Someone from the office will follow up with you at school.',
+      closed:
+        'The guidance office closed this request on {date}. If you want to talk to them again, you can send a new request.',
+      closedNoDate:
+        'The guidance office closed this request. If you want to talk to them again, you can send a new request.',
+    },
+    loadError: 'We could not load your requests right now.',
+  },
 };

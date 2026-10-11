@@ -40,6 +40,7 @@ import { PromptDialog } from './PromptDialog.jsx';
 import { BreathCard } from './BreathCard.jsx';
 import { reportCrisisItem, useCrisisReport } from '../crisis/crisisReport.js';
 import { CrisisStatus } from '../crisis/CrisisStatus.jsx';
+import { MyRequests } from '../requests/MyRequests.jsx';
 import { usePageTitle } from '../../lib/usePageTitle.js';
 
 // One small icon per question card, a visual anchor only (aria-hidden; ui-students item 8).
@@ -172,7 +173,13 @@ export function CheckInPage() {
 
   usePageTitle(saved ? t('checkin.saved.title') : t('checkin.title'));
 
-  if (saved) return <SavedCard />;
+  if (saved)
+    return (
+      <div className="flex flex-col gap-6">
+        <SavedCard />
+        <MyRequests />
+      </div>
+    );
 
   const item = step < LAST ? CHECKIN_ITEMS[step] : null;
   return (
@@ -311,6 +318,9 @@ export function CheckInPage() {
           {t('checkin.cancel')}
         </LinkButton>
       </div>
+
+      {/* The student's own requests and how far along they are (user request 2026-10-11). */}
+      <MyRequests />
 
       <PromptDialog open={prompt != null} busy={dismissing} onSend={onSend} onNotNow={onNotNow} />
     </div>

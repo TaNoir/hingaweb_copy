@@ -91,4 +91,22 @@ test.describe('Phase 07 · support request (Figs 16, 17)', () => {
     await page.getByRole('button', { name: 'Try sending again' }).first().click();
     await expect(page.getByRole('heading', { name: 'Your request was sent' })).toBeVisible();
   });
+
+  // User request 2026-10-11 ("My requests"): the check-in page lists the student's own requests.
+  test('the check-in page lists each sent request as "Sent", with nothing else about it', async ({
+    page,
+  }) => {
+    await studentLogin(page, 'student.full@example.test');
+    await expect(page).toHaveURL(/\/check-in$/);
+    const card = page.getByRole('region', { name: 'My requests to the guidance office' });
+    await expect(card).toBeVisible();
+    const progress = card.getByRole('list', { name: /^Progress of Ref [0-9a-f]{8}$/ });
+    await expect(progress).toHaveCount(3); // the three requests sent above
+    for (let i = 0; i < 3; i += 1) {
+      await expect(progress.nth(i).locator('[aria-current="step"]')).toContainText('Sent');
+    }
+    await expect(card).not.toContainText(/E2E note|keep this text|pending|reviewed|referred/i);
+    const results = await new AxeBuilder({ page }).withTags(AXE_TAGS).analyze();
+    expect(results.violations).toEqual([]);
+  });
 });
