@@ -92,7 +92,9 @@ export function LoginPage() {
       }
     >
       <AuthLogo />
-      <h1 className="text-[28px] font-semibold leading-9 text-ink">{t('auth.login.title')}</h1>
+      <h1 className="text-center text-[28px] font-semibold leading-9 text-ink">
+        {t('auth.login.title')}
+      </h1>
       <p className="mt-2 text-base text-ink-muted">{t('auth.login.lead')}</p>
       <form noValidate onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">
         <FormMessage>
