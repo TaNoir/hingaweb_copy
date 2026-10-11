@@ -705,3 +705,21 @@ show Bisaya/Tagalog (the only screens with a language switch). Fixes:
   no network request.
 - Checks: verify 314/314, check:copy OK (en, ceb, tl, captions), e2e 03, 04, 05, 06 passed (axe
   included).
+
+## Crisis header: chip and switcher on one row (branch ui-crisis-header, user request, 2026-10-11; merged)
+
+Fixes the previous change, where the long Bisaya/Tagalog chip pushed the whole switcher onto its
+own row at every width (the row could wrap).
+- Crisis and assent header rows: `flex flex-col gap-3 sm:flex-row sm:items-center
+  sm:justify-between sm:gap-4`. From 640 px the row never wraps: the chip has `min-w-0` and wraps its
+  text (2 lines in Bisaya/Tagalog), the switcher stays right-aligned and never shrinks. Below 640 px:
+  chip, then switcher, 12 px apart. The crisis chip is full width on phones; the short assent step
+  chip keeps its own width (`self-start`).
+- `SegmentedControl` `nowrap` (the language switcher only): below 640 px a full-width grid with one
+  equal column per option (`grid-cols-[repeat(var(--seg-cols),minmax(0,1fr))]`), centred labels;
+  from 640 px inline, one line, never shrinks. Buttons keep `min-h-11 px-4` and the dark selected
+  style. Keyboard unchanged (roving Tab stop, arrows move focus, Enter/Space selects, focus ring).
+- The switcher appears only on `/crisis` and `/welcome` (not on check-in or home); both use it.
+- Measured (demo build): at 640/768/1280 px chip and switcher on one row in all three languages,
+  switcher right-aligned; at 390 px switcher full width, three 100 px buttons, no blank space, all
+  buttons 44 px tall, no sideways scroll. verify 314/314, e2e 04 and 05 passed (axe included).
