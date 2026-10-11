@@ -9,7 +9,7 @@ import { Footer } from './Footer.jsx';
 import { Main } from './Main.jsx';
 import { SkipLink } from './SkipLink.jsx';
 
-/** width: 'reading' (768px) or 'wide' (1200px; the landing page). */
+/** width: 'reading' (768px), 'wide' (1200px; the landing page), or 'library' (1152px; resources). */
 export function StudentLayout({ width = 'reading' }) {
   const { signOut } = useAuth();
   const navigate = useNavigate();

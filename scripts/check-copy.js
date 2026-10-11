@@ -77,6 +77,19 @@ if (process.argv[1] && process.argv[1].endsWith('check-copy.js')) {
       const dict = (await import(pathToFileURL(path).href))[lang];
       v.push(...findViolations(dict, allowlist).map((x) => ({ ...x, lang })));
     }
+    // Guide card captions (src/content/guide-summaries.js) in all three languages.
+    const summariesPath = join(ROOT, 'src/content/guide-summaries.js');
+    if (existsSync(summariesPath)) {
+      const { GUIDE_SUMMARIES } = await import(pathToFileURL(summariesPath).href);
+      for (const lang of ['en', 'ceb', 'tl']) {
+        const captions = Object.fromEntries(
+          Object.entries(GUIDE_SUMMARIES).map(([slug, c]) => [slug, c[lang]]),
+        );
+        v.push(
+          ...findViolations({ guideSummaries: captions }, allowlist).map((x) => ({ ...x, lang })),
+        );
+      }
+    }
     if (v.length) {
       for (const x of v)
         console.error(`check:copy: [${x.lang}] ${x.key} matches ${x.pattern}: "${x.value}"`);

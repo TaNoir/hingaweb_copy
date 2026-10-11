@@ -74,4 +74,10 @@ export const tl = {
       'Hindi namin nasabihan ang guidance office sa HingaWeb. Pakitawagan sila ngayon gamit ang button sa itaas.',
     back: 'Bumalik sa check-in ko',
   },
+  // Guide cards (AI draft; /guides and /resources have no language switch yet).
+  public: {
+    guides: {
+      source: 'Mula sa {source} · bubukas sa bagong tab',
+    },
+  },
 };

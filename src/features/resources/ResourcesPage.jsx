@@ -122,10 +122,12 @@ export function ResourcesPage() {
               body={t('resources.emptyFilter.body')}
             />
           ) : (
-            <ol className="flex flex-col gap-3">
+            // Same grid as /guides: 1 column under 640px, 2 from 640px, 3 from 1024px, equal-height
+            // cards. The list stays an ordered list (ranking order unchanged).
+            <ol className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {shown.map((r) => (
-                <li key={r.id}>
-                  <ResourceCard resource={r} onOpen={onOpen} />
+                <li key={r.id} className="flex">
+                  <ResourceCard resource={r} onOpen={onOpen} className="h-full w-full" />
                 </li>
               ))}
             </ol>

@@ -2,7 +2,8 @@ import { en } from './en.js';
 import { ceb } from './ceb.js';
 import { tl } from './tl.js';
 
-// ceb and tl hold only the assent (Phase 04) and crisis (Phase 05) keys (00 Section 10.2).
+// ceb and tl hold the assent (Phase 04) and crisis (Phase 05) keys (00 Section 10.2), plus the
+// guide card source line (not shown yet: /guides and /resources have no language switch).
 const DICTIONARIES = { en, ceb, tl };
 
 function lookup(dict, key) {
