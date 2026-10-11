@@ -62,9 +62,9 @@ export function AssentPage() {
 
   return (
     <Card className="mx-auto flex max-w-[720px] flex-col gap-6" lang={lang}>
-      {/* Same row rule as the crisis screen: the switcher never wraps or shrinks. */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Chip tone="strong" shape="wrap">
+      {/* Same row rule as the crisis screen (the short step chip keeps its own width on phones). */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <Chip tone="strong" shape="wrap" className="self-start sm:min-w-0 sm:self-auto">
           <Shield aria-hidden="true" className="size-4" />
           {a('step')}
         </Chip>
