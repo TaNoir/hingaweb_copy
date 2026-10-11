@@ -71,6 +71,20 @@ test.describe('Phase 08 · guidance dashboard (Figs 21, 23, 24, 25, 26)', () => 
     );
   });
 
+  // User request 2026-10-11 ("My requests"): once guidance has opened it, the student sees it as seen.
+  test('the student now sees the request as seen by the guidance office', async ({ page }) => {
+    await studentLogin(page, 'student.full@example.test');
+    await expect(page).toHaveURL(/\/check-in$/);
+    const card = page.getByRole('region', { name: 'My requests to the guidance office' });
+    const progress = card.getByRole('list', { name: /^Progress of Ref [0-9a-f]{8}$/ });
+    await expect(progress).toHaveCount(1);
+    await expect(progress.locator('[aria-current="step"]')).toContainText(
+      'Seen by the guidance office',
+    );
+    await expect(card).toContainText(/The guidance office opened your request on/);
+    await expect(card).not.toContainText(/reviewed|referred|pending|Phase 08 E2E note/i);
+  });
+
   test('assigning an office tag starts with nothing selected', async ({ page }) => {
     await staffLogin(page, 'guidance.one@example.test');
     await page

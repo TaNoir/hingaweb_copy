@@ -190,4 +190,34 @@ export const tl = {
       source: 'Mula sa {source} · bubukas sa bagong tab',
     },
   },
+  // "My requests" card on /check-in (user request 2026-10-11; AI draft; no language switch there yet).
+  request: {
+    mine: {
+      title: 'Ang mga request ko sa guidance office',
+      lead: 'Kailan mo ipinadala ang bawat request at kung nakita na ito ng guidance office. Hindi ipinapakita rito ang note mo.',
+      sentOn: 'Ipinadala {date}',
+      stepsLabel: 'Progress ng {ref}',
+      steps: {
+        sent: 'Naipadala',
+        seen: 'Nakita na ng guidance office',
+        closed: 'Sarado na',
+      },
+      state: {
+        done: '(tapos na)',
+        now: '(ngayon)',
+        later: '(hindi pa)',
+      },
+      explain: {
+        sent: 'Hindi pa ito nabubuksan ng guidance office. May taga-office na magfo-follow up sa iyo sa school.',
+        seen: 'Binuksan ng guidance office ang request mo noong {date}. May taga-office na magfo-follow up sa iyo sa school.',
+        seenNoDate:
+          'Nabuksan na ng guidance office ang request mo. May taga-office na magfo-follow up sa iyo sa school.',
+        closed:
+          'Isinara ng guidance office ang request na ito noong {date}. Kung gusto mo ulit silang makausap, puwede kang magpadala ng bagong request.',
+        closedNoDate:
+          'Isinara na ng guidance office ang request na ito. Kung gusto mo ulit silang makausap, puwede kang magpadala ng bagong request.',
+      },
+      loadError: 'Hindi namin ma-load ang mga request mo ngayon.',
+    },
+  },
 };

@@ -41,7 +41,9 @@ export function queryResult(result) {
 
 export function createMockSupabase() {
   return {
-    rpc: vi.fn(),
+    // Resolves to an empty answer unless a test sets its own (the check-in page calls
+    // my_support_requests when it opens; user request 2026-10-11).
+    rpc: vi.fn(async () => ({ data: null, error: null })),
     from: vi.fn(),
     functions: { invoke: vi.fn() },
     channel: vi.fn(),

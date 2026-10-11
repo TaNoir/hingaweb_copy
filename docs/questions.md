@@ -829,3 +829,37 @@ help right now", with Call buttons) and on `/help`.
 - Test timing: `checkin.test.jsx` and `savedFocus.test.jsx` get a 15 s per-test limit
   (`vi.setConfig`). With one question per screen these tests make many clicks and timed out at 5 s
   under full-suite load; alone they pass. No expectation changed.
+
+## "My requests" card for students (user request, 2026-10-11)
+
+**Question (user):** how can a student know whether the guidance office has looked at what they
+sent? Before this change they could not: check-ins are never seen by staff, and after the "Your
+request was sent" screen no student page showed a request again (`support_requests` has no student
+SELECT policy). **Decision (user):** add a small "My requests" card. This is a **new feature, not
+in the plan** (no figure); the wording below was chosen by the assistant and **needs team and
+guidance office confirmation**.
+
+- **Where:** the student's home after sign-in, `/check-in`, under the check-in form (and under the
+  "saved" card after saving). It shows only when the student has sent at least one request; the five
+  newest are listed, each with its reference ("Ref 1a2b3c4d") and the date sent.
+- **Three steps only**, mapped in the database so the office's own words never reach the student:
+  | Office status | Student sees |
+  |---|---|
+  | pending, never opened | Sent |
+  | pending but opened (any audit row: view, status change, follow-up, tag), reviewed, referred | Seen by the guidance office (with the date first opened) |
+  | resolved | Closed (with the date) |
+  "Referred" is never shown: it could worry a student before anyone has spoken to them.
+- **Database:** new migration `20261011000100_my_requests.sql` adds `my_support_requests()` (security
+  definer, students only, own rows only). It returns `id`, `created_at`, `stage`, `seen_at`,
+  `closed_at` and nothing else: no note, concern, triage, office tag, follow-up date, or status word.
+  The RLS policies and table grants are **unchanged**; students still cannot read `support_requests`.
+  Seen/closed dates come from `staff_access_audit`. New pgTAP file `09_my_requests.test.sql`.
+- **Privacy:** nothing is stored on the device; the card is loaded fresh on each visit. The student
+  can see when the office first opened a request (it does not say who).
+- Bisaya and Tagalog drafts (AI) in `ceb.js`/`tl.js` and the sheet (16 rows, now 150). `/check-in`
+  has no language switch, so the card shows English only.
+- **Tests:** `src/features/requests/myRequests.test.jsx`; e2e: phase 07 checks the three requests
+  show as "Sent", phase 08 checks the request shows as "Seen by the guidance office" after guidance
+  opens it. `src/test/mockSupabase.js`: `rpc` now resolves to `{ data: null, error: null }` by
+  default (it returned `undefined`), because the check-in page now calls an RPC when it opens. No
+  test expectation changed.
