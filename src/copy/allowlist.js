@@ -10,4 +10,6 @@ export const ALLOWLIST = [
   // ui-landing-v2 (user design decision, not a plan phase): the landing FAQ question from the design.
   // Its answer says HingaWeb is not one.
   'Is HingaWeb a diagnosis?',
+  // The same question in Bisaya and Tagalog (identical wording in both drafts).
+  'Diagnosis ba ang HingaWeb?',
 ];
