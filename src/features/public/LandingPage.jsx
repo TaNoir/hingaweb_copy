@@ -1,4 +1,5 @@
 // Fig 7 · public landing (Tier 1, 2.1.5.1.2). D-18, D-19, D-20, D-30 applied.
+import { Suspense } from 'react';
 import { Link } from 'react-router';
 import { ArrowRight, CalendarHeart, GraduationCap, Lock, NotebookPen } from 'lucide-react';
 import { t } from '../../copy/index.js';
@@ -15,6 +16,10 @@ import { SITE } from '../../config/site.js';
 import { NeedHelpCard } from './NeedHelpCard.jsx';
 import { ResourceCard } from './ResourceCard.jsx';
 import { usePublishedResources } from './usePublishedResources.js';
+import { lazyNamed } from '../../lib/lazyNamed.js';
+
+// Loaded on first visit to the landing page, after the page itself (not in the first load).
+const BreathAnimation = lazyNamed(() => import('./BreathAnimation.jsx'), 'BreathAnimation');
 
 const STEPS = [
   { icon: NotebookPen, n: 1 },
@@ -48,31 +53,14 @@ export function LandingPage() {
             <Lock aria-hidden="true" className="size-4 shrink-0" />
             {t('public.landing.listenNote')}
           </p>
-          {/* Decorative calm waves, like the logo. Colour tokens only; hidden from screen readers. */}
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            viewBox="0 0 400 72"
-            fill="none"
-            strokeLinecap="round"
-            className="mt-2 h-auto w-full max-w-[420px]"
-          >
-            <path
-              d="M4 18 c16 -10 48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0"
-              stroke="var(--color-blush-strong)"
-              strokeWidth="6"
-            />
-            <path
-              d="M4 38 c16 -10 48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0"
-              stroke="var(--color-line)"
-              strokeWidth="4"
-            />
-            <path
-              d="M4 56 c16 -10 48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0 s48 -10 64 0 s48 10 64 0"
-              stroke="var(--color-ink)"
-              strokeWidth="2"
-            />
-          </svg>
+          {/* Decorative breathing animation (replaces the three-wave picture). The box reserves its
+              height so nothing moves while the player loads; hidden from screen readers and never
+              focusable. Reduced motion shows a still frame (BreathAnimation). */}
+          <div aria-hidden="true" className="mt-2 aspect-square w-full max-w-[200px]">
+            <Suspense fallback={null}>
+              <BreathAnimation />
+            </Suspense>
+          </div>
         </div>
         <NeedHelpCard />
       </section>

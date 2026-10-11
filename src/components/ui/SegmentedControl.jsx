@@ -7,7 +7,7 @@ import { cx } from './cx.js';
  * click selects. Team decision (Phase 06): selection never happens just by moving focus, because
  * Phase 08 uses this control for request status, where every change is saved and audited.
  */
-export function SegmentedControl({ label, options, value, onChange }) {
+export function SegmentedControl({ label, options, value, onChange, className = '' }) {
   const refs = useRef([]);
   const index = options.findIndex((o) => o.value === value);
   const focusable = index === -1 ? 0 : index;
@@ -37,7 +37,7 @@ export function SegmentedControl({ label, options, value, onChange }) {
     <div
       role="radiogroup"
       aria-label={label}
-      className="inline-flex flex-wrap gap-1 rounded-control bg-blush p-1"
+      className={cx('inline-flex flex-wrap gap-1 rounded-control bg-blush p-1', className)}
     >
       {options.map((o, i) => {
         const selected = o.value === value;

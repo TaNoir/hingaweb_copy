@@ -45,11 +45,13 @@ export function GuidesPage() {
           </Link>
         </p>
       )}
+      {/* Full width so the filter bar lines up with the grid; the buttons wrap on phones. */}
       <SegmentedControl
         label={t('public.guides.filterLabel')}
         options={options}
         value={area}
         onChange={setArea}
+        className="flex w-full"
       />
       {status === 'loading' && <Skeleton lines={5} />}
       {status === 'error' && <ErrorState onRetry={reload} />}
@@ -63,10 +65,12 @@ export function GuidesPage() {
         />
       )}
       {status === 'ready' && shown.length > 0 && (
-        <ul className="grid gap-4 md:grid-cols-2">
+        // 1 column under 640px, 2 from 640px, 3 from 1024px; every card in a row is the same height
+        // ("Read guide" sits at the bottom of each card).
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((r) => (
-            <li key={r.id}>
-              <ResourceCard resource={r} />
+            <li key={r.id} className="flex">
+              <ResourceCard resource={r} className="h-full w-full" />
             </li>
           ))}
         </ul>

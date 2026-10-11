@@ -97,8 +97,10 @@ export function AppRoutes() {
       <Route element={<PublicOrStudentLayout width="wide" />}>
         <Route index element={<LandingPage />} />
       </Route>
-      <Route element={<PublicOrStudentLayout />}>
+      <Route element={<PublicOrStudentLayout width="library" />}>
         <Route path="guides" element={<GuidesPage />} />
+      </Route>
+      <Route element={<PublicOrStudentLayout />}>
         <Route path="help" element={<HelpPage />} />
       </Route>
 
