@@ -863,3 +863,15 @@ guidance office confirmation**.
   opens it. `src/test/mockSupabase.js`: `rpc` now resolves to `{ data: null, error: null }` by
   default (it returned `undefined`), because the check-in page now calls an RPC when it opens. No
   test expectation changed.
+
+## GitHub CI failed on the first push (2026-10-11)
+
+The `CI / verify` workflow failed on GitHub (Linux) though `npm run verify` passes locally:
+`public.test.jsx` › "has no 30-second demo check-in and no free-text box" threw
+`ReferenceError: IntersectionObserver is not defined` from the dotlottie player. The landing page's
+breathing animation is lazy-loaded; on the slower CI runner it finished loading mid-test, and jsdom
+has no IntersectionObserver (or real canvas/WebAssembly rendering). Reproduced in a `node:24.21.0`
+container. **Fix (test environment only):** `src/test/setupTests.js` replaces
+`@lottiefiles/dotlottie-react` with a no-op in unit tests. No test checks the animation (it is
+decorative and aria-hidden); e2e still runs the real player. No app code or test expectation
+changed. Verify passes in the Linux container (57 files, 321 tests).
