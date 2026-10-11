@@ -4,7 +4,8 @@ import { OfflineBanner } from '../ui/OfflineBanner.jsx';
 
 /**
  * Page body container. width 'reading' = 768px, 'wide' = 1200px (00 Section 8.3),
- * 'library' = 1152px (max-w-6xl; the public Guides page only, three cards per row).
+ * 'library' = 1152px (max-w-6xl; the public Guides page only, three cards per row),
+ * 'full' = no width or padding (the landing page: each section sets its own width).
  */
 export function Main({ width = 'reading', children }) {
   // Each page fades in over 150 ms (reduced motion: no fade). Never on the crisis screen, which must
@@ -18,8 +19,15 @@ export function Main({ width = 'reading', children }) {
         id="main"
         tabIndex={-1}
         className={cx(
-          'mx-auto w-full px-4 py-8 md:px-6',
-          width === 'wide' ? 'max-w-[1200px]' : width === 'library' ? 'max-w-6xl' : 'max-w-[768px]',
+          'mx-auto w-full',
+          width === 'full' ? '' : 'px-4 py-8 md:px-6',
+          width === 'full'
+            ? ''
+            : width === 'wide'
+              ? 'max-w-[1200px]'
+              : width === 'library'
+                ? 'max-w-6xl'
+                : 'max-w-[768px]',
         )}
       >
         {fade ? (

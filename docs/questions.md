@@ -763,3 +763,55 @@ Four parts, one commit each (plus a focus fix).
 - Checks: verify 316/316, check:copy OK (3 languages), full e2e 02–09 passed (axe included);
   keyboard-only run of the check-in, breathing card, and guides filter; reduced motion: no movement;
   `/crisis` renders 28 ms after ticking a safety item (in-page timing), no extra downloads, no fade.
+
+## Landing page v2 and new palette (branch ui-landing-v2, user request, 2026-10-11; merged)
+
+Design: `docs/design/HingaWeb-Landing.pdf` (copied from Downloads; it was not in docs/design).
+UI only: no routes, database, Edge Functions, scoring, login, or saved data changed (`supabase/`:
+0 files changed).
+- **Tokens (whole app):** canvas #f3f0f9, surface #fff, ink #28223e, ink-muted #5e5873, line #e4def0,
+  action #28223e with action-ink #fff, plus accent, lavender, mint, mint-ink, peach, butter, help-bg,
+  help-strip, help-ink, footer. Existing names kept: blush = lavender #e3daf5, blush-strong #d3c7ef and
+  surface-muted #f7f5fb are **derived shades not in the design list**, canvas-alt = canvas. Headings
+  (h1–h3) use Bricolage Grotesque 700/800, self-hosted (`@fontsource/bricolage-grotesque` 5.3.0,
+  latin only; +44 KB). axe: no violations on home, /guides, /help, /resources, /trends, check-in,
+  /crisis, and the staff queue.
+- **Strip** on public pages (`CrisisStrip.jsx`), names and numbers from `directory.js` (no hard-coded
+  numbers). The config holds "0917 899 8727 (landline: 1553)" as one value, so the strip shows it as
+  is instead of "· or 1553 from a landline". Links keep the 44 px tap height, so the strip is taller
+  than in the PDF. Phones: two lines (lead + emergency, then the main hotline).
+- **Header:** public nav How it works (/#how), Breathe (/#breathe), Guides, Get help (/help).
+  Section links are plain links (never "current"). Student nav unchanged.
+- **Hero:** label, plan's Fig 7 text unchanged, "Try a check-in" (/check-in), "See how it works"
+  (#how); right: lavender blob with the existing Lottie (lazy, reserved size, still frame with
+  reduced motion). The PDF's window illustration is replaced by the Lottie as instructed.
+- **Mood picker:** radio group; same lavender face for every choice (the PDF's coloured faces were
+  not used); memory only, never saved/sent/scored (checked: storage empty, no requests).
+  **Plan conflict for the team:** D-19 says the landing page has no demo check-in. The picker asks
+  how today is but stores and scores nothing; flagged for review.
+- **How it works:** card 1 says "school, home, your mood and your stress" instead of the PDF's "mood,
+  sleep and stress" (the check-in has no sleep question).
+- **Breathe:** mint section; shares the breathing timer with the check-in card (`useBreathing.js`).
+- **Short reads:** three published guides by preference (sleep, exam stress, friendships, …).
+  "Sleep and routine" is a **draft** in the demo data, so it does not show (publish it to show it
+  first). Topic labels are the app's areas, not the PDF's "Rest"/"Reaching out". No "[X] min read".
+- **If you need help right now:** replaces the "Need help right now?" card; Call buttons from the
+  directory (no plain number line); office row uses `GUIDANCE_OFFICE` location and hours; "Request a
+  talk" links to /request (the existing guard sends signed-out visitors to log in).
+- **FAQ:** the PDF shows the questions closed, so the answers were written from existing approved
+  copy. "Who can see my check-ins?" is written from the RLS policies (checkins: owner only, no staff
+  policy; support_requests/crisis_events: guidance with the second factor, only the disclosed copy).
+  **Needs team and guidance office confirmation.** Note: database operators (service role/owner)
+  are not limited by RLS. "Is HingaWeb a diagnosis?" (and "Diagnosis ba ang HingaWeb?") is
+  allowlisted in `src/copy/allowlist.js` (user design decision, not a plan phase).
+- **Footer:** dark site footer on public and student pages; staff, portal, and logo-only screens keep
+  the plain footer. **No Privacy link: there is no privacy page.** The school footer line stays.
+- New text in Bisaya and Tagalog (AI drafts) in `ceb.js`/`tl.js` and the sheet (137 rows). The landing
+  page has no language switch, so it shows English only.
+- **Tests updated:** `src/features/public/public.test.jsx`, `e2e/phase-03/public.spec.js`,
+  `e2e/phase-03/offline.spec.js` now find the hotlines in "If you need help right now" (the card's
+  new name; the unit test counts only its Call links). FAQ answer 1 does not repeat the hero's
+  allowlisted sentence word for word, so the existing hero test still finds it once.
+- Checks: verify 316/316, check:copy OK (3 languages), check:bundle OK, full e2e 02–09 passed (03 and
+  09 re-run in full after two tests stalled for 9–15 min while the machine was suspended; both pass
+  in normal time), crisis 34 ms after a safety tick.

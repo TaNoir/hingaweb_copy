@@ -94,7 +94,7 @@ export function AppRoutes() {
   return (
     <Routes>
       {/* Tier 1: public pages; a signed-in student keeps the student header */}
-      <Route element={<PublicOrStudentLayout width="wide" />}>
+      <Route element={<PublicOrStudentLayout width="full" />}>
         <Route index element={<LandingPage />} />
       </Route>
       <Route element={<PublicOrStudentLayout width="library" />}>

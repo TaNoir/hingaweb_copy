@@ -97,8 +97,100 @@ export const tl = {
       done: 'Ayos. Tuloy tayo kapag handa ka na.',
     },
   },
+  // Landing page strip, nav, and footer (ui-landing-v2; AI draft; no language switch there yet).
+  nav: {
+    public: {
+      how: 'Paano ito gumagana',
+      breathe: 'Huminga',
+      getHelp: 'Humingi ng tulong',
+    },
+    strip: {
+      lead: 'Gusto mo bang makausap ang isang tao ngayon?',
+      emergencies: 'Emergency:',
+    },
+    footer: {
+      title: 'Hinga muna.',
+      tagline: 'HingaWeb, isang guidance platform para sa mga senior high student.',
+      label: 'Footer',
+    },
+  },
   // Guide cards (AI draft; /guides and /resources have no language switch yet).
   public: {
+    // Landing page (ui-landing-v2; AI draft).
+    landing: {
+      label: 'Para sa mga senior high student at sa kanilang guidance office',
+      tryCheckin: 'Subukan ang check-in',
+      seeHow: 'Tingnan kung paano',
+      mood: {
+        title: 'Kumusta ka talaga ngayon?',
+        note: 'Walang naka-save hangga’t wala kang account.',
+        good: 'Ayos',
+        okay: 'Okay lang',
+        notSure: 'Di ako sure',
+        low: 'Malungkot',
+        overwhelmed: 'Sobrang bigat',
+        reply: {
+          good: 'Masaya akong marinig iyan. Makakatulong ang maikling check-in para mapansin mo kung ano ang maayos ngayon.',
+          okay: 'Ayos lang ang okay lang. Makakatulong ang check-in para makita mo kung kumusta ang linggo mo.',
+          notSure: 'Okay lang din iyan. Makakatulong ang ilang maikling tanong para maayos mo ito.',
+          low: 'Salamat sa pagiging tapat. Hindi mo kailangang dalhin ito nang mag-isa.',
+          overwhelmed: 'Mukhang mabigat iyan. Dahan-dahan lang, isang hinga sa bawat sandali.',
+        },
+        talkNow: 'Gusto mo bang makausap ang isang tao ngayon?',
+        talkLink: 'Tingnan kung sino ang pwede mong tawagan',
+      },
+      how: {
+        title: 'Paano gumagana ang HingaWeb',
+        lead: 'Ikaw ang bahala sa bilis mo. Walang mangyayari maliban kung pipiliin mo.',
+        step1Kicker: 'Una',
+        step1Title: 'Mag-check in sa sarili mo',
+        step1Body:
+          'Sagutin ang ilang maikling tanong tungkol sa school, bahay, mood mo at stress mo. Ilang minuto lang ito.',
+        step2Kicker: 'Pagkatapos',
+        step2Title: 'Pansinin ang mga pattern mo',
+        step2Body:
+          'Tingnan kung kumusta ang linggo mo, para mas madaling sabihin kung ano ang nararamdaman mo.',
+        step3Kicker: 'Kapag handa ka na',
+        step3Title: 'Kausapin ang guidance office mo',
+        step3Body:
+          'Magpadala ng request para makipagkita sa counselor kapag gusto mong makipag-usap. Ikaw ang bahala kung kailan.',
+        days: 'M T W T F S S',
+      },
+      breathe: {
+        title1: 'Hinga muna.',
+        title2: 'Isang minutong dahan-dahan.',
+        body: 'Kapag mabigat ang pakiramdam, makakatulong ang ilang mabagal na paghinga para kumalma ka at mapansin kung ano ang kailangan mo. Sundan ang hugis: lumalaki ito habang humihinga ka papasok at lumiliit habang humihinga ka palabas.',
+        inFor: 'Papasok',
+        holdFor: 'Pigil',
+        outFor: 'Palabas',
+        forSeconds: 'nang {n}',
+        start: 'Simulan ang paghinga',
+        stop: 'Ihinto',
+        ready: 'Handa na kapag handa ka na',
+        readyHint: 'Pindutin ang simulan at sundan ang hugis.',
+      },
+      reads: {
+        title: 'Maikling babasahin para sa totoong araw',
+        browse: 'Tingnan lahat ng guides',
+      },
+      help: {
+        title: 'Kung kailangan mo ng tulong ngayon',
+        lead: 'Libre at kumpidensyal na suporta ay handa 24/7 para sa iyo o sa kakilala mo.',
+        officeTitle: 'Ang guidance office mo',
+        request: 'Humiling ng usapan',
+      },
+      faq: {
+        title: 'Mga tanong ng mga estudyante',
+        q1: 'Diagnosis ba ang HingaWeb?',
+        a1: 'Hindi. Tinutulungan ka ng HingaWeb na mapansin kung kumusta ka at makausap ang guidance office mo kapag gusto mo. Hindi nito sinasabi kung ano ang mali sa iyo, at hindi nito pinapalitan ang pakikipag-usap sa isang tao.',
+        q2: 'Kailangan ko bang makipag-usap sa counselor?',
+        a2: 'Hindi. Ikaw palagi ang pipili kung kakausapin mo ang guidance office. Walang ipapadala sa kanila maliban kung pipiliin mong ipadala.',
+        q3: 'Sino ang makakakita ng mga check-in ko?',
+        a3: 'Ikaw lang. Hindi mabubuksan ng mga staff ng school ang mga check-in mo, kahit ang guidance office. Kung pipiliin mong magpadala ng support request, makikita ng guidance office ang pangalan mo, grade, section at class adviser, ang mga sagot mo sa apat na tanong mula sa pinakabago mong check-in, at ang isinulat mo sa request. Hindi nila kailanman makikita ang mood mo, stress mo, mga note mo sa check-in o ang iba mong check-in. Kung i-tick mo ang isa sa mga safety item, agad na sasabihan ang guidance office at makikita nila ang pangalan mo, grade, section, class adviser at ang item na tinick mo.',
+        q4: 'Paano kung kailangan ko ng tulong ngayon?',
+        a4: 'Tawagan ang isa sa mga hotline sa page na ito. Libre at bukas 24/7 ang mga ito. Hindi para sa emergency ang HingaWeb: kung nasa panganib ka ngayon, tumawag sa {number}.',
+      },
+    },
     guides: {
       source: 'Mula sa {source} · bubukas sa bagong tab',
     },

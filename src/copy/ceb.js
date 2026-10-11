@@ -97,8 +97,101 @@ export const ceb = {
       done: 'Nindot. Padayon ta kung andam na ka.',
     },
   },
+  // Landing page strip, nav, and footer (ui-landing-v2; AI draft; no language switch there yet).
+  nav: {
+    public: {
+      how: 'Unsaon paggamit',
+      breathe: 'Ginhawa',
+      getHelp: 'Pangayo og tabang',
+    },
+    strip: {
+      lead: 'Gusto ka makig-istorya og usa ka tawo karon?',
+      emergencies: 'Emergency:',
+    },
+    footer: {
+      title: 'Hinga muna.',
+      tagline: 'HingaWeb, usa ka guidance platform para sa mga senior high student.',
+      label: 'Footer',
+    },
+  },
   // Guide cards (AI draft; /guides and /resources have no language switch yet).
   public: {
+    // Landing page (ui-landing-v2; AI draft).
+    landing: {
+      label: 'Para sa mga senior high student ug sa ilang guidance office',
+      tryCheckin: 'Sulayi ang check-in',
+      seeHow: 'Tan-awa kung unsaon',
+      mood: {
+        title: 'Kumusta gyud ka karon?',
+        note: 'Walay ma-save hangtod maghimo ka og account.',
+        good: 'Okay kaayo',
+        okay: 'Okay ra',
+        notSure: 'Di ko sure',
+        low: 'Down',
+        overwhelmed: 'Kapoy na kaayo',
+        reply: {
+          good: 'Nalipay ko nga madungog ana. Ang mubo nga check-in makatabang nimo nga makamatikod kung unsa ang nindot karon.',
+          okay: 'Okay ra gyud nga okay ra. Ang check-in makatabang nimo nga makita kung kumusta imong semana.',
+          notSure:
+            'Okay ra pud na. Pipila ka mubo nga pangutana makatabang nimo nga ma-sort out kini.',
+          low: 'Salamat sa pagkamatinud-anon. Dili nimo kinahanglan pas-anon ni nga ikaw ra.',
+          overwhelmed: 'Murag daghan kaayo na. Hinay-hinay lang, usa ka ginhawa matag higayon.',
+        },
+        talkNow: 'Gusto ka makig-istorya og usa ka tawo karon?',
+        talkLink: 'Tan-awa kinsa ang pwede nimo tawagan',
+      },
+      how: {
+        title: 'Unsaon paggamit sa HingaWeb',
+        lead: 'Ikaw ang magbuot sa imong dagan. Walay mahitabo kung dili nimo kini pilion.',
+        step1Kicker: 'Una',
+        step1Title: 'Check-in sa imong kaugalingon',
+        step1Body:
+          'Tubaga ang pipila ka mubo nga pangutana bahin sa school, balay, imong mood ug imong stress. Pipila ra ka minuto.',
+        step2Kicker: 'Dayon',
+        step2Title: 'Matikdi ang imong mga pattern',
+        step2Body:
+          'Tan-awa kung kumusta imong semana, para mas sayon masulti kung unsa imong gibati.',
+        step3Kicker: 'Kung andam na ka',
+        step3Title: 'Istoryahi ang imong guidance office',
+        step3Body:
+          'Pagpadala og request para makigkita sa counselor kung gusto ka makig-istorya. Ikaw ang mobuot kung kanus-a.',
+        days: 'M T W T F S S',
+      },
+      breathe: {
+        title1: 'Hinga muna.',
+        title2: 'Usa ka minuto nga hinay.',
+        body: 'Kung bug-at ang gibati, pipila ka hinay nga ginhawa makatabang nimo nga mahimutang ug makamatikod kung unsa imong kinahanglan. Sunda ang hulagway: modako kini samtang moginhawa ka pasulod ug mogamay samtang moginhawa ka pagawas.',
+        inFor: 'Sulod',
+        holdFor: 'Kupti',
+        outFor: 'Gawas',
+        forSeconds: 'sa {n}',
+        start: 'Sugod og ginhawa',
+        stop: 'Hunong',
+        ready: 'Andam na kung andam ka na',
+        readyHint: 'Pindota ang sugod ug sunda ang hulagway.',
+      },
+      reads: {
+        title: 'Mubo nga basahon para sa tinuod nga mga adlaw',
+        browse: 'Tan-awa tanang guides',
+      },
+      help: {
+        title: 'Kung kinahanglan nimo og tabang karon dayon',
+        lead: 'Libre ug kompidensyal nga suporta andam 24/7 para nimo o sa usa ka tawo nga imong kaila.',
+        officeTitle: 'Imong guidance office',
+        request: 'Mangayo og istorya',
+      },
+      faq: {
+        title: 'Mga pangutana sa mga estudyante',
+        q1: 'Diagnosis ba ang HingaWeb?',
+        a1: 'Dili. Ang HingaWeb motabang nimo nga makamatikod kung kumusta ka ug makaabot sa imong guidance office kung gusto nimo. Dili kini mosulti kung unsa ang sayop nimo, ug dili kini puli sa pakig-istorya sa usa ka tawo.',
+        q2: 'Kinahanglan ba ko makig-istorya sa counselor?',
+        a2: 'Dili. Ikaw gyud ang mopili kung makig-istorya ka sa guidance office. Walay ipadala kanila kung dili nimo pilion nga ipadala.',
+        q3: 'Kinsa ang makakita sa akong mga check-in?',
+        a3: 'Ikaw ra. Dili maablihan sa mga staff sa school ang imong mga check-in, bisan ang guidance office. Kung pilion nimo nga magpadala og support request, makita sa guidance office imong pangalan, grade, section ug class adviser, imong tubag sa upat ka pangutana sa imong pinakabag-o nga check-in, ug ang imong gisulat sa request. Dili gyud nila makita imong mood, imong stress, imong mga note sa check-in o imong ubang check-in. Kung i-tick nimo ang usa sa mga safety item, ipahibalo dayon ang guidance office ug makita nila imong pangalan, grade, section, class adviser ug ang item nga imong gi-tick.',
+        q4: 'Unsaon kung kinahanglan nako og tabang karon dayon?',
+        a4: 'Tawagi ang usa sa mga hotline niini nga page. Libre ug bukas 24/7. Dili para sa emergency ang HingaWeb: kung naa ka sa peligro karon dayon, tawag sa {number}.',
+      },
+    },
     guides: {
       source: 'Gikan sa {source} · moabli sa bag-ong tab',
     },
