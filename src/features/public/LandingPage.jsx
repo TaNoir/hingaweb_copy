@@ -31,7 +31,9 @@ export function LandingPage() {
   const { status, resources, reload } = usePublishedResources();
   return (
     <div className="flex flex-col gap-12">
-      <section className="grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-start">
+      {/* The row stretches so the left column fills its height; the animation is centred in the
+          space left under the text. The help card keeps its own height (self-start). */}
+      <section className="grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-stretch">
         <div className="flex flex-col gap-4">
           <Chip className="self-start">{t('public.landing.chip')}</Chip>
           <h1 className="text-[32px] font-semibold leading-10 text-ink md:text-[40px] md:leading-[48px]">
@@ -53,16 +55,29 @@ export function LandingPage() {
             <Lock aria-hidden="true" className="size-4 shrink-0" />
             {t('public.landing.listenNote')}
           </p>
-          {/* Decorative breathing animation (replaces the three-wave picture). The box reserves its
-              height so nothing moves while the player loads; hidden from screen readers and never
-              focusable. Reduced motion shows a still frame (BreathAnimation). */}
-          <div aria-hidden="true" className="mt-2 aspect-square w-full max-w-[200px]">
-            <Suspense fallback={null}>
-              <BreathAnimation />
-            </Suspense>
+          {/* Decorative breathing animation, the hero's main visual. Hidden from screen readers, never
+              focusable, no pointer events (the scaled canvas is transparent around the figure).
+              The box reserves its size (260 px phones, 360 px from 640 px, 480×360 from 1024 px) so
+              nothing moves while the lazy player loads; reduced motion shows a still frame. The
+              player is scaled up because the .lottie has empty space around the figure; sideways it
+              is clipped to the column (only transparent edges), so the page never scrolls sideways. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none flex flex-1 items-center justify-center overflow-x-clip py-2"
+          >
+            <div className="relative aspect-square w-full max-w-[260px] sm:max-w-[360px] lg:aspect-[4/3] lg:max-w-[480px]">
+              <span className="absolute top-1/2 left-1/2 aspect-square h-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blush" />
+              <div className="absolute inset-0 scale-[1.4]">
+                <Suspense fallback={null}>
+                  <BreathAnimation />
+                </Suspense>
+              </div>
+            </div>
           </div>
         </div>
-        <NeedHelpCard />
+        <div className="md:self-start">
+          <NeedHelpCard />
+        </div>
       </section>
 
       <section id="how" aria-labelledby="how-title" className="flex flex-col gap-4 scroll-mt-6">
