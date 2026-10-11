@@ -47,13 +47,16 @@ export function CrisisPage() {
       </div>
 
       <Card className="flex flex-col gap-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <Chip>{c('chip', { school: SITE.schoolName })}</Chip>
+        {/* Chip and language switcher share a row when they fit; otherwise the switcher moves to
+            its own line below (left-aligned), 12 px apart. The switcher never wraps or shrinks. */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Chip shape="wrap">{c('chip', { school: SITE.schoolName })}</Chip>
           <SegmentedControl
             label={c('languageLabel')}
             options={LANGUAGES}
             value={lang}
             onChange={setLang}
+            nowrap
           />
         </div>
 

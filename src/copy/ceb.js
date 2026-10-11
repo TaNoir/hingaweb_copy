@@ -74,4 +74,10 @@ export const ceb = {
       'Wala namo mapahibalo ang guidance office pinaagi sa HingaWeb. Palihug tawagi sila karon gamit ang button sa taas.',
     back: 'Balik sa akong check-in',
   },
+  // Guide cards (AI draft; /guides and /resources have no language switch yet).
+  public: {
+    guides: {
+      source: 'Gikan sa {source} · moabli sa bag-ong tab',
+    },
+  },
 };

@@ -6,8 +6,17 @@ import { cx } from './cx.js';
  * One Tab stop (roving tabindex). Arrow keys and Home/End move focus only; Enter, Space, or a
  * click selects. Team decision (Phase 06): selection never happens just by moving focus, because
  * Phase 08 uses this control for request status, where every change is saved and audited.
+ * nowrap: keep every option on one line, never shrunk (the language switcher; its labels are
+ * short). Without it the options wrap onto more rows when space runs out.
  */
-export function SegmentedControl({ label, options, value, onChange, className = '' }) {
+export function SegmentedControl({
+  label,
+  options,
+  value,
+  onChange,
+  className = '',
+  nowrap = false,
+}) {
   const refs = useRef([]);
   const index = options.findIndex((o) => o.value === value);
   const focusable = index === -1 ? 0 : index;
@@ -37,7 +46,11 @@ export function SegmentedControl({ label, options, value, onChange, className = 
     <div
       role="radiogroup"
       aria-label={label}
-      className={cx('inline-flex flex-wrap gap-1 rounded-control bg-blush p-1', className)}
+      className={cx(
+        'inline-flex gap-1 rounded-control bg-blush p-1',
+        nowrap ? 'shrink-0 flex-nowrap whitespace-nowrap' : 'flex-wrap',
+        className,
+      )}
     >
       {options.map((o, i) => {
         const selected = o.value === value;
@@ -53,6 +66,7 @@ export function SegmentedControl({ label, options, value, onChange, className = 
             onKeyDown={(e) => onKeyDown(e, i)}
             className={cx(
               'min-h-11 rounded-control px-4 text-[14px] font-semibold',
+              nowrap && 'shrink-0 whitespace-nowrap',
               selected ? 'bg-action text-action-ink' : 'bg-transparent text-ink',
             )}
           >

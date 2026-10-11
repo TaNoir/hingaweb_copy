@@ -43,6 +43,9 @@ export const publicCopy = {
     all: 'All',
     read: 'Read guide',
     opensNewTab: '(opens in a new tab)',
+    // user request 2026-10-11 (guide captions)
+    source: 'From {source} · opens in a new tab',
+    readLabel: 'Read guide: {title} (opens in a new tab)',
     emptyTitle: 'No guides yet',
     emptyBody: 'The guidance office has not published any guides yet. Please check again later.',
     emptyFilterTitle: 'No guides in this area yet',

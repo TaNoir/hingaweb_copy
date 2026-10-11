@@ -62,8 +62,9 @@ export function AssentPage() {
 
   return (
     <Card className="mx-auto flex max-w-[720px] flex-col gap-6" lang={lang}>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <Chip tone="strong">
+      {/* Same row rule as the crisis screen: the switcher never wraps or shrinks. */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Chip tone="strong" shape="wrap">
           <Shield aria-hidden="true" className="size-4" />
           {a('step')}
         </Chip>
@@ -72,6 +73,7 @@ export function AssentPage() {
           options={LANGUAGES}
           value={lang}
           onChange={setLang}
+          nowrap
         />
       </div>
 

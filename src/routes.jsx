@@ -126,6 +126,17 @@ export function AppRoutes() {
 
       {/* Tier 2 and Tier 3 students */}
       <Route element={<RequireStudent tier2 />}>
+        {/* Suggested guides use the same wide grid as /guides (1152 px, three cards per row). */}
+        <Route element={<StudentLayout width="library" />}>
+          <Route
+            path="resources"
+            element={
+              <LazyPage>
+                <ResourcesPage />
+              </LazyPage>
+            }
+          />
+        </Route>
         <Route element={<StudentLayout />}>
           <Route path="check-in" element={<CheckInPage />} />
           <Route
@@ -133,14 +144,6 @@ export function AppRoutes() {
             element={
               <LazyPage>
                 <TrendsPage />
-              </LazyPage>
-            }
-          />
-          <Route
-            path="resources"
-            element={
-              <LazyPage>
-                <ResourcesPage />
               </LazyPage>
             }
           />

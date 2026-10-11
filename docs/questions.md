@@ -664,3 +664,44 @@ tagalog, checked_by; crisis rows first, then assent; checked_by empty).
   (check-in + crisis) passed; at 390 px no overflow or placeholders on `/crisis` and `/welcome` in
   all three languages; switching language on `/crisis` makes no network request (crisis screen stays
   in the main bundle).
+
+## Guide captions and translated-text spacing (branch ui-guide-captions, user request, 2026-10-11; merged)
+
+**A. Captions.**
+- New `src/content/guide-summaries.js`: the 12 captions from the request, each with Bisaya and
+  Tagalog (AI draft), matched by link (site `www.youngminds.org.uk` + last path part). There is no
+  `summary` column: adding one would mean a migration (must-never 18), so the captions live with the
+  app's other static content. A guide whose link is not listed shows no caption and no source line;
+  with the demo data every one of the 11 published guides (and the "Sleep and routine" draft) is
+  listed, so no guide is missing a caption. With the plain seed (example.org links) cards show none.
+- `ResourceCard.jsx` (used by `/guides`, `/resources`, and the landing page's four guides): chip,
+  title, caption (15 px, ink-muted, `leading-normal` = 1.5, `line-clamp-2`), source line (13 px,
+  "From YoungMinds · opens in a new tab"), divider, "Read guide". The link keeps
+  `target="_blank" rel="noopener noreferrer"` and now has
+  `aria-label="Read guide: {title} (opens in a new tab)"` (it contains the visible "Read guide").
+  New English keys `public.guides.source` and `public.guides.readLabel`.
+- `/resources`: same grid as `/guides` (1/2/3 columns from 0/640/1024 px, 24 px gap, equal-height
+  cards), and the same 1152 px page width (its own layout route; other student pages stay 768 px).
+  Ranking order unchanged (still an ordered list).
+- Bisaya/Tagalog: the source line is in `ceb.js`/`tl.js` (`public.guides.source`), the captions in
+  `guide-summaries.js`; both are in `docs/translation-sheet.csv` (now 64 rows, checked_by empty).
+  They are not shown yet: `/guides` and `/resources` have no language switch.
+- `check-copy` also checks the captions in all three languages.
+
+**B. Spacing with longer Bisaya/Tagalog text.** Only the crisis screen and the assent walkthrough
+show Bisaya/Tagalog (the only screens with a language switch). Fixes:
+- `SegmentedControl.jsx`: new `nowrap` prop (group `flex-nowrap whitespace-nowrap shrink-0`,
+  buttons `shrink-0 whitespace-nowrap`); used for the language switcher on `/crisis` and
+  `/welcome`. All three buttons keep the same `min-h-11 px-4`. Other segmented controls (filters,
+  request status) still wrap as before.
+- `Chip.jsx`: new `shape="wrap"`: `rounded-2xl`, `px-3.5 py-1.5`, `leading-[1.4]`, `max-w-full`
+  instead of a stretched pill. Used for the crisis chip and the assent step chip.
+- Crisis and assent header rows: `flex flex-wrap items-center justify-between gap-3`. When chip and
+  switcher do not fit on one line, the switcher moves to its own line, left-aligned, 12 px below.
+- Measured on `/crisis` and `/welcome` at 390/768/1280 px in all three languages: switcher always on
+  one line with equal button heights, never overlapping the chip, no clipped text, no sideways page
+  scroll. `/guides`, `/resources`, check-in, and home (English only) at the same widths: no
+  clipping, no sideways scroll. The crisis screen stays in the main bundle; switching language makes
+  no network request.
+- Checks: verify 314/314, check:copy OK (en, ceb, tl, captions), e2e 03, 04, 05, 06 passed (axe
+  included).
