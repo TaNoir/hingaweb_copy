@@ -511,3 +511,38 @@ unchanged). No new text. New `loginStaffLink.test.jsx` (1 test). verify 314/314,
 first e2e 02 run failed 18 tests at about 6 s each while the local Supabase containers were
 restarting (edge runtime up 1 s, the logging container in a restart loop); the re-run passed
 with no change.
+
+## Guides layout and landing animation (branch ui-guides-layout, user request, 2026-10-11; not merged)
+
+- **Guides page width.** `Main.jsx` gets a third width, `'library'` = `max-w-6xl` (1152 px); only
+  `/guides` uses it (its own layout route in `routes.jsx`; `/help` stays 768 px). Side padding is
+  unchanged (16 px on phones). The page header, the "Free to read without an account" chip, and
+  the filter bar now all span the grid width: the filter bar gets `className="flex w-full"` through
+  a new optional `className` prop on `SegmentedControl` (other uses unchanged). The lead paragraph
+  keeps its existing `max-w-2xl` reading width (shared `PageHeader`, not changed).
+- **Guide grid.** 1 column under 640 px, 2 from 640 px, 3 from 1024 px, 24 px gap. Cards in a row
+  are equal height (`li` is flex, card `h-full w-full` through a new optional `className` prop on
+  `ResourceCard`; "Read guide" was already `mt-auto`). Measured: 1/2/3 columns at 390/768/1280 px,
+  rows equal, no horizontal scroll.
+- **Wave picture replaced.** The three-wave SVG existed in one place only: the landing hero
+  (`LandingPage.jsx`). Not on the crisis screen. (The logo's lucide `Waves` icon is a different,
+  single-colour icon and is unchanged.) Now: `BreathAnimation.jsx` plays
+  `public/animations/hinga-breath.lottie` (downloaded from lottie.host, 8.7 KB) with
+  `@lottiefiles/dotlottie-react@0.20.0` (installed `--save-exact`), loop + autoplay, loaded with
+  `React.lazy` (`lazyNamed`). The player's 1.2 MB WebAssembly renderer is bundled from
+  `node_modules` (`?url`) and set with `setWasmUrl`, because by default the player fetches it from
+  cdn.jsdelivr.net / unpkg.com. Checked: no request leaves the site.
+  - In a reserved `aspect-square` box, 200 px wide, in the old picture's spot, `aria-hidden`, nothing
+    focusable; the box does not change size while loading. The animation is a 512×512 square
+    illustration, so it cannot match the old 420×75 strip; 200 px fits the empty space beside the help
+    card on desktop.
+  - Reduced motion: no autoplay, no loop; the still first frame shows (checked: two captures 1.5 s
+    apart identical).
+  - **CSP:** `vercel.json` `script-src` gains `'wasm-unsafe-eval'` (needed to run same-origin
+    WebAssembly; it does not allow `eval()` of JavaScript or outside scripts).
+  - **Colours:** the illustration uses its own palette (skin, hair, light blue, purple, greys), not
+    the app's colour tokens. It is decorative, not system output; flagged for review.
+  - The service worker precaches the new 168 KB player chunk (all `.js` files are precached); the
+    `.wasm` and `.lottie` are not precached, so offline the box stays empty (decorative only).
+- Checks: verify 314/314 (check:copy and check:colours OK), check:bundle OK (core views 255–268 KB),
+  e2e 03 16/16, 06 3/3.

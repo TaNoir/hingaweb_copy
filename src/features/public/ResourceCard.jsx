@@ -4,15 +4,16 @@
 import { ArrowRight } from 'lucide-react';
 import { t } from '../../copy/index.js';
 import { Card, Chip } from '../../components/ui/index.js';
+import { cx } from '../../components/ui/cx.js';
 import { CRITERIA } from '../../config/vocabulary.js';
 import { primaryArea } from './primaryArea.js';
 
-export function ResourceCard({ resource, onOpen }) {
+export function ResourceCard({ resource, onOpen, className = '' }) {
   const area = resource.area
     ? { label: CRITERIA.find((c) => c.attribute === resource.area)?.studentLabel ?? '' }
     : primaryArea(resource.attributes);
   return (
-    <Card as="article" className="flex flex-col gap-3">
+    <Card as="article" className={cx('flex flex-col gap-3', className)}>
       <Chip className="self-start">{area.label}</Chip>
       <h3 className="text-[17px] font-semibold text-ink">{resource.title}</h3>
       <div className="mt-auto flex items-center justify-end gap-3 border-t border-line pt-3">
