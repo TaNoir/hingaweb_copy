@@ -2,15 +2,19 @@ import { Outlet } from 'react-router';
 import { t } from '../../copy/index.js';
 import { LinkButton } from '../ui/LinkButton.jsx';
 import { AppHeader } from './AppHeader.jsx';
+import { CrisisStrip } from './CrisisStrip.jsx';
 import { Footer } from './Footer.jsx';
 import { Main } from './Main.jsx';
 import { SkipLink } from './SkipLink.jsx';
 
-/** width: 'reading' (768px) or 'wide' (1200px; the landing page). */
+/** width: 'reading' (768px), 'wide' (1200px), or 'full' (the landing page: each section sets its own width). */
 export function PublicLayout({ width = 'reading' }) {
   const items = [
+    // ui-landing-v2: How it works and Breathe jump to sections of the landing page.
+    { to: '/#how', label: t('nav.public.how'), hash: true },
+    { to: '/#breathe', label: t('nav.public.breathe'), hash: true },
     { to: '/guides', label: t('nav.public.guides') },
-    { to: '/help', label: t('nav.public.help') },
+    { to: '/help', label: t('nav.public.getHelp') },
   ];
   const actions = (
     <>
@@ -23,6 +27,7 @@ export function PublicLayout({ width = 'reading' }) {
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
       <SkipLink />
+      <CrisisStrip />
       <AppHeader
         logoTo="/"
         navLabel={t('nav.public.label')}
@@ -35,7 +40,7 @@ export function PublicLayout({ width = 'reading' }) {
           <Outlet />
         </Main>
       </div>
-      <Footer />
+      <Footer variant="site" />
     </div>
   );
 }

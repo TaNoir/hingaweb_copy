@@ -54,8 +54,14 @@ describe('LandingPage (Fig 7)', () => {
         /It is not a diagnosis and it is not a replacement for talking to someone\./,
       ),
     ).toBeInTheDocument();
-    const help = screen.getByRole('complementary', { name: 'Need help right now?' });
-    expect(within(help).getAllByRole('link')).toHaveLength(HOTLINES.length);
+    // ui-landing-v2: the hotline card is now the "If you need help right now" section (it also
+    // links to Request a talk, so only the Call links are counted).
+    const help = screen.getByRole('complementary', { name: 'If you need help right now' });
+    expect(
+      within(help)
+        .getAllByRole('link')
+        .filter((a) => a.getAttribute('href').startsWith('tel:')),
+    ).toHaveLength(HOTLINES.length);
     expect(
       await screen.findByRole('heading', { name: 'Managing exam pressure' }),
     ).toBeInTheDocument();
@@ -67,7 +73,9 @@ describe('LandingPage (Fig 7)', () => {
     mock.client.from.mockReturnValue(queryResult({ data: null, error: { message: 'offline' } }));
     renderWithAuth(<Route path="/" element={<LandingPage />} />);
     expect(await screen.findByText('Something went wrong.')).toBeInTheDocument();
-    expect(screen.getByRole('complementary', { name: 'Need help right now?' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('complementary', { name: 'If you need help right now' }),
+    ).toBeInTheDocument();
   });
 
   it('has no 30-second demo check-in and no free-text box (D-19)', async () => {

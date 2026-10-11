@@ -37,6 +37,20 @@ export const en = {
       login: 'Log in',
       register: 'Create account',
       needHelp: 'Need help right now?',
+      // ui-landing-v2 header
+      how: 'How it works',
+      breathe: 'Breathe',
+      getHelp: 'Get help',
+    },
+    // ui-landing-v2: crisis strip on public pages and the site footer
+    strip: {
+      lead: 'Need to talk to someone right now?',
+      emergencies: 'Emergencies:',
+    },
+    footer: {
+      title: 'Hinga muna.',
+      tagline: 'HingaWeb, a guidance platform for senior high students.',
+      label: 'Footer',
     },
     student: {
       label: 'Student',

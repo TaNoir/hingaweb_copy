@@ -8,7 +8,8 @@ test.describe('Phase 03 · public pages (Tier 1)', () => {
     await expect(
       page.getByRole('heading', { level: 1, name: 'A private place to check in with yourself.' }),
     ).toBeVisible();
-    const card = page.getByRole('complementary', { name: 'Need help right now?' });
+    // ui-landing-v2: the hotline card is now the "If you need help right now" section.
+    const card = page.getByRole('complementary', { name: 'If you need help right now' });
     await expect(card).toBeVisible();
     await expect(card.getByText(/HingaWeb is not for emergencies\./)).toBeVisible();
     await expect(page.getByRole('textbox')).toHaveCount(0); // D-19: no demo check-in

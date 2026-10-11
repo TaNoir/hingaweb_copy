@@ -61,7 +61,7 @@ export function StudentLayout({ width = 'reading' }) {
           <Outlet />
         </Main>
       </div>
-      <Footer />
+      <Footer variant="site" />
     </div>
   );
 }

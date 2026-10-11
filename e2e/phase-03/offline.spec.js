@@ -16,6 +16,9 @@ test('hotlines and the directory still show with no network', async ({ page, con
   await expect(page.getByText(/HingaWeb is not for emergencies\./)).toBeVisible();
 
   await page.goto('/');
-  await expect(page.getByRole('complementary', { name: 'Need help right now?' })).toBeVisible();
+  // ui-landing-v2: the hotline card is now the "If you need help right now" section.
+  await expect(
+    page.getByRole('complementary', { name: 'If you need help right now' }),
+  ).toBeVisible();
   await context.setOffline(false);
 });
