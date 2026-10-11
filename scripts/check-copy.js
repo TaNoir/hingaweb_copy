@@ -68,11 +68,20 @@ if (process.argv[1] && process.argv[1].endsWith('check-copy.js')) {
     const allowlist = existsSync(allowPath)
       ? (await import(pathToFileURL(allowPath).href)).ALLOWLIST
       : [];
-    const v = findViolations(en, allowlist);
+    const v = findViolations(en, allowlist).map((x) => ({ ...x, lang: 'en' }));
+    // Bisaya and Tagalog (assent and crisis keys) follow the same student rules. The patterns are
+    // English words; the translations keep English school words, so they are checked too.
+    for (const lang of ['ceb', 'tl']) {
+      const path = join(ROOT, `src/copy/${lang}.js`);
+      if (!existsSync(path)) continue;
+      const dict = (await import(pathToFileURL(path).href))[lang];
+      v.push(...findViolations(dict, allowlist).map((x) => ({ ...x, lang })));
+    }
     if (v.length) {
-      for (const x of v) console.error(`check:copy: ${x.key} matches ${x.pattern}: "${x.value}"`);
+      for (const x of v)
+        console.error(`check:copy: [${x.lang}] ${x.key} matches ${x.pattern}: "${x.value}"`);
       process.exit(1);
     }
-    console.log('check:copy: OK');
+    console.log('check:copy: OK (en, ceb, tl)');
   }
 }
