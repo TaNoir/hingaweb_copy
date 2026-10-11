@@ -589,3 +589,27 @@ The plain monospace number line under each hotline is removed; the number stays 
   `tel:09178998727` and `tel:911`; at 390 px the NCMH button wraps to two lines inside the card, no
   clipping, no horizontal scroll. verify 314/314 (check:copy OK), check:bundle OK, e2e 03 16/16,
   05 6/6 (axe on `/`, `/help`, `/crisis` included).
+
+## Hero columns end on the same line (branch ui-hero-balance, user request, 2026-10-11; merged)
+
+`LandingPage.jsx` hero only.
+- From 1024 px: 2-column grid, `items-stretch`; the help card is no longer `self-start`, so it sets
+  the row height. The left column is `flex h-full flex-col`; text, buttons, and reassurance line keep
+  their natural size. The animation wrapper is `relative flex-1 overflow-hidden` with no height of
+  its own; the player is `absolute inset-0` (canvas `size-full`, fit contain, centred) at
+  `scale-[1.15]` (was 1.4). The 480 px max-width, aspect-ratio box, and `overflow-x-clip` from
+  ui-hero-animation are removed.
+- **Minimum height 180 px, not 260 px:** the space left under the text is about 205 px (flag-off and
+  demo builds alike), so a 260 px minimum made the left column 55 px taller than the card and left
+  55 px of blank space inside the card. With 180 px the card decides: measured at 1280, 1440, and
+  1920 px, the animation bottom equals the card bottom (0 px) and the card has no blank space (1 px).
+  The figure is smaller than before (about 170 px tall) because it now fits the leftover space.
+- Below 1024 px the columns stack (they used to sit side by side from 768 px); the animation is a
+  fixed 240 px tall (`h-60`) after the buttons, then the help card.
+- Blush circle: `h-[85%] max-w-[85%]`, centred; the height is the smaller side at every width, so
+  it is 85 % of the smaller side and is never cut off (checked).
+- Spacing to "How HingaWeb works": 64 px from 1024 px (`gap-12` + `lg:mb-4`), 48 px below.
+- Unchanged: aria-hidden, no pointer events, not focusable; still frame with reduced motion
+  (checked); lazy player; self-hosted (no outside requests); crisis screen untouched.
+- Checks: verify 314/314 (check:copy OK), e2e 03 16/16 with axe, no horizontal scroll at 390 and
+  768 px, box does not jump while loading.

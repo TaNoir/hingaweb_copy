@@ -31,10 +31,13 @@ export function LandingPage() {
   const { status, resources, reload } = usePublishedResources();
   return (
     <div className="flex flex-col gap-12">
-      {/* The row stretches so the left column fills its height; the animation is centred in the
-          space left under the text. The help card keeps its own height (self-start). */}
-      <section className="grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-stretch">
-        <div className="flex flex-col gap-4">
+      {/* From 1024 px: two columns that end on the same line. The help card sets the row height;
+          the left column stretches to it and the animation fills whatever space is left under the
+          text (it has no height of its own, so it never makes the row taller). Below 1024 px the
+          columns stack and the animation is a fixed 240 px. 64 px to the next section on desktop
+          (48 px gap + 16 px margin), 48 px on phones. */}
+      <section className="grid gap-8 lg:mb-4 lg:grid-cols-[1.2fr_1fr] lg:items-stretch">
+        <div className="flex h-full flex-col gap-4">
           <Chip className="self-start">{t('public.landing.chip')}</Chip>
           <h1 className="text-[32px] font-semibold leading-10 text-ink md:text-[40px] md:leading-[48px]">
             {t('public.landing.title')}
@@ -55,29 +58,26 @@ export function LandingPage() {
             <Lock aria-hidden="true" className="size-4 shrink-0" />
             {t('public.landing.listenNote')}
           </p>
-          {/* Decorative breathing animation, the hero's main visual. Hidden from screen readers, never
-              focusable, no pointer events (the scaled canvas is transparent around the figure).
-              The box reserves its size (260 px phones, 360 px from 640 px, 480×360 from 1024 px) so
-              nothing moves while the lazy player loads; reduced motion shows a still frame. The
-              player is scaled up because the .lottie has empty space around the figure; sideways it
-              is clipped to the column (only transparent edges), so the page never scrolls sideways. */}
+          {/* Decorative breathing animation. Desktop minimum 180 px (the space left under the text is
+              about 205 px, so a larger minimum would make the row taller than the help card).
+              Hidden from screen readers, never focusable, no pointer
+              events. The player sits absolutely inside the wrapper (canvas fits "contain", centred),
+              so the figure grows or shrinks with the space and nothing moves while the lazy player
+              loads. A small 1.15 scale trims the empty padding in the .lottie; the wrapper clips it
+              and never grows. Reduced motion shows a still frame (BreathAnimation). */}
           <div
             aria-hidden="true"
-            className="pointer-events-none flex flex-1 items-center justify-center overflow-x-clip py-2"
+            className="pointer-events-none relative h-60 overflow-hidden lg:h-auto lg:min-h-[180px] lg:flex-1"
           >
-            <div className="relative aspect-square w-full max-w-[260px] sm:max-w-[360px] lg:aspect-[4/3] lg:max-w-[480px]">
-              <span className="absolute top-1/2 left-1/2 aspect-square h-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blush" />
-              <div className="absolute inset-0 scale-[1.4]">
-                <Suspense fallback={null}>
-                  <BreathAnimation />
-                </Suspense>
-              </div>
+            <span className="absolute top-1/2 left-1/2 aspect-square h-[85%] max-w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blush" />
+            <div className="absolute inset-0 scale-[1.15]">
+              <Suspense fallback={null}>
+                <BreathAnimation />
+              </Suspense>
             </div>
           </div>
         </div>
-        <div className="md:self-start">
-          <NeedHelpCard />
-        </div>
+        <NeedHelpCard />
       </section>
 
       <section id="how" aria-labelledby="how-title" className="flex flex-col gap-4 scroll-mt-6">
