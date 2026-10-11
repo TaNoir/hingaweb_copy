@@ -636,3 +636,31 @@ The plain monospace number line under each hotline is removed; the number stays 
   heading (`AuthLogo` in `AuthCard.jsx`, `alt=""`).
 - Checks: verify 314/314 (check:copy OK), check:bundle OK, e2e 02 28/28, 03 16/16, 05 6/6, 08 6/6
   (axe included). Favicon and touch icon served as image/svg+xml and image/png.
+
+## Bisaya and Tagalog drafted with AI (branch i18n-translate, user request, 2026-10-11; merged)
+
+**Decision (user):** the 102 `[[TEAM:CEB:…]]` / `[[TEAM:TL:…]]` placeholders are replaced with
+AI-drafted text. This overrides 00 Section 10.2 and must-never 11 ("never translate into Cebuano or
+Tagalog"; "written by the HingaWeb team, not by AI translation"). The headers of `ceb.js` and
+`tl.js` now say so. **Every line still needs a native speaker on the team to check it before the
+pilot**, the crisis screen first: `docs/translation-sheet.csv` (page, key, english, bisaya,
+tagalog, checked_by; crisis rows first, then assent; checked_by empty).
+- Scope: only the assent walkthrough (`/welcome`, 32 keys) and the crisis screen (`/crisis`, 19
+  keys) have Bisaya and Tagalog; they are the only screens with a language switch. The check-in
+  page, the home page, and everything else are English only (no language switch, no ceb/tl keys),
+  so they were not translated. The hotline descriptions and office details on the crisis screen come
+  from `directory.js` and stay English.
+- Style: everyday Davao Cebuano and everyday Tagalog; school words kept in English (check-in,
+  guidance office, grade, section, class adviser, support request, permission form, pilot, test);
+  HingaWeb, hotline names, numbers, and the school name unchanged; `{number}`, `{name}`, `{school}`
+  tokens kept. Call buttons: "Tawag sa {number}" / "Tumawag sa {number}".
+- `scripts/check-copy.js` now also checks `ceb.js` and `tl.js` with the student rules (English
+  patterns). The no-clinical-words rule for Bisaya/Tagalog words themselves needs the team's check.
+- Status flags unchanged: `CHECKIN_ITEMS_STATUS` and `ASSENT_COPY_STATUS` stay `'provisional'`.
+- Tests unchanged. The translation-file tests only compare values that start with `[[`, so they
+  pass with real text. The only `[[TEAM:` strings left in `src/` are those two test templates
+  (`assent.test.jsx`, `crisis.test.jsx`); app code: 0. `docs/placeholders.md` 133 → 31.
+- Checks: verify 314/314, check:copy OK (en, ceb, tl), e2e 04 (assent + language switch) and 05
+  (check-in + crisis) passed; at 390 px no overflow or placeholders on `/crisis` and `/welcome` in
+  all three languages; switching language on `/crisis` makes no network request (crisis screen stays
+  in the main bundle).
