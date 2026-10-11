@@ -9,7 +9,7 @@ import { useAuth } from '../../lib/auth/useAuth.js';
 import { authErrorKey } from '../../lib/auth/errors.js';
 import { homePathFor } from '../../lib/auth/homePath.js';
 import { Button, Chip, Field, PasswordInput, TextInput } from '../../components/ui/index.js';
-import { AuthCard, FormMessage } from './AuthCard.jsx';
+import { AuthCard, AuthLogo, FormMessage } from './AuthCard.jsx';
 import { loginSchema } from './schemas.js';
 import { useForm } from './useForm.js';
 import { usePageTitle } from '../../lib/usePageTitle.js';
@@ -91,6 +91,7 @@ export function LoginPage() {
         </Link>
       }
     >
+      <AuthLogo />
       <h1 className="text-[28px] font-semibold leading-9 text-ink">{t('auth.login.title')}</h1>
       <p className="mt-2 text-base text-ink-muted">{t('auth.login.lead')}</p>
       <form noValidate onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">

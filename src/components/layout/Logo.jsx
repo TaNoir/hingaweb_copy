@@ -1,8 +1,12 @@
 import { Link } from 'react-router';
-import { Waves } from 'lucide-react';
 import { SITE } from '../../config/site.js';
 
-/** "HingaWeb" wordmark with the "Start with a breath" caption (00 Section 8.5; caption changed at the user's request). */
+/**
+ * HingaWeb mark, wordmark, and the "Start with a breath" caption (00 Section 8.5; caption and mark
+ * changed at the user's request). The mark (public/hingaweb-mark.svg) has its own pink circle, so it
+ * has no background; alt="" because the wordmark beside it already says HingaWeb. 36 px on phones,
+ * 44 px from 640 px. It is a plain image (same origin, precached), never lazy-loaded.
+ */
 export function Logo({ to = '/' }) {
   return (
     <Link
@@ -10,12 +14,13 @@ export function Logo({ to = '/' }) {
       className="flex min-h-11 items-center gap-2 rounded-control"
       aria-label={`${SITE.appName} home`}
     >
-      <span
-        aria-hidden="true"
-        className="flex size-9 items-center justify-center rounded-[10px] bg-blush"
-      >
-        <Waves className="size-5 text-ink" />
-      </span>
+      <img
+        src="/hingaweb-mark.svg"
+        alt=""
+        width="44"
+        height="44"
+        className="size-9 shrink-0 sm:size-11"
+      />
       <span aria-hidden="true" className="flex flex-col leading-none">
         <span className="text-[17px] text-ink">
           <span className="font-semibold">Hinga</span>

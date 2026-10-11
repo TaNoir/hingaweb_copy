@@ -613,3 +613,26 @@ The plain monospace number line under each hotline is removed; the number stays 
   (checked); lazy player; self-hosted (no outside requests); crisis screen untouched.
 - Checks: verify 314/314 (check:copy OK), e2e 03 16/16 with axe, no horizontal scroll at 390 and
   768 px, box does not jump while loading.
+
+## New logo (branch ui-new-logo, user request, 2026-10-11; merged)
+
+- **Files:** `public/hingaweb-mark.svg` and `public/hingaweb-logo.svg` were not in `public/` as
+  stated. `hingaweb-logo.svg` was copied from `Downloads/` (identical to the file attached to the
+  request; checked: no scripts, event handlers, or external links). **No mark file existed
+  anywhere**, so `hingaweb-mark.svg` was made from the full logo: same three paths, clipped to the
+  logo's own pink circle (viewBox = that circle), so the breath tail outside the circle is cut off.
+  Replace the file to use a different mark; the app refers to it only by name.
+- `Logo.jsx`: the lucide `Waves` icon and its blush square are removed (`Waves` is no longer used
+  anywhere); the mark is `<img src="/hingaweb-mark.svg" alt="" width="44" height="44">`, 36 px below
+  640 px and 44 px from 640 px. Wordmark, caption, link, and its "HingaWeb home" name unchanged.
+  Used by `AppHeader` (public, student, guidance, admin headers), `BareLayout` (crisis, welcome,
+  waiting), and `PortalLayout` (staff sign-in); the footer has no logo. On the crisis screen it is a
+  plain same-origin image (precached by the service worker), never lazy.
+- Favicon: `public/favicon.svg` is now a copy of the mark (index.html already linked it).
+- `public/apple-touch-icon.png`: 180×180, the mark on #FFF1F4, rendered with the Playwright Chromium
+  already in devDependencies (no new packages); linked in index.html. No web manifest exists
+  (`manifest: false`), so no 192/512 icons were made.
+- Login and sign-up form pages: the full logo, 120 px, centred at the top of the card above the
+  heading (`AuthLogo` in `AuthCard.jsx`, `alt=""`).
+- Checks: verify 314/314 (check:copy OK), check:bundle OK, e2e 02 28/28, 03 16/16, 05 6/6, 08 6/6
+  (axe included). Favicon and touch icon served as image/svg+xml and image/png.

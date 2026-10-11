@@ -11,6 +11,19 @@ export function AuthCard({ children, above = null, below = null }) {
   );
 }
 
+/** Full HingaWeb logo at the top of the log in and sign-up cards (decorative: alt=""). */
+export function AuthLogo() {
+  return (
+    <img
+      src="/hingaweb-logo.svg"
+      alt=""
+      width="120"
+      height="120"
+      className="mx-auto mb-4 block size-[120px]"
+    />
+  );
+}
+
 export function FormMessage({ children }) {
   if (!children) return null;
   return (
