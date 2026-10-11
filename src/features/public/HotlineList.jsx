@@ -4,7 +4,10 @@ import { t } from '../../copy/index.js';
 import { HOTLINES } from '../../content/directory.js';
 import { buttonClasses } from '../../components/ui/index.js';
 
-/** variant: 'primary' (default; request pages) or 'outline' (landing page card and Where to get help). */
+/**
+ * variant: 'primary' (default; request pages) or 'outline' (landing page card and Where to get help).
+ * The number is shown once, inside the Call button (it wraps to two lines on narrow screens).
+ */
 export function HotlineList({ lang = 'en', variant = 'primary' }) {
   const callVariant = variant === 'outline' ? 'outline' : 'primary';
   return (
@@ -17,14 +20,17 @@ export function HotlineList({ lang = 'en', variant = 'primary' }) {
           <div>
             <p className="font-semibold text-ink">{h.name}</p>
             <p className="text-[14px] text-ink-muted">{h.note}</p>
-            <p className="mt-1 font-mono text-[15px] text-ink">{h.number}</p>
           </div>
           <a
             href={`tel:${h.dial}`}
             aria-label={t('public.hotlines.callLabel', { name: h.name, number: h.number }, lang)}
-            className={buttonClasses(callVariant, 'md', 'max-w-full self-start text-left')}
+            className={buttonClasses(
+              callVariant,
+              'md',
+              'max-w-full self-start py-2 text-left leading-snug',
+            )}
           >
-            <Phone aria-hidden="true" className="size-4" />
+            <Phone aria-hidden="true" className="size-4 shrink-0" />
             <span>{t('public.hotlines.call', { number: h.number }, lang)}</span>
           </a>
         </li>

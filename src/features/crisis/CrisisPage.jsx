@@ -78,7 +78,7 @@ export function CrisisPage() {
                 key={h.id}
                 icon={Phone}
                 title={h.name}
-                lines={[`${h.number} • ${h.note}`]}
+                lines={[h.note]} // the number is shown once, in the Call button
                 href={`tel:${h.dial}`}
                 action={c('call', { number: h.number })}
                 actionLabel={c('callLabel', { name: h.name, number: h.number })}
@@ -150,10 +150,14 @@ function ContactRow({ icon: Icon, title, lines, href, action, actionLabel }) {
       <a
         href={href}
         aria-label={actionLabel}
-        className={buttonClasses('primary', 'md', 'max-w-full self-start sm:self-center')}
+        className={buttonClasses(
+          'primary',
+          'md',
+          'max-w-full self-start py-2 text-left leading-snug sm:self-center',
+        )}
       >
         <span>{action}</span>
-        <ArrowRight aria-hidden="true" className="size-4" />
+        <ArrowRight aria-hidden="true" className="size-4 shrink-0" />
       </a>
     </li>
   );

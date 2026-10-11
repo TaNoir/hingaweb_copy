@@ -512,7 +512,7 @@ first e2e 02 run failed 18 tests at about 6 s each while the local Supabase cont
 restarting (edge runtime up 1 s, the logging container in a restart loop); the re-run passed
 with no change.
 
-## Guides layout and landing animation (branch ui-guides-layout, user request, 2026-10-11; not merged)
+## Guides layout and landing animation (branch ui-guides-layout, user request, 2026-10-11; merged into main 2026-10-11)
 
 - **Guides page width.** `Main.jsx` gets a third width, `'library'` = `max-w-6xl` (1152 px); only
   `/guides` uses it (its own layout route in `routes.jsx`; `/help` stays 768 px). Side padding is
@@ -547,7 +547,7 @@ with no change.
 - Checks: verify 314/314 (check:copy and check:colours OK), check:bundle OK (core views 255–268 KB),
   e2e 03 16/16, 06 3/3.
 
-## Hero animation bigger and centred (branch ui-hero-animation, user request, 2026-10-11; not merged)
+## Hero animation bigger and centred (branch ui-hero-animation, user request, 2026-10-11; merged into main 2026-10-11)
 
 Branched from `ui-guides-layout`, not `main`: the Lottie animation exists only on that unmerged
 branch (`main` still has the wave SVG), so merging this branch also brings in the guides layout.
@@ -569,3 +569,23 @@ branch (`main` still has the wave SVG), so merging this branch also brings in th
   self-hosted files (no outside requests, checked), crisis screen untouched.
 - Checks: verify 314/314 (check:copy OK), e2e 03 16/16 (axe on `/` included), no horizontal scroll at
   390/768/1280/1440 px.
+
+## Hotline number shown once (branch ui-hotline-cleanup, user request, 2026-10-11; merged into main 2026-10-11)
+
+The plain monospace number line under each hotline is removed; the number stays in the Call button
+("Call {number}", tel: link and accessible name unchanged).
+- `HotlineList.jsx` (shared by the landing "Need help right now?" card, `/help`, and the request and
+  request-sent pages): the `font-mono` number line is deleted. Description to button gap is the
+  existing 12 px (`gap-3`). The Call button gets `py-2 text-left leading-snug` and a non-shrinking
+  icon, so the long NCMH label wraps neatly to two lines on phones.
+- `CrisisPage.jsx`: the crisis screen does **not** use `HotlineList` (it has its own `ContactRow`,
+  because its labels follow the Bisaya/Tagalog switch). Its hotline line was "number • description";
+  it is now the description only, and its Call button gets the same wrapping classes. The crisis
+  screen stays in the main bundle (no lazy loading); numbers remain visible inside the buttons.
+  The emergency banner at the top ("…call this number: 911") is unchanged.
+- No test looked for the plain number text (all hotline tests find the Call links by their
+  accessible names), so no test was changed.
+- Checked on a demo build (real numbers): home, `/help`, and the crisis screen at 390 and 1280 px;
+  `tel:09178998727` and `tel:911`; at 390 px the NCMH button wraps to two lines inside the card, no
+  clipping, no horizontal scroll. verify 314/314 (check:copy OK), check:bundle OK, e2e 03 16/16,
+  05 6/6 (axe on `/`, `/help`, `/crisis` included).
