@@ -14,7 +14,7 @@ import {
   Select,
   TextInput,
 } from '../../components/ui/index.js';
-import { AuthCard, FormMessage } from './AuthCard.jsx';
+import { AuthCard, AuthLogo, FormMessage } from './AuthCard.jsx';
 import { registerSchema } from './schemas.js';
 import { useForm } from './useForm.js';
 import { usePageTitle } from '../../lib/usePageTitle.js';
@@ -112,6 +112,7 @@ export function RegisterPage() {
         </p>
       }
     >
+      <AuthLogo />
       <Chip tone="strong">{t('auth.register.step')}</Chip>
       <h1 className="mt-4 text-[28px] font-semibold leading-9 text-ink">
         {t('auth.register.title')}
