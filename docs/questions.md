@@ -723,3 +723,43 @@ own row at every width (the row could wrap).
 - Measured (demo build): at 640/768/1280 px chip and switcher on one row in all three languages,
   switcher right-aligned; at 390 px switcher full width, three 100 px buttons, no blank space, all
   buttons 44 px tall, no sideways scroll. verify 314/314, e2e 04 and 05 passed (axe included).
+
+## Student side interactive touches (branch ui-interactive, user request, 2026-10-11; merged)
+
+Four parts, one commit each (plus a focus fix).
+- **Part 1 (feedback):** `index.css` `.btn-motion` (all `buttonClasses` buttons: lift 1 px + soft
+  shadow on hover, scale 0.98 on press), `.card-hover` (guide cards, "How HingaWeb works" cards,
+  hotline cards: lift 2 px, blush-strong border, "Read guide" arrow slides 4 px; also on keyboard
+  focus inside the card), `.link-grow` (nav items: underline grows left to right).
+  `SegmentedControl` (filters, language switcher, request status): the dark selected pill is one
+  element that slides (200 ms); until measured, the selected button paints its own background.
+  Reduced motion removes all movement. The crisis screen is wrapped in `.no-motion` (no
+  transitions, no lift, no shadow on hover).
+- **Part 2 (check-in one question per screen; user decision to update specs):** `CheckInPage.jsx`:
+  steps 1–6 are the six questions (same items, order, wording, choices), step 7 is the optional note
+  and Save. Back / answered count / Next (or Save) in the sticky bar; Next is manual, never
+  automatic; Save stays disabled until all six are answered (same hint text). Progress: a row of six
+  dots plus "Question n of 6" (there are 6 questions, not 4; no percentage). The step is kept in the
+  in-memory draft, so Back and a trip to /crisis keep everything. After Back/Next, focus moves to the
+  question text. **The safety items stay visible on every step** (moving them to the end would make
+  a student answer six questions before reaching them). There was no review step before; none was
+  added. Chosen answers: blush-strong background, ink border, a small check badge above the button.
+  **Tests updated (navigation only, no expectation changed):** `checkin.test.jsx`,
+  `savedFocus.test.jsx`, `unsavedWarning.test.jsx` (also a 15 s per-test timeout: ~26 clicks), and the
+  answer loops in `e2e/phase-05/checkin-crisis.spec.js`, `e2e/phase-06/trends-resources.spec.js`,
+  `e2e/phase-07/request.spec.js`, `e2e/phase-08/guidance.spec.js` (answer the visible question, then
+  press Next).
+- **Part 3 (breathing card):** `BreathCard.jsx`, above the first question on `/check-in` only (no
+  student home page exists; user chose this). Start/Stop/Skip; in 4 s, hold 4 s, out 6 s, 3 cycles,
+  then "Nice. Ready when you are."; the phase name is a polite live region; reduced motion shows the
+  steps with a countdown and no circle. Skip hides it for this visit (page memory only). The 4–6 s
+  breathing transitions are longer than the 150–300 ms rule on purpose (the exercise itself).
+- **Part 4:** shimmer `Skeleton` (blush gradient; still with reduced motion); `Toast` ("Saved" after a
+  check-in, "Request sent" on the sent page; polite live region, fades after 3 s; the full saved/sent
+  pages stay); empty states keep their wording and get an icon (trends, guides, resources); `Main`
+  fades each page in over 150 ms, never on `/crisis`.
+- New English keys (`checkin.next/back/stepOf`, `checkin.breath.*`, `common.toast.*`) with Bisaya and
+  Tagalog drafts in `ceb.js`/`tl.js` and `docs/translation-sheet.csv` (77 rows).
+- Checks: verify 316/316, check:copy OK (3 languages), full e2e 02–09 passed (axe included);
+  keyboard-only run of the check-in, breathing card, and guides filter; reduced motion: no movement;
+  `/crisis` renders 28 ms after ticking a safety item (in-page timing), no extra downloads, no fade.
