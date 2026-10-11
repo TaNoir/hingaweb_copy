@@ -36,6 +36,7 @@ import { FormMessage } from '../auth/AuthCard.jsx';
 import { clearDraft, loadDraft, saveDraft } from './checkinDraft.js';
 import { useCrisisItems } from './useCrisisItems.js';
 import { PromptDialog } from './PromptDialog.jsx';
+import { BreathCard } from './BreathCard.jsx';
 import { reportCrisisItem, useCrisisReport } from '../crisis/crisisReport.js';
 import { CrisisStatus } from '../crisis/CrisisStatus.jsx';
 import { usePageTitle } from '../../lib/usePageTitle.js';
@@ -186,6 +187,9 @@ export function CheckInPage() {
         <p className="text-base text-ink-muted">{t('checkin.lead')}</p>
         <StepDots step={step} answers={draft.answers} />
       </header>
+
+      {/* Optional breathing exercise before the first question (Part 3). Skip moves focus on. */}
+      {step === 0 && <BreathCard onSkip={() => stepHeading.current?.focus()} />}
 
       {/* The current step, keyed so it slides and fades in (reduced motion: no movement). */}
       <div

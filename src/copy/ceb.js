@@ -74,6 +74,22 @@ export const ceb = {
       'Wala namo mapahibalo ang guidance office pinaagi sa HingaWeb. Palihug tawagi sila karon gamit ang button sa taas.',
     back: 'Balik sa akong check-in',
   },
+  // Check-in steps and breathing card (AI draft; /check-in has no language switch yet).
+  checkin: {
+    next: 'Sunod',
+    back: 'Balik',
+    stepOf: 'Pangutana {n} sa {total}',
+    breath: {
+      title: 'Ginhawa sa kadiyot',
+      start: 'Sugod',
+      stop: 'Hunong',
+      skip: 'Laktawi',
+      in: 'Ginhawa pasulod…',
+      hold: 'Kupti…',
+      out: 'Ginhawa pagawas…',
+      done: 'Nindot. Padayon ta kung andam na ka.',
+    },
+  },
   // Guide cards (AI draft; /guides and /resources have no language switch yet).
   public: {
     guides: {

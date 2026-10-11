@@ -35,6 +35,17 @@ export const checkinCopy = {
   next: 'Next',
   back: 'Back',
   stepOf: 'Question {n} of {total}',
+  // ui-interactive Part 3: optional breathing card above the first question
+  breath: {
+    title: 'Take a breath',
+    start: 'Start',
+    stop: 'Stop',
+    skip: 'Skip',
+    in: 'Breathe in…',
+    hold: 'Hold…',
+    out: 'Breathe out…',
+    done: 'Nice. Ready when you are.',
+  },
   saveError:
     'Your check-in was not saved. Check your connection and try again. Your answers are still here.',
   saved: {

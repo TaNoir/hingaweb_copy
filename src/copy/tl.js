@@ -74,6 +74,22 @@ export const tl = {
       'Hindi namin nasabihan ang guidance office sa HingaWeb. Pakitawagan sila ngayon gamit ang button sa itaas.',
     back: 'Bumalik sa check-in ko',
   },
+  // Check-in steps and breathing card (AI draft; /check-in has no language switch yet).
+  checkin: {
+    next: 'Susunod',
+    back: 'Bumalik',
+    stepOf: 'Tanong {n} ng {total}',
+    breath: {
+      title: 'Huminga muna',
+      start: 'Simulan',
+      stop: 'Ihinto',
+      skip: 'Laktawan',
+      in: 'Huminga papasok…',
+      hold: 'Pigilin…',
+      out: 'Huminga palabas…',
+      done: 'Ayos. Tuloy tayo kapag handa ka na.',
+    },
+  },
   // Guide cards (AI draft; /guides and /resources have no language switch yet).
   public: {
     guides: {
