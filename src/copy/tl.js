@@ -74,6 +74,13 @@ export const tl = {
       'Hindi namin nasabihan ang guidance office sa HingaWeb. Pakitawagan sila ngayon gamit ang button sa itaas.',
     back: 'Bumalik sa check-in ko',
   },
+  // Toasts (AI draft; not shown in Tagalog yet).
+  common: {
+    toast: {
+      saved: 'Na-save',
+      requestSent: 'Naipadala na ang request',
+    },
+  },
   // Check-in steps and breathing card (AI draft; /check-in has no language switch yet).
   checkin: {
     next: 'Susunod',

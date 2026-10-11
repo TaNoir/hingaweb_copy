@@ -18,7 +18,7 @@ import {
   Skeleton,
   Table,
 } from '../../components/ui/index.js';
-import { Lock, MessageCircleHeart } from 'lucide-react';
+import { CalendarDays, Lock, MessageCircleHeart, Sprout } from 'lucide-react';
 import { TrendChart } from './TrendChart.jsx';
 import { useCheckinHistory } from './useCheckinHistory.js';
 import { usePageTitle } from '../../lib/usePageTitle.js';
@@ -105,12 +105,14 @@ function Body({ history, range, onAllTime, table, onToggleTable }) {
   if (history.rows.length === 0) {
     return range === 'all' ? (
       <EmptyState
+        icon={Sprout}
         title={t('trends.empty.title')}
         body={t('trends.empty.body')}
         action={<LinkButton to="/check-in">{t('trends.empty.action')}</LinkButton>}
       />
     ) : (
       <EmptyState
+        icon={CalendarDays}
         title={t('trends.emptyRange.title')}
         body={t('trends.emptyRange.body')}
         action={

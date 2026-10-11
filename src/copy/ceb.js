@@ -74,6 +74,13 @@ export const ceb = {
       'Wala namo mapahibalo ang guidance office pinaagi sa HingaWeb. Palihug tawagi sila karon gamit ang button sa taas.',
     back: 'Balik sa akong check-in',
   },
+  // Toasts (AI draft; not shown in Bisaya yet).
+  common: {
+    toast: {
+      saved: 'Na-save',
+      requestSent: 'Napadala na ang request',
+    },
+  },
   // Check-in steps and breathing card (AI draft; /check-in has no language switch yet).
   checkin: {
     next: 'Sunod',

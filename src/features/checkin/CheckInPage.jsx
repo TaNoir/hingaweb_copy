@@ -30,6 +30,7 @@ import {
   ScaleButtons,
   Skeleton,
   Textarea,
+  Toast,
 } from '../../components/ui/index.js';
 import { cx } from '../../components/ui/cx.js';
 import { FormMessage } from '../auth/AuthCard.jsx';
@@ -408,6 +409,7 @@ function SavedCard() {
   }, []);
   return (
     <Card className="flex flex-col gap-4">
+      <Toast message={t('common.toast.saved')} />
       <Chip className="self-start">
         <Check aria-hidden="true" className="size-4" />
         {t('checkin.saved.chip')}

@@ -1,5 +1,6 @@
 // Tier 1 guide list (Fig 7 "Read something helpful"; 2.1.5.1.2). Unranked; no tracking.
 import { useState } from 'react';
+import { BookOpen } from 'lucide-react';
 import { Link } from 'react-router';
 import { t } from '../../copy/index.js';
 import { CRITERIA } from '../../config/vocabulary.js';
@@ -56,10 +57,15 @@ export function GuidesPage() {
       {status === 'loading' && <Skeleton lines={5} />}
       {status === 'error' && <ErrorState onRetry={reload} />}
       {status === 'ready' && resources.length === 0 && (
-        <EmptyState title={t('public.guides.emptyTitle')} body={t('public.guides.emptyBody')} />
+        <EmptyState
+          icon={BookOpen}
+          title={t('public.guides.emptyTitle')}
+          body={t('public.guides.emptyBody')}
+        />
       )}
       {status === 'ready' && resources.length > 0 && shown.length === 0 && (
         <EmptyState
+          icon={BookOpen}
           title={t('public.guides.emptyFilterTitle')}
           body={t('public.guides.emptyFilterBody')}
         />

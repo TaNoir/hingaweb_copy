@@ -29,6 +29,8 @@
 "/check-in (breathing card)","checkin.breath.hold","Hold…","Kupti…","Pigilin…",""
 "/check-in (breathing card)","checkin.breath.out","Breathe out…","Ginhawa pagawas…","Huminga palabas…",""
 "/check-in (breathing card)","checkin.breath.done","Nice. Ready when you are.","Nindot. Padayon ta kung andam na ka.","Ayos. Tuloy tayo kapag handa ka na.",""
+"/check-in saved, /request/sent (toast)","common.toast.saved","Saved","Na-save","Na-save",""
+"/check-in saved, /request/sent (toast)","common.toast.requestSent","Request sent","Napadala na ang request","Naipadala na ang request",""
 "/welcome (assent walkthrough)","assent.step","Step 2 of 2","Step 2 sa 2","Step 2 ng 2",""
 "/welcome (assent walkthrough)","assent.languageLabel","Language","Pinulongan","Wika",""
 "/welcome (assent walkthrough)","assent.title","What we keep private, and what we cannot","Unsa ang among ginatago nga private, ug unsa ang dili","Ano ang tinatago naming private, at ano ang hindi",""

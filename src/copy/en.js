@@ -8,6 +8,11 @@ import { sections } from './en/index.js';
 export const en = {
   common: {
     loading: 'Loading…',
+    // ui-interactive Part 4: short toasts (the full success pages stay as they are)
+    toast: {
+      saved: 'Saved',
+      requestSent: 'Request sent',
+    },
     error: {
       title: 'Something went wrong.',
       body: 'This page could not load. Your information has not changed.',
