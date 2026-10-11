@@ -546,3 +546,26 @@ with no change.
     `.wasm` and `.lottie` are not precached, so offline the box stays empty (decorative only).
 - Checks: verify 314/314 (check:copy and check:colours OK), check:bundle OK (core views 255–268 KB),
   e2e 03 16/16, 06 3/3.
+
+## Hero animation bigger and centred (branch ui-hero-animation, user request, 2026-10-11; not merged)
+
+Branched from `ui-guides-layout`, not `main`: the Lottie animation exists only on that unmerged
+branch (`main` still has the wave SVG), so merging this branch also brings in the guides layout.
+`LandingPage.jsx` only:
+- The hero row is `md:items-stretch`; the left column fills the row; the help card is wrapped in
+  `md:self-start` so its own height is unchanged (the card component is not edited).
+- The animation wrapper (`aria-hidden`, `pointer-events-none`) sits under the reassurance line,
+  `flex-1` + `items-center justify-center`, so the animation is centred in the leftover space.
+- Reserved box: 260×260 below 640 px, 360×360 from 640 px, 480×360 from 1024 px. The brief said
+  about 400 px tall on desktop; at 400 the figure's feet ended about 120 px below the help card, so
+  360 is used (feet about 80 px below the card; box bottom 106 px below). The box never moves while
+  the player loads (measured).
+- The player is `scale-[1.4]` inside the box (the .lottie has empty space around the figure); the
+  figure stays inside the box. The wrapper is `overflow-x-clip` (only the transparent canvas edges)
+  so the page never scrolls sideways; vertical overflow stays visible.
+- A blush circle (`bg-blush`, #FDE4EA, 85 % of the box height) sits behind the figure. No shadow,
+  no new colour.
+- Unchanged: decorative and not focusable, still frame under reduced motion (checked), lazy player,
+  self-hosted files (no outside requests, checked), crisis screen untouched.
+- Checks: verify 314/314 (check:copy OK), e2e 03 16/16 (axe on `/` included), no horizontal scroll at
+  390/768/1280/1440 px.
