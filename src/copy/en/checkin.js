@@ -31,6 +31,21 @@ export const checkinCopy = {
   progress: '{answered} of 6 answered', // ui-students item 7 (the one new line)
   save: 'Save check-in',
   cancel: 'Cancel and return',
+  // ui-interactive Part 2: one question per screen
+  next: 'Next',
+  back: 'Back',
+  stepOf: 'Question {n} of {total}',
+  // ui-interactive Part 3: optional breathing card above the first question
+  breath: {
+    title: 'Take a breath',
+    start: 'Start',
+    stop: 'Stop',
+    skip: 'Skip',
+    in: 'Breathe in…',
+    hold: 'Hold…',
+    out: 'Breathe out…',
+    done: 'Nice. Ready when you are.',
+  },
   saveError:
     'Your check-in was not saved. Check your connection and try again. Your answers are still here.',
   saved: {

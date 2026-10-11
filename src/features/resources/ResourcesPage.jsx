@@ -2,7 +2,7 @@
 // Ranking runs on the server (rank-resources). Relevance is shown by order alone: no number,
 // no "match" wording. The student is never compared to other students.
 import { useCallback, useEffect, useState } from 'react';
-import { MessageSquare, Lock } from 'lucide-react';
+import { BookOpen, Compass, MessageSquare, Lock } from 'lucide-react';
 import { t } from '../../copy/index.js';
 import { CRITERIA } from '../../config/vocabulary.js';
 import { supabase } from '../../lib/supabase.js';
@@ -90,6 +90,7 @@ export function ResourcesPage() {
       {status === 'error' && <ErrorState onRetry={retry} />}
       {status === 'ready' && state.basis === 'none' && (
         <EmptyState
+          icon={Compass}
           title={t('resources.noCheckin.title')}
           body={t('resources.noCheckin.body')}
           action={
@@ -104,6 +105,7 @@ export function ResourcesPage() {
       )}
       {status === 'ready' && state.basis !== 'none' && state.resources.length === 0 && (
         <EmptyState
+          icon={BookOpen}
           title={t('resources.emptyLibrary.title')}
           body={t('resources.emptyLibrary.body')}
         />
@@ -118,6 +120,7 @@ export function ResourcesPage() {
           />
           {shown.length === 0 ? (
             <EmptyState
+              icon={BookOpen}
               title={t('resources.emptyFilter.title')}
               body={t('resources.emptyFilter.body')}
             />

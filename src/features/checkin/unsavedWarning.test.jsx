@@ -64,22 +64,28 @@ describe('unsaved check-in warning', () => {
   it('asks once there is an answer or note text, and stops once saved', async () => {
     const user = userEvent.setup();
     setup();
+    for (let i = 0; i < 6; i += 1) await user.click(screen.getByRole('button', { name: 'Next' }));
     await user.type(screen.getByLabelText('Optional note'), 'x');
     expect(leaving()).toBe(true);
-    const groups = screen.getAllByRole('radiogroup');
+    for (let i = 0; i < 6; i += 1) await user.click(screen.getByRole('button', { name: 'Back' }));
     const picks = ['Not at all', 'Not at all', 'Not at all', 'Very much', 'Okay', 'A little'];
-    for (let i = 0; i < 6; i += 1)
-      await user.click(within(groups[i]).getByRole('radio', { name: picks[i] }));
+    for (let i = 0; i < 6; i += 1) {
+      await user.click(
+        within(screen.getByRole('radiogroup')).getByRole('radio', { name: picks[i] }),
+      );
+      await user.click(screen.getByRole('button', { name: 'Next' }));
+    }
     await user.click(screen.getByRole('button', { name: 'Save check-in' }));
     await screen.findByRole('heading', { name: 'Your check-in is saved' });
     expect(leaving()).toBe(false);
-  });
+    // About 26 clicks through the one-question-per-screen steps; 5 s was too tight under load.
+  }, 15000);
 
   it('ticking a safety item moves to /crisis in the app without unloading the page', async () => {
     const user = userEvent.setup();
     setup();
     await user.click(
-      within(screen.getAllByRole('radiogroup')[0]).getByRole('radio', { name: 'Somewhat' }),
+      within(screen.getByRole('radiogroup')).getByRole('radio', { name: 'Somewhat' }),
     );
     const unload = vi.fn();
     window.addEventListener('beforeunload', unload);

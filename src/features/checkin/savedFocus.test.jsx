@@ -36,10 +36,11 @@ function setup(prompt = null) {
 }
 
 async function answerAndSave(user) {
-  const groups = screen.getAllByRole('radiogroup');
   const picks = ['Not at all', 'Not at all', 'Not at all', 'Very much', 'Okay', 'A little'];
-  for (let i = 0; i < 6; i += 1)
-    await user.click(within(groups[i]).getByRole('radio', { name: picks[i] }));
+  for (let i = 0; i < 6; i += 1) {
+    await user.click(within(screen.getByRole('radiogroup')).getByRole('radio', { name: picks[i] }));
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+  }
   await user.click(screen.getByRole('button', { name: 'Save check-in' }));
 }
 

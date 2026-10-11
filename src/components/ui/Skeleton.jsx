@@ -8,7 +8,7 @@ export function Skeleton({ lines = 3 }) {
         <div
           key={i}
           aria-hidden="true"
-          className="h-4 animate-pulse rounded bg-blush motion-reduce:animate-none"
+          className="h-4 animate-shimmer rounded bg-[linear-gradient(90deg,var(--color-blush)_0%,var(--color-blush-strong)_50%,var(--color-blush)_100%)] bg-[length:200%_100%] motion-reduce:animate-none"
           style={{ width: `${90 - i * 12}%` }}
         />
       ))}

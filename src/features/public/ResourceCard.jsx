@@ -16,7 +16,7 @@ export function ResourceCard({ resource, onOpen, className = '' }) {
     : primaryArea(resource.attributes);
   const { summary, source } = guideInfo(resource.url);
   return (
-    <Card as="article" className={cx('flex flex-col gap-3', className)}>
+    <Card as="article" className={cx('card-hover flex flex-col gap-3', className)}>
       <Chip className="self-start">{area.label}</Chip>
       <h3 className="text-[17px] font-semibold text-ink">{resource.title}</h3>
       {summary && (
@@ -35,7 +35,7 @@ export function ResourceCard({ resource, onOpen, className = '' }) {
           className="inline-flex min-h-11 items-center gap-1 rounded-control font-semibold text-ink"
         >
           {t('public.guides.read')}
-          <ArrowRight aria-hidden="true" className="size-4" />
+          <ArrowRight aria-hidden="true" className="arrow-slide size-4" />
         </a>
       </div>
     </Card>

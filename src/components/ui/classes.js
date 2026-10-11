@@ -13,7 +13,8 @@ const SIZES = {
 
 export const buttonClasses = (variant = 'primary', size = 'md', extra = '') =>
   cx(
-    'inline-flex min-w-11 items-center justify-center gap-2 rounded-control font-semibold',
+    // btn-motion (index.css): lift on hover, press-down on tap; none under reduced motion.
+    'btn-motion inline-flex min-w-11 items-center justify-center gap-2 rounded-control font-semibold',
     'disabled:cursor-not-allowed disabled:opacity-50',
     VARIANTS[variant],
     SIZES[size],

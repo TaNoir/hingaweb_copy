@@ -18,15 +18,19 @@ export function NavItems({ items, onNavigate, vertical = false }) {
               )
             }
           >
-            <span>{item.label}</span>
-            {item.badge ? (
-              <span
-                className="rounded-full bg-blush-strong px-2 text-[12px] font-semibold text-ink"
-                aria-label={item.badgeLabel}
-              >
-                {item.badge}
-              </span>
-            ) : null}
+            {({ isActive }) => (
+              <>
+                <span className={isActive ? undefined : 'link-grow'}>{item.label}</span>
+                {item.badge ? (
+                  <span
+                    className="rounded-full bg-blush-strong px-2 text-[12px] font-semibold text-ink"
+                    aria-label={item.badgeLabel}
+                  >
+                    {item.badge}
+                  </span>
+                ) : null}
+              </>
+            )}
           </NavLink>
         </li>
       ))}

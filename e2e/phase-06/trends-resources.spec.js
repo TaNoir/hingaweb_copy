@@ -20,7 +20,9 @@ test.describe('Phase 06 · trends and ranked resources (Figs 12, 13)', () => {
     const picks = ['Not at all', 'Very much', 'Not at all', 'Very much', 'Okay', 'Somewhat'];
     const groups = page.getByRole('radiogroup');
     for (let i = 0; i < picks.length; i += 1) {
-      await groups.nth(i).getByRole('radio', { name: picks[i], exact: true }).click();
+      // One question per screen (ui-interactive Part 2): answer the visible question, then Next.
+      await groups.first().getByRole('radio', { name: picks[i], exact: true }).click();
+      await page.getByRole('button', { name: 'Next' }).click();
     }
     await page.getByRole('button', { name: 'Save check-in' }).click();
     await page.getByRole('button', { name: 'Not now' }).click();

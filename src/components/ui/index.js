@@ -17,6 +17,7 @@ export { PageHeader } from './PageHeader.jsx';
 export { EmptyState } from './EmptyState.jsx';
 export { ErrorState } from './ErrorState.jsx';
 export { Skeleton } from './Skeleton.jsx';
+export { Toast } from './Toast.jsx';
 export { OfflineBanner } from './OfflineBanner.jsx';
 export { Table } from './Table.jsx';
 export { cx } from './cx.js';

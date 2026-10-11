@@ -95,7 +95,7 @@ export function LandingPage() {
         <ul className="grid gap-4 md:grid-cols-3">
           {STEPS.map(({ icon: Icon, n }) => (
             <li key={n}>
-              <Card className="flex h-full flex-col gap-3">
+              <Card className="card-hover flex h-full flex-col gap-3">
                 <span
                   aria-hidden="true"
                   className="flex size-10 items-center justify-center rounded-control bg-blush"
