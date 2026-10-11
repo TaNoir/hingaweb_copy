@@ -42,14 +42,10 @@ export const en = {
       breathe: 'Breathe',
       getHelp: 'Get help',
     },
-    // ui-landing-v2: crisis strip on public pages and the site footer
-    strip: {
-      lead: 'Need to talk to someone right now?',
-      emergencies: 'Emergencies:',
-    },
+    // ui-landing-v2: site footer
     footer: {
       title: 'Hinga muna.',
-      tagline: 'HingaWeb, a guidance platform for senior high students.',
+      tagline: 'HingaWeb, a mental health platform for senior high students.',
       label: 'Footer',
     },
     student: {

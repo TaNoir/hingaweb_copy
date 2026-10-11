@@ -3,7 +3,7 @@
 // reassurance line) is unchanged. Nothing a visitor picks here is saved or sent.
 import { Suspense, useEffect } from 'react';
 import { useLocation } from 'react-router';
-import { ArrowRight, Sprout } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { t } from '../../copy/index.js';
 import { LinkButton, buttonClasses } from '../../components/ui/index.js';
 import { lazyNamed } from '../../lib/lazyNamed.js';
@@ -37,15 +37,6 @@ export function LandingPage() {
     <div className="flex flex-col">
       <Container className="grid items-center gap-10 pt-10 pb-12 lg:grid-cols-[1.05fr_1fr] lg:pt-14">
         <div className="flex flex-col gap-5">
-          <p className="flex items-center gap-2 text-[14px] font-semibold text-mint-ink">
-            <span
-              aria-hidden="true"
-              className="flex size-6 items-center justify-center rounded-full bg-mint"
-            >
-              <Sprout className="size-4" />
-            </span>
-            {t('public.landing.label')}
-          </p>
           <h1 className="text-[40px] leading-[1.03] font-extrabold tracking-tight text-ink sm:text-[52px] lg:text-[60px]">
             {t('public.landing.title')}
           </h1>

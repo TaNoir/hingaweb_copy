@@ -97,20 +97,16 @@ export const tl = {
       done: 'Ayos. Tuloy tayo kapag handa ka na.',
     },
   },
-  // Landing page strip, nav, and footer (ui-landing-v2; AI draft; no language switch there yet).
+  // Landing page nav and footer (ui-landing-v2; AI draft; no language switch there yet).
   nav: {
     public: {
       how: 'Paano ito gumagana',
       breathe: 'Huminga',
       getHelp: 'Humingi ng tulong',
     },
-    strip: {
-      lead: 'Gusto mo bang makausap ang isang tao ngayon?',
-      emergencies: 'Emergency:',
-    },
     footer: {
       title: 'Hinga muna.',
-      tagline: 'HingaWeb, isang guidance platform para sa mga senior high student.',
+      tagline: 'HingaWeb, isang mental health platform para sa mga senior high student.',
       label: 'Footer',
     },
   },
@@ -118,7 +114,6 @@ export const tl = {
   public: {
     // Landing page (ui-landing-v2; AI draft).
     landing: {
-      label: 'Para sa mga senior high student at sa kanilang guidance office',
       tryCheckin: 'Subukan ang check-in',
       seeHow: 'Tingnan kung paano',
       mood: {

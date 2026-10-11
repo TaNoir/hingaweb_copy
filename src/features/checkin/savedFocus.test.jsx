@@ -1,5 +1,9 @@
 // ui-students item 11: after a check-in is saved, focus moves to the "saved" heading.
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+// The one-question-per-screen check-in needs many clicks per test; 5 s is too tight when the whole
+// suite runs at once (timing only, no expectation changed).
+vi.setConfig({ testTimeout: 15000 });
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Route } from 'react-router';

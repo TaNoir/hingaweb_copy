@@ -97,20 +97,16 @@ export const ceb = {
       done: 'Nindot. Padayon ta kung andam na ka.',
     },
   },
-  // Landing page strip, nav, and footer (ui-landing-v2; AI draft; no language switch there yet).
+  // Landing page nav and footer (ui-landing-v2; AI draft; no language switch there yet).
   nav: {
     public: {
       how: 'Unsaon paggamit',
       breathe: 'Ginhawa',
       getHelp: 'Pangayo og tabang',
     },
-    strip: {
-      lead: 'Gusto ka makig-istorya og usa ka tawo karon?',
-      emergencies: 'Emergency:',
-    },
     footer: {
       title: 'Hinga muna.',
-      tagline: 'HingaWeb, usa ka guidance platform para sa mga senior high student.',
+      tagline: 'HingaWeb, usa ka mental health platform para sa mga senior high student.',
       label: 'Footer',
     },
   },
@@ -118,7 +114,6 @@ export const ceb = {
   public: {
     // Landing page (ui-landing-v2; AI draft).
     landing: {
-      label: 'Para sa mga senior high student ug sa ilang guidance office',
       tryCheckin: 'Sulayi ang check-in',
       seeHow: 'Tan-awa kung unsaon',
       mood: {
