@@ -2,7 +2,6 @@ import { Outlet } from 'react-router';
 import { t } from '../../copy/index.js';
 import { LinkButton } from '../ui/LinkButton.jsx';
 import { AppHeader } from './AppHeader.jsx';
-import { CrisisStrip } from './CrisisStrip.jsx';
 import { Footer } from './Footer.jsx';
 import { Main } from './Main.jsx';
 import { SkipLink } from './SkipLink.jsx';
@@ -27,7 +26,6 @@ export function PublicLayout({ width = 'reading' }) {
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
       <SkipLink />
-      <CrisisStrip />
       <AppHeader
         logoTo="/"
         navLabel={t('nav.public.label')}

@@ -3,7 +3,6 @@ export const publicCopy = {
   landing: {
     // ui-landing-v2 (design: docs/design/HingaWeb-Landing.pdf). title, lead, leadNot, listenNote
     // are the plan's Fig 7 text and are unchanged.
-    label: 'For senior high students and their guidance office',
     title: 'A private place to check in with yourself.',
     lead: "HingaWeb helps you notice how you are doing and connects you to your school's guidance office when you want support.",
     leadNot: 'It is not a diagnosis and it is not a replacement for talking to someone.',

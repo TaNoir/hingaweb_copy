@@ -815,3 +815,17 @@ UI only: no routes, database, Edge Functions, scoring, login, or saved data chan
 - Checks: verify 316/316, check:copy OK (3 languages), check:bundle OK, full e2e 02–09 passed (03 and
   09 re-run in full after two tests stalled for 9–15 min while the machine was suspended; both pass
   in normal time), crisis 34 ms after a safety tick.
+
+## Crisis strip removed (user request, 2026-10-11)
+
+The hotline strip at the top of public pages ("Need to talk to someone right now? …") is removed
+(`CrisisStrip.jsx` deleted, `PublicLayout.jsx`), with its copy keys (`nav.strip.*` in en, ceb, tl)
+and its two translation-sheet rows (now 135). The hotlines stay on the landing page ("If you need
+help right now", with Call buttons) and on `/help`.
+- Also (same request): the footer tagline reads "HingaWeb, a mental health platform for senior high
+  students." (was "a guidance platform"; Bisaya/Tagalog drafts updated), and the hero label "For
+  senior high students and their guidance office" (with its leaf icon) is removed, with its copy key
+  in en, ceb, tl (sheet: 134 rows).
+- Test timing: `checkin.test.jsx` and `savedFocus.test.jsx` get a 15 s per-test limit
+  (`vi.setConfig`). With one question per screen these tests make many clicks and timed out at 5 s
+  under full-suite load; alone they pass. No expectation changed.
