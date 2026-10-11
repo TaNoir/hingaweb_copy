@@ -18,7 +18,9 @@ test.describe('Phase 08 · guidance dashboard (Figs 21, 23, 24, 25, 26)', () => 
     const picks = ['Very much', 'Very much', 'Not at all', 'Not at all', 'Low', 'Quite a lot'];
     const groups = page.getByRole('radiogroup');
     for (let i = 0; i < picks.length; i += 1) {
-      await groups.nth(i).getByRole('radio', { name: picks[i], exact: true }).click();
+      // One question per screen (ui-interactive Part 2): answer the visible question, then Next.
+      await groups.first().getByRole('radio', { name: picks[i], exact: true }).click();
+      await page.getByRole('button', { name: 'Next' }).click();
     }
     await page.getByRole('button', { name: 'Save check-in' }).click();
     await page.getByRole('button', { name: 'Continue to send a request' }).click();

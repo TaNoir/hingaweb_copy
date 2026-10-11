@@ -44,7 +44,9 @@ test.describe('Phase 07 · support request (Figs 16, 17)', () => {
     const picks = ['Very much', 'Very much', 'Not at all', 'Not at all', 'Low', 'Quite a lot'];
     const groups = page.getByRole('radiogroup');
     for (let i = 0; i < picks.length; i += 1) {
-      await groups.nth(i).getByRole('radio', { name: picks[i], exact: true }).click();
+      // One question per screen (ui-interactive Part 2): answer the visible question, then Next.
+      await groups.first().getByRole('radio', { name: picks[i], exact: true }).click();
+      await page.getByRole('button', { name: 'Next' }).click();
     }
     await page.getByRole('button', { name: 'Save check-in' }).click();
     await page.getByRole('button', { name: 'Continue to send a request' }).click();

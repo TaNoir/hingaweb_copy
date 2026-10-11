@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { CircleCheck } from 'lucide-react';
+import { Check, CircleCheck } from 'lucide-react';
 import { cx } from './cx.js';
 
 /**
@@ -7,6 +7,8 @@ import { cx } from './cx.js';
  * options: { value, label }[]; value: selected value or null.
  * icon (optional): a lucide icon shown beside the question as a visual anchor (aria-hidden).
  * markAnswered: show a small check (aria-hidden) once a value is chosen.
+ * The chosen answer is highlighted at once: blush-strong background, ink border, and a small check
+ * badge centred above it (aria-checked carries the state for screen readers).
  */
 export function ScaleButtons({
   name,
@@ -82,12 +84,20 @@ export function ScaleButtons({
               onClick={() => onChange(o.value)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cx(
-                'min-h-11 rounded-control border px-0 py-1 text-[12px] leading-tight hyphens-auto [overflow-wrap:normal] [word-break:normal] sm:px-2 sm:text-[14px]',
+                'relative min-h-11 rounded-control border px-0 py-1 text-[12px] leading-tight hyphens-auto transition-colors duration-150 ease-out [overflow-wrap:normal] [word-break:normal] sm:px-2 sm:text-[14px]',
                 selected
-                  ? 'border-action bg-action font-semibold text-action-ink'
+                  ? 'border-ink bg-blush-strong font-semibold text-ink'
                   : 'border-line bg-blush text-ink',
               )}
             >
+              {selected && (
+                <span
+                  aria-hidden="true"
+                  className="absolute -top-2 left-1/2 flex size-4 -translate-x-1/2 items-center justify-center rounded-full bg-action text-action-ink"
+                >
+                  <Check className="size-3" strokeWidth={3} />
+                </span>
+              )}
               {o.label}
             </button>
           );

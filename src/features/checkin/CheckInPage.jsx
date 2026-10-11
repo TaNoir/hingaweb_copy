@@ -4,6 +4,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import {
+  ArrowLeft,
+  ArrowRight,
   BookOpen,
   Check,
   Compass,
@@ -59,6 +61,9 @@ export function CheckInPage() {
   const [dismissing, setDismissing] = useState(false);
   const [saved, setSaved] = useState(false);
   const [noteFocused, setNoteFocused] = useState(false);
+  const [direction, setDirection] = useState('next'); // slide direction for the step animation
+  const stepHeading = useRef(null);
+  const moved = useRef(false); // true after Back/Next, so focus moves only then (not on first load)
   const crisisItems = useCrisisItems();
   const report = useCrisisReport(owner);
 
@@ -70,6 +75,22 @@ export function CheckInPage() {
     });
   };
   const answer = (column, value) => update({ answers: { ...draft.answers, [column]: value } });
+  // One question per screen (ui-interactive Part 2): steps 0-5 are the six questions in order,
+  // step 6 is the optional note and Save. The step lives in the in-memory draft, so it survives a
+  // trip to /crisis and back. Moving on is always manual (Next); nothing auto-advances.
+  const LAST = CHECKIN_ITEMS.length; // the note + Save step
+  const step = Math.min(Math.max(draft.step ?? 0, 0), LAST);
+  const goTo = (to, dir) => {
+    moved.current = true;
+    setDirection(dir);
+    update({ step: to });
+  };
+  useEffect(() => {
+    if (!moved.current) return;
+    // After Back/Next, move focus to the new step's heading so keyboard and screen reader users
+    // start at the new question (no outline: data-route-focus).
+    stepHeading.current?.focus();
+  }, [step]);
   const complete = CHECKIN_ITEMS.every((i) => draft.answers[i.column] != null);
   // Only the six questions count (not the note, not the safety items). No other number is shown.
   const progress = t('checkin.progress', {
@@ -151,6 +172,7 @@ export function CheckInPage() {
 
   if (saved) return <SavedCard />;
 
+  const item = step < LAST ? CHECKIN_ITEMS[step] : null;
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-3">
@@ -162,37 +184,59 @@ export function CheckInPage() {
           {t('checkin.title')}
         </h1>
         <p className="text-base text-ink-muted">{t('checkin.lead')}</p>
-        <p className="text-[14px] font-semibold text-ink">{progress}</p>
+        <StepDots step={step} answers={draft.answers} />
       </header>
 
-      {CHECKIN_ITEMS.map((item, i) => (
-        <Card key={item.column} className="max-sm:p-3">
-          <ScaleButtons
-            name={item.column}
-            legend={`${i + 1}. ${t(item.textKey)}`}
-            hint={item.hintKey ? t(item.hintKey) : ''}
-            options={item.scale}
-            value={draft.answers[item.column] ?? null}
-            onChange={(v) => answer(item.column, v)}
-            icon={QUESTION_ICONS[item.column]}
-            markAnswered
-          />
-        </Card>
-      ))}
+      {/* The current step, keyed so it slides and fades in (reduced motion: no movement). */}
+      <div
+        key={step}
+        className={direction === 'next' ? 'animate-step-in-next' : 'animate-step-in-back'}
+      >
+        {item ? (
+          <Card className="max-sm:p-3">
+            <p
+              ref={stepHeading}
+              tabIndex={-1}
+              data-route-focus=""
+              className="mb-3 text-[13px] font-semibold tracking-wide text-ink-muted"
+            >
+              {t('checkin.stepOf', { n: step + 1, total: CHECKIN_ITEMS.length })}
+            </p>
+            <ScaleButtons
+              name={item.column}
+              legend={`${step + 1}. ${t(item.textKey)}`}
+              hint={item.hintKey ? t(item.hintKey) : ''}
+              options={item.scale}
+              value={draft.answers[item.column] ?? null}
+              onChange={(v) => answer(item.column, v)}
+              icon={QUESTION_ICONS[item.column]}
+              markAnswered
+            />
+          </Card>
+        ) : (
+          <Card>
+            <h2
+              ref={stepHeading}
+              tabIndex={-1}
+              data-route-focus=""
+              className="mb-4 text-[17px] font-semibold text-ink"
+            >
+              {t('checkin.note.title')}
+            </h2>
+            <Field id="checkin-note" label={t('checkin.note.label')} hint={t('checkin.note.hint')}>
+              <Textarea
+                value={draft.note}
+                placeholder={t('checkin.note.placeholder')}
+                onChange={(e) => update({ note: e.target.value })}
+                onFocus={() => setNoteFocused(true)}
+                onBlur={() => setNoteFocused(false)}
+              />
+            </Field>
+          </Card>
+        )}
+      </div>
 
-      <Card>
-        <h2 className="mb-4 text-[17px] font-semibold text-ink">{t('checkin.note.title')}</h2>
-        <Field id="checkin-note" label={t('checkin.note.label')} hint={t('checkin.note.hint')}>
-          <Textarea
-            value={draft.note}
-            placeholder={t('checkin.note.placeholder')}
-            onChange={(e) => update({ note: e.target.value })}
-            onFocus={() => setNoteFocused(true)}
-            onBlur={() => setNoteFocused(false)}
-          />
-        </Field>
-      </Card>
-
+      {/* The safety items stay on every step, exactly as before: ticking one opens /crisis at once. */}
       <section
         aria-labelledby="safety-title"
         className="flex flex-col gap-3 rounded-card border-2 border-ink bg-surface p-5 md:p-6"
@@ -214,34 +258,56 @@ export function CheckInPage() {
       </section>
 
       <FormMessage>{error}</FormMessage>
-      {!complete && <p className="text-[14px] text-ink-muted">{t('checkin.required')}</p>}
-      {/* Below md only the Save button and the answered count stick to the bottom (bar under 80 px); the
+      {step === LAST && !complete && (
+        <p className="text-[14px] text-ink-muted">{t('checkin.required')}</p>
+      )}
+      {/* Below md the Back / count / Next (or Save) bar sticks to the bottom (under 80 px); the
           wrapper is display: contents there, so the bar's sticky area is the whole page column.
-          Sticky (not fixed) keeps its own place after the last card, so at the end of the page it
-          never covers a field. While the note has focus the bar stops sticking (the phone keyboard
-          is open). From md up, Save and Cancel share one row as before. */}
+          Sticky (not fixed) keeps its own place after the last card. While the note has focus the
+          bar stops sticking (the phone keyboard is open). From md up it is a normal row. */}
       <div className="max-md:contents md:flex md:items-center md:justify-between md:gap-3">
         <div
           className={cx(
-            'checkin-savebar -mx-4 flex items-center justify-between gap-3 max-md:flex-row-reverse border-t border-line bg-surface px-4 py-3 md:static md:mx-0 md:justify-start md:gap-4 md:border-t-0 md:bg-transparent md:p-0',
+            'checkin-savebar -mx-4 flex items-center justify-between gap-3 border-t border-line bg-surface px-4 py-3 md:static md:mx-0 md:justify-start md:gap-4 md:border-t-0 md:bg-transparent md:p-0',
             noteFocused ? 'static' : 'sticky bottom-0 z-10',
           )}
         >
-          <Button
-            size="lg"
-            className="shrink-0"
-            onClick={onSave}
-            disabled={!complete}
-            loading={saving}
-            iconLeft={<Check aria-hidden="true" className="size-5" />}
-          >
-            {t('checkin.save')}
-          </Button>
-          {/* The one polite live region for the count (the copy at the top is not announced).
-              Save stays first in the DOM; on phones the row is reversed so Save sits on the right. */}
+          {step > 0 ? (
+            <Button
+              variant="outline"
+              size="lg"
+              className="shrink-0"
+              onClick={() => goTo(step - 1, 'back')}
+              iconLeft={<ArrowLeft aria-hidden="true" className="size-5" />}
+            >
+              {t('checkin.back')}
+            </Button>
+          ) : null}
+          {/* The one polite live region for the answered count. */}
           <p role="status" className="text-[14px] font-semibold text-ink">
             {progress}
           </p>
+          {step < LAST ? (
+            <Button
+              size="lg"
+              className="shrink-0"
+              onClick={() => goTo(step + 1, 'next')}
+              iconRight={<ArrowRight aria-hidden="true" className="size-5" />}
+            >
+              {t('checkin.next')}
+            </Button>
+          ) : (
+            <Button
+              size="lg"
+              className="shrink-0"
+              onClick={onSave}
+              disabled={!complete}
+              loading={saving}
+              iconLeft={<Check aria-hidden="true" className="size-5" />}
+            >
+              {t('checkin.save')}
+            </Button>
+          )}
         </div>
         <LinkButton to="/" variant="ghost" className="self-start">
           {t('checkin.cancel')}
@@ -249,6 +315,37 @@ export function CheckInPage() {
       </div>
 
       <PromptDialog open={prompt != null} busy={dismissing} onSend={onSend} onNotNow={onNotNow} />
+    </div>
+  );
+}
+
+/**
+ * A row of dots, one per question (answered = filled, current = ringed), plus "Question n of 6".
+ * No percentage. On the note step it shows the answered count instead. The dots are decorative.
+ */
+function StepDots({ step, answers }) {
+  const total = CHECKIN_ITEMS.length;
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <ol aria-hidden="true" className="flex items-center gap-1.5">
+        {CHECKIN_ITEMS.map((it, i) => (
+          <li
+            key={it.column}
+            className={cx(
+              'size-2.5 rounded-full border transition-colors duration-200',
+              answers[it.column] != null ? 'border-ink bg-ink' : 'border-ink-muted bg-transparent',
+              i === step && 'ring-2 ring-blush-strong ring-offset-1',
+            )}
+          />
+        ))}
+      </ol>
+      <p className="text-[14px] font-semibold text-ink">
+        {step < total
+          ? t('checkin.stepOf', { n: step + 1, total })
+          : t('checkin.progress', {
+              answered: CHECKIN_ITEMS.filter((i) => answers[i.column] != null).length,
+            })}
+      </p>
     </div>
   );
 }

@@ -31,6 +31,10 @@ export const checkinCopy = {
   progress: '{answered} of 6 answered', // ui-students item 7 (the one new line)
   save: 'Save check-in',
   cancel: 'Cancel and return',
+  // ui-interactive Part 2: one question per screen
+  next: 'Next',
+  back: 'Back',
+  stepOf: 'Question {n} of {total}',
   saveError:
     'Your check-in was not saved. Check your connection and try again. Your answers are still here.',
   saved: {

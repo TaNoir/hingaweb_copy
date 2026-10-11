@@ -66,15 +66,19 @@ function RequestProbe() {
   return <p>request screen</p>;
 }
 
+// One question per screen (ui-interactive Part 2): answer the visible question, then press Next.
+// After the sixth Next the note and Save step is showing.
 async function answerAll(
   user,
   picks = ['Not at all', 'Not at all', 'Not at all', 'Very much', 'Okay', 'A little'],
 ) {
-  const groups = screen.getAllByRole('radiogroup');
   for (let i = 0; i < 6; i += 1) {
-    await user.click(within(groups[i]).getByRole('radio', { name: picks[i] }));
+    await user.click(within(screen.getByRole('radiogroup')).getByRole('radio', { name: picks[i] }));
+    await next(user);
   }
 }
+const next = (user) => user.click(screen.getByRole('button', { name: 'Next' }));
+const back = (user) => user.click(screen.getByRole('button', { name: 'Back' }));
 
 beforeEach(() => {
   clearDraft();
@@ -91,8 +95,20 @@ describe('CheckInPage (Fig 11; 2.1.5.1.3)', () => {
     expect(
       screen.getByText('Private to your account • Staff cannot browse your check-ins'),
     ).toBeInTheDocument();
-    const legends = screen.getAllByRole('radiogroup').map((g) => g.getAttribute('aria-labelledby'));
-    expect(legends.map((id) => document.getElementById(id).textContent)).toEqual([
+    // One question per screen: read each step's question, then press Next.
+    const user = userEvent.setup();
+    const legends = [];
+    for (let i = 0; i < 6; i += 1) {
+      const id = screen.getByRole('radiogroup').getAttribute('aria-labelledby');
+      legends.push(document.getElementById(id).textContent);
+      if (i === 3) {
+        expect(
+          screen.getByText('Answer honestly. There is no right answer here.'),
+        ).toBeInTheDocument();
+      }
+      await next(user);
+    }
+    expect(legends).toEqual([
       '1. School work and academic pressure has been affecting me.',
       '2. Things at home, family, or money have been affecting me.',
       '3. Worries about graduating, college, or my future have been affecting me.',
@@ -100,7 +116,6 @@ describe('CheckInPage (Fig 11; 2.1.5.1.3)', () => {
       '5. How has your mood been today?',
       '6. How stressed have you felt today?',
     ]);
-    expect(screen.getByText('Answer honestly. There is no right answer here.')).toBeInTheDocument();
     expect(screen.getByLabelText('Optional note')).toBeInTheDocument();
     expect(
       screen.getByText('This is stored as you write it. Nothing reads it or analyses it.'),
@@ -117,13 +132,15 @@ describe('CheckInPage (Fig 11; 2.1.5.1.3)', () => {
     setupClient();
     const user = userEvent.setup();
     renderPage();
-    const save = screen.getByRole('button', { name: 'Save check-in' });
-    expect(save).toBeDisabled();
+    // Skip to the last step without answering: Save is there but disabled.
+    for (let i = 0; i < 6; i += 1) await next(user);
+    expect(screen.getByRole('button', { name: 'Save check-in' })).toBeDisabled();
     expect(
       screen.getByText('Answer questions 1 to 6 to save. The note is optional.'),
     ).toBeInTheDocument();
+    for (let i = 0; i < 6; i += 1) await back(user);
     await answerAll(user);
-    expect(save).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Save check-in' })).toBeEnabled();
   });
 
   it('writes stored values (C4 reversed), a null note when blank, then asks only for the prompt type', async () => {
@@ -172,6 +189,8 @@ describe('CheckInPage (Fig 11; 2.1.5.1.3)', () => {
       ),
     ).toBeInTheDocument();
     expect(screen.queryByText('Your check-in is saved')).not.toBeInTheDocument();
+    await back(user); // stress
+    await back(user); // mood
     expect(screen.getByRole('radio', { name: 'Okay' })).toHaveAttribute('aria-checked', 'true');
     expect(mock.client.functions.invoke).not.toHaveBeenCalled();
   });
@@ -263,17 +282,21 @@ describe('Crisis items (2.1.6.1.6; Table 11)', () => {
     setupClient();
     const user = userEvent.setup();
     const first = renderPage();
+    await next(user); // question 2
     await user.click(
-      within(screen.getAllByRole('radiogroup')[1]).getByRole('radio', { name: 'Quite a lot' }),
+      within(screen.getByRole('radiogroup')).getByRole('radio', { name: 'Quite a lot' }),
     );
+    for (let i = 0; i < 5; i += 1) await next(user); // the note step
     await user.type(screen.getByLabelText('Optional note'), 'draft');
     await user.click(await screen.findByLabelText('[[GUIDANCE:crisis_item_1]]'));
     first.unmount();
     renderPage();
-    expect(
-      within(screen.getAllByRole('radiogroup')[1]).getByRole('radio', { name: 'Quite a lot' }),
-    ).toHaveAttribute('aria-checked', 'true');
+    // Back on the same step, with the note kept.
     expect(screen.getByLabelText('Optional note')).toHaveValue('draft');
+    for (let i = 0; i < 5; i += 1) await back(user); // question 2
+    expect(
+      within(screen.getByRole('radiogroup')).getByRole('radio', { name: 'Quite a lot' }),
+    ).toHaveAttribute('aria-checked', 'true');
     const box = await screen.findByLabelText('[[GUIDANCE:crisis_item_1]]');
     expect(box).toBeChecked();
     expect(box).toBeDisabled();
