@@ -199,15 +199,8 @@ export function CheckInPage() {
       >
         {item ? (
           <Card className="max-sm:p-3">
-            <p
-              ref={stepHeading}
-              tabIndex={-1}
-              data-route-focus=""
-              className="mb-3 text-[13px] font-semibold tracking-wide text-ink-muted"
-            >
-              {t('checkin.stepOf', { n: step + 1, total: CHECKIN_ITEMS.length })}
-            </p>
             <ScaleButtons
+              legendRef={stepHeading}
               name={item.column}
               legend={`${step + 1}. ${t(item.textKey)}`}
               hint={item.hintKey ? t(item.hintKey) : ''}

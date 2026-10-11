@@ -7,6 +7,8 @@ import { cx } from './cx.js';
  * options: { value, label }[]; value: selected value or null.
  * icon (optional): a lucide icon shown beside the question as a visual anchor (aria-hidden).
  * markAnswered: show a small check (aria-hidden) once a value is chosen.
+ * legendRef (optional): makes the question text a focus target (tabindex -1, no outline), so a
+ * step-by-step form can move focus to it.
  * The chosen answer is highlighted at once: blush-strong background, ink border, and a small check
  * badge centred above it (aria-checked carries the state for screen readers).
  */
@@ -19,6 +21,7 @@ export function ScaleButtons({
   onChange,
   icon: Icon = null,
   markAnswered = false,
+  legendRef = null,
 }) {
   const refs = useRef([]);
   const index = options.findIndex((o) => o.value === value);
@@ -55,7 +58,13 @@ export function ScaleButtons({
             <Icon className="size-[18px] text-ink" />
           </span>
         )}
-        <p id={`${name}-legend`} className="flex-1 text-[16px] font-semibold text-ink">
+        <p
+          id={`${name}-legend`}
+          ref={legendRef}
+          tabIndex={legendRef ? -1 : undefined}
+          data-route-focus={legendRef ? '' : undefined}
+          className="flex-1 text-[16px] font-semibold text-ink"
+        >
           {legend}
         </p>
         {markAnswered && value != null && (
